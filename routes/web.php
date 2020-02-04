@@ -20,6 +20,5 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 
 Route::group(['prefix'  => 'operator/'],function(){
-    Route::get('/dashboard','Operator\DashboardController@index')->name('operator.dashboard');
-    Route::get('/login','Auth\LoginController@showLoginForm')->name('operator.login');
+    Route::get('/','Operator\DashboardController@index')->name('operator.dashboard');
 });
