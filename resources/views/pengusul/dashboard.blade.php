@@ -1,31 +1,27 @@
 @extends('layouts.layout')
 @section('title', 'Dashboard')
-@section('login_as', 'Administrator')
 @section('user-login')
-    @if (Auth::check())
-    {{ Auth::user()->nm_user }}
+    @if(Session::get('login') && Session::get('login',1))
+        {{ Session::get('nm_dosen') }}
     @endif
 @endsection
 @section('user-login2')
-    @if (Auth::check())
-    {{ Auth::user()->nm_user }}
+    @if(Session::get('login') && Session::get('login',1))
+        {{ Session::get('nm_dosen') }}
     @endif
 @endsection
+@section('login_as', 'Dosen Pengusul')
 @section('sidebar-menu')
-    @include('operator/sidebar')
+    @include('pengusul/sidebar')
 @endsection
 @section('content')
     <section class="panel" style="margin-bottom:20px;">
         <header class="panel-heading" style="color: #ffffff;background-color: #074071;border-color: #fff000;border-image: none;border-style: solid solid none;border-width: 4px 0px 0;border-radius: 0;font-size: 14px;font-weight: 700;padding: 15px;">
-            <i class="fa fa-home"></i>&nbsp;Dashboard
-            <span class="tools pull-right" style="margin-top:-5px;">
-                <a class="fa fa-chevron-down" href="javascript:;" style="float: left;margin-left: 3px;padding: 10px;text-decoration: none;"></a>
-                <a class="fa fa-times" href="javascript:;" style="float: left;margin-left: 3px;padding: 10px;text-decoration: none;"></a>
-            </span>
+            <i class="fa fa-home"></i>&nbsp;Usulan Publikasi, Riset dan Pengabdian Kepada Masyarakat
         </header>
         <div class="panel-body" style="border-top: 1px solid #eee; padding:15px; background:white;">
             <div class="row" style="margin-right:-15px; margin-left:-15px;">
-                <div class="col-md-12">Selamat datang <strong> {{ Auth::user()->nm_user }} </strong> di halaman Dashboard Admin <b> Sistem Informasi Publikasi, Riset dan Pengabdian Kepada Masyarakat                            </b></div>
+                <div class="col-md-12">Selamat datang <strong> {{ Session::get('nm_dosen') }} </strong> di halaman Dashboard Admin <b> Sistem Informasi Publikasi, Riset dan Pengabdian Kepada Masyarakat                            </b></div>
             </div>
         </div>
     </section>

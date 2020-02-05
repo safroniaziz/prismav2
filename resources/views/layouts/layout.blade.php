@@ -6,24 +6,34 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>Prisma V2! | @yield('title') </title>
+
+    <title>Prisma V2 | @yield('title') </title>
     <link rel="shortcut icon" href="{{ asset('assets/images/logo.png') }}">
 
     <!-- Bootstrap -->
     <link href="{{ asset('assets/vendors/bootstrap/dist/css/bootstrap.min.css') }}" rel="stylesheet">
+    <!-- DataTables -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.bootstrap4.min.css">
     <!-- Font Awesome -->
     <link href="{{ asset('assets/vendors/font-awesome/css/font-awesome.min.css') }}" rel="stylesheet">
     <!-- NProgress -->
     <link href="{{ asset('assets/vendors/nprogress/nprogress.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/style.css') }}" rel="stylesheet">
+
+
 
     <!-- Custom Theme Style -->
     <link href="{{ asset('assets/build/css/custom.min.css') }}" rel="stylesheet">
         <style>
           body{
             font-family: "open sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
-            background-color: #074071;
+            background-color: #013C62;
             font-size: 13px;
+            margin: 0;
+            padding: 0;
             color: #676a6c;
           }
         </style>
@@ -35,7 +45,7 @@
         <div class="col-md-3 left_col" style="background: #013C62 !important;">
           <div class="left_col scroll-view" style="background: #013C62 !important;">
             <div class="navbar nav_title" style="border-bottom: 1px white solid;; margin:0; padding-bottom:5px 0px !important; background:#013C62;">
-                <a href="index.html" class="site_title" style="font-weight:600;"><i class="fa fa-home"></i> <span>PRISMA V2</span></a>
+                <a href="index.html" class="site_title" style="font-weight:600;"><i class="fa fa-home"></i> <span>PRISMA UNIB</span></a>
               </div>
             <div class="clearfix"></div>
 
@@ -44,9 +54,11 @@
                 <div class="profile_pic">
                   <img src="{{ asset('assets/images/logo.png') }}"style="width:70%; background:#fff; margin-left:15%;z-index:1000; position:inherit;margin-top:20px;border: 1px solid rgba(52,73,94,0.44);padding: 4px;border-radius:50%;filter:drop-shadow(0px 1px 5px #fff);" alt="..." class="img-circle profile_img">
                 </div>
-                <div class="profile_info">
-                  <span style="color:#fff000; font-weight:bold;">Administrator,</span>
-                  <h2>John Doe</h2>
+                <div class="profile_info" style="padding-top:20px;">
+                  <span style="color:#fff000; font-weight:bold;">@yield('login_as'),</span>
+                  <h2>
+                    @yield('user-login')
+                  </h2>
                 </div>
                 <div class="clearfix"></div>
             </div>
@@ -65,19 +77,8 @@
             <!-- /sidebar menu -->
 
             <!-- /menu footer buttons -->
-            <div class="sidebar-footer hidden-small">
-              <a data-toggle="tooltip" data-placement="top" title="Settings">
-                <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
-              </a>
-              <a data-toggle="tooltip" data-placement="top" title="FullScreen">
-                <span class="glyphicon glyphicon-fullscreen" aria-hidden="true"></span>
-              </a>
-              <a data-toggle="tooltip" data-placement="top" title="Lock">
-                <span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span>
-              </a>
-              <a data-toggle="tooltip" data-placement="top" title="Logout" href="login.html">
-                <span class="glyphicon glyphicon-off" aria-hidden="true"></span>
-              </a>
+            <div class="sidebar-footer hidden-small" style="background:#172D44;">
+                <p style="color:white; font-style:italic;text-align:center; margin-bottom:0px; padding:5px;">Versi 2.0</p>
             </div>
             <!-- /menu footer buttons -->
           </div>
@@ -93,16 +94,19 @@
                 <ul class=" navbar-right">
                   <li class="nav-item dropdown open" style="padding-left: 15px;">
                     <a href="javascript:;" class="user-profile dropdown-toggle" aria-haspopup="true" id="navbarDropdown" data-toggle="dropdown" aria-expanded="false">
-                      <img src="{{ asset('assets/images/img.jpg') }}" alt="">John Doe
+                        <i class="fa fa-user"></i>&nbsp;
+                        @yield('user-login2')
                     </a>
                     <div class="dropdown-menu dropdown-usermenu pull-right" aria-labelledby="navbarDropdown">
-                      <a class="dropdown-item"  href="javascript:;"> Profile</a>
-                        <a class="dropdown-item"  href="javascript:;">
-                          <span class="badge bg-red pull-right">50%</span>
-                          <span>Settings</span>
+                         <a class="dropdown-item text-danger" href="{{ route('logout') }}"
+                            onclick="event.preventDefault();
+                            document.getElementById('logout-form').submit();">
+                            <i class="fa fa-power-off text-danger pull-right"></i>{{ __('Logout') }}
+
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                @csrf
+                            </form>
                         </a>
-                    <a class="dropdown-item"  href="javascript:;">Help</a>
-                      <a class="dropdown-item"  href="login.html"><i class="fa fa-sign-out pull-right"></i> Log Out</a>
                     </div>
                   </li>
                 </ul>
@@ -122,20 +126,7 @@
 
             <div class="row">
               <div class="col-md-12 col-sm-12  ">
-                <section class="panel">
-                    <header class="panel-heading" style="color: #ffffff;background-color: #074071;border-color: #fff000;border-image: none;border-style: solid solid none;border-width: 4px 0px 0;border-radius: 0;font-size: 14px;font-weight: 700;padding: 15px;">
-                        <i class="fa fa-home"></i>&nbsp;Dashboard
-                        <span class="tools pull-right" style="margin-top:-5px;">
-                            <a class="fa fa-chevron-down" href="javascript:;" style="float: left;margin-left: 3px;padding: 10px;text-decoration: none;"></a>
-                            <a class="fa fa-times" href="javascript:;" style="float: left;margin-left: 3px;padding: 10px;text-decoration: none;"></a>
-                        </span>
-                    </header>
-                    <div class="panel-body" style="border-top: 1px solid #eee; padding:15px; background:white;">
-                        <div class="row" style="margin-right:-15px; margin-left:-15px;">
-                            <div class="col-md-12">Selamat datang <strong> Administrator </strong> di halaman Dashboard Admin <b> Sistem Informasi Publikasi, Riset dan Pengabdian Kepada Masyarakat                            </b></div>
-                        </div>
-                    </div>
-                </section>
+                @yield('content')
               </div>
             </div>
           </div>
@@ -155,6 +146,13 @@
 
     <!-- jQuery -->
     <script src="{{ asset('assets/vendors/jquery/dist/jquery.min.js') }}"></script>
+
+    <!-- DataTables -->
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.2.3/js/responsive.bootstrap4.min.js"></script>
+
     <!-- Bootstrap -->
    <script src="{{ asset('assets/vendors/bootstrap/dist/js/bootstrap.bundle.min.js') }}"></script>
     <!-- FastClick -->
@@ -164,5 +162,6 @@
 
     <!-- Custom Theme Scripts -->
     <script src="{{ asset('assets/build/js/custom.min.js') }}"></script>
+    @stack('scripts')
   </body>
 </html>

@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateRancanganAnggaransTable extends Migration
+class CreateAnggotaUsulansTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,11 @@ class CreateRancanganAnggaransTable extends Migration
      */
     public function up()
     {
-        Schema::create('rancangan_anggarans', function (Blueprint $table) {
+        Schema::create('anggota_usulans', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('penelitian_id');
+            $table->unsignedInteger('usulan_id');
+            $table->unsignedInteger('anggota_id');
+            $table->timestamps();
         });
     }
 
@@ -26,6 +28,6 @@ class CreateRancanganAnggaransTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('rancangan_anggarans');
+        Schema::dropIfExists('anggota_usulans');
     }
 }

@@ -18,14 +18,14 @@
                         <strong>Perhatian:</strong> <i>{{ $message }}</i>
                     </div>
                     @else
-                    <h6>Login Operator</h6>
+                    <h6>Login Dosen Pengusul</h6>
                     <p style="text-align:center; margin-bottom:20px;">Sistem Informasi Publikasi, Riset dan Pengabdian Kepada Masyarakat</p>
                 @endif
-                <form method="post" action="{{ route('login') }}">
+                <form method="post" action="{{ route('panda.login.dosen') }}">
                     @csrf
-                    <p>Email</p>
-                    <input type="email" name="email" placeholder="masukan email">
-                    <p>Password</p>
+                    <p>Nip</p>
+                    <input type="text" name="username" placeholder="masukan nip">
+                    <p>Password PAK</p>
                     <input type="password" name="password" placeholder="••••••">
 
                     <button type="submit" name="submit" style="margin-bottom:10px;r"><i class="fa fa-sign-in"></i>&nbsp; Login</button>
