@@ -16,13 +16,13 @@ class CreateUsulansTable extends Migration
         Schema::create('usulans', function (Blueprint $table) {
             $table->increments('id');
             $table->string('judul_penelitian');
-            $table->string('bidang_penelitian');
-            $table->unsignedInteger('ketua_peneliti_id');
+            $table->string('skim_id');
+            $table->string('bidang_id');
+            $table->string('ketua_peneliti_id');
             $table->text('abstrak');
             $table->string('kata_kunci');
             $table->string('peta_jalan');
             $table->string('biaya_diusulkan');
-            $table->unsignedInteger('rancangan_anggaran_id');
             $table->string('tahun_usulan');
             $table->timestamps();
         });

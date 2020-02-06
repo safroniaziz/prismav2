@@ -2,6 +2,13 @@
     <a href=" {{ route('operator.dashboard') }} "><i class="fa fa-home"></i> Dashboard</a>
 </li>
 
+<li><a><i class="fa fa-reply"></i>Usulan Dosen <span class="fa fa-chevron-down"></span></a>
+    <ul class="nav child_menu">
+        <li><a href=" {{ route('operator.skim') }} ">Skim Penelitian</a></li>
+        <li><a href=" {{ route('operator.bidang') }} ">Bidang Penelitian</a></li>
+    </ul>
+</li>
+
 <li><a><i class="fa fa-users"></i> Manajemen User <span class="fa fa-chevron-down"></span></a>
     <ul class="nav child_menu">
         <li><a href=" {{ route('operator.dosen') }} ">Dosen</a></li>

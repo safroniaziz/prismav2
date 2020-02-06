@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateRancanganAnggaransTable extends Migration
+class CreateSkimsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,11 @@ class CreateRancanganAnggaransTable extends Migration
      */
     public function up()
     {
-        Schema::create('rancangan_anggarans', function (Blueprint $table) {
+        Schema::create('skims', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('usulan_id');
+            $table->string('nm_skim');
+            $table->string('tahun');
+            $table->timestamps();
         });
     }
 
@@ -26,6 +28,6 @@ class CreateRancanganAnggaransTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('rancangan_anggarans');
+        Schema::dropIfExists('skims');
     }
 }

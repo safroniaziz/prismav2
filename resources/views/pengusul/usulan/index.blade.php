@@ -50,12 +50,9 @@
                                 <th>No</th>
                                 <th>Judul Penelitian</th>
                                 <th>Bidang Penelitian</th>
-                                <th>Perguruan Tinggi</th>
-                                <th>Program Study</th>
                                 <th>Ketua Peneliti</th>
-                                <th>Abstrak</th>
-                                <th>Kata Kunci</th>
-                                <th>Peta Jalan</th>
+                                <th>Anggota Kelompok</th>
+                                <th>Tambah Anggota</th>
                                 <th>Biaya Diusulkan</th>
                                 <th>Aksi</th>
                             </tr>
@@ -69,47 +66,26 @@
                                     <td> {{ $no++ }} </td>
                                     <td> {{ $usulan->judul_penelitian }} </td>
                                     <td> {{ $usulan->bidang_penelitian }} </td>
-                                    <td> {{ $usulan->perguruan_tinggi }} </td>
-                                    <td> {{ $usulan->program_study }} </td>
                                     <td> {{ $usulan->nm_ketua_peneliti }} </td>
-                                    <td> {{ $usulan->abstrak }} </td>
-                                    <td> {{ $usulan->kata_kunci }} </td>
-                                    <td> {{ $usulan->peta_jalan }} </td>
-                                    <td> {{ $usulan->biaya_diusulkan }} </td>
                                     <td>
-                                        <a onclick="ubahOperator({{ $usulan->id }})" class="btn btn-primary btn-sm" style="color:white; cursor:pointer;"><i class="fa fa-edit"></i></a>
-                                        <a onclick="hapusOperator({{ $usulan->id }})" class="btn btn-danger btn-sm" style="color:white; cursor:pointer;"><i class="fa fa-trash"></i></a>
-                                        <div class="modal modal-danger fade" id="modalhapus" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                            <div class="modal-dialog" role="document">
-                                              <div class="modal-content">
-                                                <div class="modal-header modal-header-danger">
-                                                    <p style="font-size:15px;" class="modal-title" id="exampleModalLabel"><i class="fa fa-user"></i>&nbsp;Form Konfirmasi Hapus Data Operator</p>
-                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                        <span aria-hidden="true">&times;</span>
-                                                    </button>
-                                                </div>
-                                                <div class="modal-body">
-                                                  Apakah anda yakin akan menghapus data pengusul ?
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-outline-light btn-sm " style="color:white;" data-dismiss="modal"><i class="fa fa-close"></i>&nbsp;Close</button>
-                                                    <form method="POST" action="{{ route('pengusul.usulan.delete') }}">
-                                                        {{ csrf_field() }}
-                                                        {{ method_field('DELETE') }}
-                                                        <input type="hidden" name="id" id="id_hapus">
-                                                        <button type="submit" class="btn btn-outline-light btn-sm" style="color:white;"><i class="fa fa-check-circle"></i>&nbsp; Ya, Hapus Data !</button>
-                                                    </form>
-                                                </div>
-                                              </div>
-                                            </div>
-                                        </div>
+                                        @if ($usulan->anggota_kelompok == null)
+                                            <label for="" class="badge badge-danger"><i class="fa fa-close" style="padding:5px;"></i>&nbsp; Belum ditambahkan</label>
+                                        @endif
+                                    </td>
+                                    <td>
+                                        <a onclick="tambahAnggota({{ $usulan->id }})" class="btn btn-primary btn-sm" style="color:white; cursor:pointer;"><i class="fa fa-user-plus"></i></a>
+                                    </td>
+                                    <td> Rp. {{ number_format($usulan->biaya_diusulkan, 2) }} </td>
+                                    <td>
+                                        <a onclick="ubahUsulan({{ $usulan->id }})" class="btn btn-primary btn-sm" style="color:white; cursor:pointer;"><i class="fa fa-edit"></i></a>
+                                        <a onclick="hapusUsulan({{ $usulan->id }})" class="btn btn-danger btn-sm" style="color:white; cursor:pointer;"><i class="fa fa-trash"></i></a>
                                     </td>
                                     <!-- Modal Ubah -->
                                     <div class="modal fade" id="modalubah" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                        <div class="modal-dialog" role="document">
+                                        <div class="modal-dialog modal-lg" role="document">
                                         <div class="modal-content">
                                             <div class="modal-header">
-                                                <p style="font-size:15px;" class="modal-title" id="exampleModalLabel"><i class="fa fa-user"></i>&nbsp;Form Ubah Data Operator</p>
+                                                <p style="font-size:15px;" class="modal-title" id="exampleModalLabel"><i class="fa fa-user"></i>&nbsp;Form Ubah Data Usulan</p>
                                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                     <span aria-hidden="true">&times;</span>
                                                 </button>
@@ -118,17 +94,48 @@
                                                 {{ csrf_field() }} {{ method_field('PATCH') }}
                                                             <div class="modal-body">
                                                                 <input type="hidden" name="id" id="id">
-                                                                <div class="form-group">
-                                                                    <label for="exampleInputEmail1">Nama Operator</label>
-                                                                    <input type="text" name="nm_user" id="nm_user" class="form-control" placeholder="masukan nama pengusul" required>
+                                                                <div class="form-group col-md-12">
+                                                                    <label for="exampleInputEmail1">Judul Penelitian</label>
+                                                                    <textarea name="judul_penelitian" id="judul_penelitian" cols="30" rows="3" class="form-control" required></textarea>
                                                                 </div>
-                                                                <div class="form-group">
-                                                                    <label for="exampleInputEmail1">Username (unique) <a id="username-gagal" style="color:red;display:none;"><i>username sudah digunakan</i></a></label>
-                                                                    <input type="text" name="username" id="username" class="form-control" placeholder="masukan username" required>
+                                                                <div class="form-group col-md-6">
+                                                                    <label for="exampleInputEmail1">Bidang Penelitian</label></label>
+                                                                    <select name="bidang_id" class="form-control" id="bidang_id" style="font-size:13px;" required>
+                                                                        <option value="" disabled selected>-- pilih bidang penelitian --</option>
+                                                                        @foreach ($bidangs as $bidang)
+                                                                            <option value="{{ $bidang->id }}"> {{ $bidang->nm_bidang }} </option>
+                                                                        @endforeach
+                                                                    </select>
                                                                 </div>
-                                                                <div class="form-group">
-                                                                    <label for="exampleInputEmail1">E-mail (unique) : <a id="email-gagal" style="color:red;display:none;"><i>email sudah digunakan</i></a></label>
-                                                                    <input type="email" name="email" id="email" class="form-control" placeholder="example@mail.com" required>
+                                                                <div class="form-group col-md-6">
+                                                                    <label for="exampleInputEmail1">Pilih Skim :</label>
+                                                                    <select name="skim_id" class="form-control" id="skim_id" style="font-size:13px;" required>
+                                                                        <option value="" disabled selected>-- pilih skim --</option>
+                                                                        @foreach ($skims as $skim)
+                                                                            <option value="{{ $skim->id }}"> {{ $skim->nm_skim }} </option>
+                                                                        @endforeach
+                                                                    </select>
+                                                                </div>
+                                                                <div class="form-group col-md-6">
+                                                                    <label for="exampleInputEmail1">Ketua Peneliti : </label>
+                                                                    <input type="text" name="ketua_peneliti" id="ketua_peneliti" value="{{ $ketua->nm_lengkap }}" disabled class="form-control">
+                                                                </div>
+                                                                <div class="form-group col-md-6">
+                                                                    <label for="exampleInputEmail1">Biaya Yang Diusulkan :</label>
+                                                                    <input type="number" name="biaya_diusulkan" id="biaya_diusulkan" class="form-control">
+                                                                </div>
+                                                                <div class="form-group col-md-12">
+                                                                    <label for="exampleInputEmail1">File Peta Jalan : <a style="color:red; font-style:italic; font-size:12px;">Harap masukan file pdf</a></label>
+                                                                    <input type="file" name="peta_jalan" id="peta_jalan" accept="application/pdf" class="form-control" style="padding-bottom:30px;" required>
+                                                                </div>
+                                                                <div class="form-group col-md-12">
+                                                                    <label for="exampleInputEmail1">Abstrak</label>
+                                                                    <textarea name="abstrak_edit" id="abstrak_edit" cols="30" rows="10"></textarea>
+                                                                </div>
+                                                                <div class="form-group col-md-12">
+                                                                    <label for="exampleInputEmail1">Kata Kunci</label>
+                                                                    <input id="tags_2" type="text" name="kata_kunci[]" id="kata_kunci" class="tags form-control" />
+                                                                    <div id="suggestions-container" style="position: relative; float: left; width: 250px;"></div>
                                                                 </div>
                                                             </div>
                                                     <div class="modal-footer">
@@ -142,54 +149,67 @@
                                 </tr>
                             @endforeach
                             <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                <div class="modal-dialog" role="document">
+                                <div class="modal-dialog modal-lg" role="document">
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                            <p style="font-size:15px;" class="modal-title" id="exampleModalLabel"><i class="fa fa-user"></i>&nbsp;Form Tambah Operator Baru</p>
+                                            <p style="font-size:15px;" class="modal-title" id="exampleModalLabel"><i class="fa fa-user"></i>&nbsp;Form Tambah Usulan Baru</p>
                                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                 <span aria-hidden="true">&times;</span>
                                             </button>
                                         </div>
-                                        <form action=" {{ route('pengusul.usulan.add') }} " method="POST">
+                                        <form action=" {{ route('pengusul.usulan.add') }} " method="POST" enctype="multipart/form-data">
                                             {{ csrf_field() }} {{ method_field('POST') }}
                                                 <div class="modal-body">
-
-                                                    <div class="form-group">
-                                                        <label for="exampleInputEmail1">Judul Penelitian</label>
-                                                        <textarea name="judul_penelitian" cols="30" rows="3" class="form-control" required></textarea>
+                                                    <div class="row">
+                                                        <div class="form-group col-md-12">
+                                                            <label for="exampleInputEmail1">Judul Penelitian</label>
+                                                            <textarea name="judul_penelitian" cols="30" rows="3" class="form-control" required></textarea>
+                                                        </div>
+                                                        <div class="form-group col-md-6">
+                                                            <label for="exampleInputEmail1">Bidang Penelitian</label></label>
+                                                            <select name="bidang_id" class="form-control" style="font-size:13px;" required>
+                                                                <option value="" disabled selected>-- pilih bidang penelitian --</option>
+                                                                @foreach ($bidangs as $bidang)
+                                                                    <option value=" {{ $bidang->id }}"> {{ $bidang->nm_bidang }} </option>
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
+                                                        <div class="form-group col-md-6">
+                                                            <label for="exampleInputEmail1">Pilih Skim :</label>
+                                                            <select name="skim_id" class="form-control" style="font-size:13px;" required>
+                                                                <option value="" disabled selected>-- pilih skim --</option>
+                                                                @foreach ($skims as $skim)
+                                                                    <option value=" {{ $skim->id }}"> {{ $skim->nm_skim }} </option>
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
+                                                        <div class="form-group col-md-6">
+                                                            <label for="exampleInputEmail1">Ketua Peneliti : </label>
+                                                            <input type="text" name="ketua_peneliti" value="{{ $ketua->nm_lengkap }}" disabled class="form-control">
+                                                        </div>
+                                                        <div class="form-group col-md-6">
+                                                            <label for="exampleInputEmail1">Biaya Yang Diusulkan :</label>
+                                                            <input type="number" name="biaya_diusulkan" class="form-control">
+                                                        </div>
+                                                        <div class="form-group col-md-12">
+                                                            <label for="exampleInputEmail1">File Peta Jalan : <a style="color:red; font-style:italic; font-size:12px;">Harap masukan file pdf</a></label>
+                                                            <input type="file" name="peta_jalan" id="peta_jalan1" accept="application/pdf" class="form-control" style="padding-bottom:30px;" required>
+                                                            <div id="peta-name"></div>
+                                                        </div>
+                                                        <div class="form-group col-md-12">
+                                                            <label for="exampleInputEmail1">Abstrak</label>
+                                                            <textarea name="abstrak" cols="30" rows="10"></textarea>
+                                                        </div>
+                                                        <div class="form-group col-md-12">
+                                                            <label for="exampleInputEmail1">Kata Kunci</label>
+                                                            <input id="tags_1" type="text" name="kata_kunci[]" class="tags form-control" />
+                                                            <div id="suggestions-container" style="position: relative; float: left; width: 250px;"></div>
+                                                        </div>
                                                     </div>
-                                                    <div class="form-group">
-                                                        <label for="exampleInputEmail1">Bidang Penelitian</label> <a id="username-gagal" style="color:red;display:none;"><i>username sudah digunakan</i></a></label>
-                                                        <input type="text" name="username" id="username" class="form-control" placeholder="masukan username" required>
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label for="exampleInputEmail1">E-mail (unique) : <a id="email-gagal" style="color:red;display:none;"><i>email sudah digunakan</i></a></label>
-                                                        <input type="email" name="email" id="email" class="form-control" placeholder="example@mail.com" required>
-                                                    </div>
-
-                                                    <div class="form-group">
-                                                        <label for="exampleInputEmail1">Password</label>
-                                                        <input type="password" name="password" id="password" class="form-control" placeholder="masukan password" required>
-                                                    </div>
-
-                                                    <div class="form-group">
-                                                        <label for="exampleInputEmail1">Ulangi Password</label>
-                                                        <input type="password" name="ulangi" id="ulangi" class="form-control" placeholder="ulangi password" required>
-                                                    </div>
-
-                                                    <div class="alert alert-success" id="konfirmasi" style="display:none;">
-                                                        <button type="button" class="close" data-dismiss="alert">×</button>
-                                                        <i class="fa fa-check-circle"></i>&nbsp;<strong style="font-style:italic;">Password Sama !</strong>
-                                                    </div>
-                                                    <div class="alert alert-danger" id="konfirmasi-gagal" style="display:none;">
-                                                        <button type="button" class="close" data-dismiss="alert">×</button>
-                                                        <i class="fa fa-close"></i>&nbsp;<strong style="font-style:italic;">Password Tidak Sama !</strong>
-                                                    </div>
-
                                                 </div>
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-close"></i>&nbsp;Batalkan</button>
-                                                    <button type="submit" class="btn btn-primary" id="btn-submit" disabled><i class="fa fa-save"></i>&nbsp;Simpan</button>
+                                                    <button type="submit" class="btn btn-primary" id="btn-submit"><i class="fa fa-save"></i>&nbsp;Simpan</button>
                                                 </div>
                                             </div>
                                         </form>
@@ -198,12 +218,80 @@
                             </div>
                         </tbody>
                     </table>
+                    <div class="modal modal-danger fade" id="modalhapus" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                          <div class="modal-content">
+                            <div class="modal-header modal-header-danger">
+                                <p style="font-size:15px;" class="modal-title" id="exampleModalLabel"><i class="fa fa-user"></i>&nbsp;Form Konfirmasi Hapus Data Operator</p>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                              Apakah anda yakin akan menghapus data usulan ?
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-outline-light btn-sm " style="color:white;" data-dismiss="modal"><i class="fa fa-close"></i>&nbsp;Close</button>
+                                <form method="POST" action="{{ route('pengusul.usulan.delete') }}">
+                                    {{ csrf_field() }}
+                                    {{ method_field('DELETE') }}
+                                    <input type="hidden" name="id" id="id_hapus">
+                                    <button type="submit" class="btn btn-outline-light btn-sm" style="color:white;"><i class="fa fa-check-circle"></i>&nbsp; Ya, Hapus Data !</button>
+                                </form>
+                            </div>
+                          </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Modal Anggota -->
+                <div class="modal fade" id="modalanggota" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-lg" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <p style="font-size:15px;" class="modal-title" id="exampleModalLabel"><i class="fa fa-user"></i>&nbsp;Form Tambah Usulan Baru</p>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <form action=" {{ route('pengusul.usulan.anggota_post') }} " method="POST" enctype="multipart/form-data">
+                                {{ csrf_field() }} {{ method_field('POST') }}
+                                    <div class="modal-body">
+                                        <div class="row">
+                                            <div class="form-group col-md-12">
+                                                <label for="exampleInputEmail1">Judul Penelitian</label>
+                                                <textarea name="judul_penelitian" cols="30" rows="3" class="form-control" required></textarea>
+                                            </div>
+                                            <div class="form-group col-md-12">
+                                                <label for="exampleInputEmail1">Kata Kunci</label>
+                                                <input id="tags_1" type="text" name="kata_kunci[]" class="tags form-control" />
+                                                <div id="suggestions-container" style="position: relative; float: left; width: 250px;"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-close"></i>&nbsp;Batalkan</button>
+                                        <button type="submit" class="btn btn-primary" id="btn-submit"><i class="fa fa-save"></i>&nbsp;Simpan</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 @endsection
 @push('scripts')
+    <script src="https://cdn.ckeditor.com/4.13.1/standard/ckeditor.js"></script>
+    <script>
+            CKEDITOR.replace( 'abstrak_edit', {height:150});
+            CKEDITOR.replace( 'abstrak', {height:150});
+
+            function myFunction() {
+                var x = document.getElementById("peta_jalan1").value;
+                document.getElementById("peta-name").innerHTML = x;
+            }
+    </script>
     <script>
         $(document).ready(function() {
             $('#table').DataTable({
@@ -211,17 +299,19 @@
             });
         } );
 
-        function ubahOperator(id){
+        function ubahUsulan(id){
             $.ajax({
-                url: "{{ url('pengusul/manajemen_operator') }}"+'/'+ id + "/edit",
+                url: "{{ url('pengusul/manajemen_usulan') }}"+'/'+ id + "/edit",
                 type: "GET",
                 dataType: "JSON",
                 success: function(data){
                     $('#modalubah').modal('show');
                     $('#id').val(data.id);
-                    $('#nm_user').val(data.nm_user);
-                    $('#username').val(data.username);
-                    $('#email').val(data.email);
+                    $('#judul_penelitian').val(data.judul_penelitian);
+                    $('#bidang_id').val(data.bidang_id);
+                    $('#skim_id').val(data.skim_id);
+                    $('#biaya_diusulkan').val(data.biaya_diusulkan);
+                    CKEDITOR.instances['abstrak_edit'].setData(data.abstrak);
                 },
                 error:function(){
                     alert("Nothing Data");
@@ -229,10 +319,13 @@
             });
         }
 
-        function hapusOperator(id){
+        function hapusUsulan(id){
             $('#modalhapus').modal('show');
             $('#id_hapus').val(id);
         }
 
+        function tambahAnggota(id){
+            $('#modalanggota').modal('show');
+        }
     </script>
 @endpush

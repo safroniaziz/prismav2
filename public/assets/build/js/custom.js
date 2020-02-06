@@ -1,8 +1,8 @@
 /**
  * Resize function without multiple trigger
- * 
+ *
  * Usage:
- * $(window).smartresize(function(){  
+ * $(window).smartresize(function(){
  *     // code here
  * });
  */
@@ -16,8 +16,8 @@
             var obj = this, args = arguments;
             function delayed () {
                 if (!execAsap)
-                    func.apply(obj, args); 
-                timeout = null; 
+                    func.apply(obj, args);
+                timeout = null;
             }
 
             if (timeout)
@@ -25,11 +25,11 @@
             else if (execAsap)
                 func.apply(obj, args);
 
-            timeout = setTimeout(delayed, threshold || 100); 
+            timeout = setTimeout(delayed, threshold || 100);
         };
     };
 
-    // smartresize 
+    // smartresize
     jQuery.fn[sr] = function(fn){  return fn ? this.bind('resize', debounce(fn)) : this.trigger(sr); };
 
 })(jQuery,'smartresize');
@@ -64,7 +64,8 @@ function init_sidebar() {
         // normalize content
         contentHeight -= $NAV_MENU.height() + footerHeight;
 
-        $RIGHT_COL.css('min-height', contentHeight);
+        // $RIGHT_COL.css('min-height', contentHeight);
+        $RIGHT_COL.css("min-height",$(window).height());
     };
 
     var openUpMenu = function () {
@@ -611,7 +612,7 @@ function init_starrr() {
 
 function init_JQVmap() {
 
-    //console.log('check init_JQVmap [' + typeof (VectorCanvas) + '][' + typeof (jQuery.fn.vectorMap) + ']' );	
+    //console.log('check init_JQVmap [' + typeof (VectorCanvas) + '][' + typeof (jQuery.fn.vectorMap) + ']' );
 
     if (typeof (jQuery.fn.vectorMap) === 'undefined') { return; }
 
@@ -1015,6 +1016,9 @@ function init_TagsInput() {
     if (typeof $.fn.tagsInput !== 'undefined') {
 
         $('#tags_1').tagsInput({
+            width: 'auto'
+        });
+        $('#tags_2').tagsInput({
             width: 'auto'
         });
 
@@ -5036,4 +5040,4 @@ $(document).ready(function () {
     init_autosize();
     init_autocomplete();
 
-});	
+});

@@ -33,6 +33,22 @@ Route::group(['prefix'  => 'operator/manajemen_dosen'],function(){
     Route::get('/api','Operator\DosenController@dataTable')->name('operator.dosen_api');
 });
 
+Route::group(['prefix'  => 'operator/manajemen_skim'],function(){
+    Route::get('/','Operator\SkimController@index')->name('operator.skim');
+    Route::post('/','Operator\SkimController@post')->name('operator.skim.add');
+    Route::get('/{id}/edit','Operator\SkimController@edit')->name('operator.skim.edit');
+    Route::patch('/','Operator\SkimController@update')->name('operator.skim.update');
+    Route::delete('/','Operator\SkimController@delete')->name('operator.skim.delete');
+});
+
+Route::group(['prefix'  => 'operator/bidang_penelitian'],function(){
+    Route::get('/','Operator\BidangPenelitianController@index')->name('operator.bidang');
+    Route::post('/','Operator\BidangPenelitianController@post')->name('operator.bidang.add');
+    Route::get('/{id}/edit','Operator\BidangPenelitianController@edit')->name('operator.bidang.edit');
+    Route::patch('/','Operator\BidangPenelitianController@update')->name('operator.bidang.update');
+    Route::delete('/','Operator\BidangPenelitianController@delete')->name('operator.bidang.delete');
+});
+
 Route::group(['prefix'  => 'operator/manajemen_operator'],function(){
     Route::get('/','Operator\OperatorController@index')->name('operator.operator');
     Route::post('/','Operator\OperatorController@post')->name('operator.operator.add');
@@ -57,4 +73,5 @@ Route::group(['prefix'  => 'pengusul/manajemen_usulan'],function(){
     Route::get('/{id}/edit','Pengusul\UsulanController@edit')->name('pengusul.usulan.edit');
     Route::patch('/','Pengusul\UsulanController@update')->name('pengusul.usulan.update');
     Route::delete('/','Pengusul\UsulanController@delete')->name('pengusul.usulan.delete');
+    Route::post('/anggota','Pengusul\UsulanController@anggotaPost')->name('pengusul.usulan.anggota_post');
 });

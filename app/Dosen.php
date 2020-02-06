@@ -16,6 +16,7 @@ class Dosen extends Model
         'fakultas',
         'prodi',
         'keahlian',
+        'perguruan_tinggi',
         'alamat_institusi',
         'telephone',
         'fax',

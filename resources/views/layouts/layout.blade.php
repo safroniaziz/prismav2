@@ -9,7 +9,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
 
-    <title>Prisma V2 | @yield('title') </title>
+    <title>Prisma LPPM V2 | @yield('title') </title>
     <link rel="shortcut icon" href="{{ asset('assets/images/logo.png') }}">
 
     <!-- Bootstrap -->
@@ -36,6 +36,20 @@
             padding: 0;
             color: #676a6c;
           }
+
+          input[type=text], select, input[type=number],input[type=email],input[type=password],input[type=file] {
+              font-size: 13px;
+        }
+
+        button{
+            font-size: 13px;
+        }
+
+        html{
+            padding:0;
+            margin: 0;
+        }
+
         </style>
     </head>
 
@@ -159,9 +173,11 @@
     <script src="{{ asset('assets/vendors/fastclick/lib/fastclick.js') }}"></script>
     <!-- NProgress -->
     <script src="{{ asset('assets/vendors/nprogress/nprogress.js') }}"></script>
-
+    <!-- Input Tags -->
+    <script src="{{ asset('assets/vendors/jquery.tagsinput/src/jquery.tagsinput.js') }}"></script>
     <!-- Custom Theme Scripts -->
-    <script src="{{ asset('assets/build/js/custom.min.js') }}"></script>
+    <script src="{{ asset('assets/build/js/custom.js') }}"></script>
+
     @stack('scripts')
   </body>
 </html>
