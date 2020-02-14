@@ -16,7 +16,16 @@ class CreateReviewer1sTable extends Migration
         Schema::create('reviewer1s', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('usulan_id');
-            $table->unsignedInteger('reviewer_id');
+            $table->string('reviewer_nip');
+            $table->string('reviewer_nama');
+            $table->string('reviewer_prodi_id');
+            $table->string('reviewer_prodi_nama');
+            $table->string('reviewer_fakultas_id');
+            $table->string('reviewer_fakultas_nama');
+            $table->string('ketua_peneliti_nidn');
+            $table->string('reviewer_jabatan_fungsional');
+            $table->string('reviewer_jk');
+            $table->string('reviewer_universitas');
             $table->timestamps();
         });
     }

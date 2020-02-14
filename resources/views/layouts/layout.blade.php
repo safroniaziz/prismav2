@@ -22,15 +22,14 @@
     <!-- NProgress -->
     <link href="{{ asset('assets/vendors/nprogress/nprogress.css') }}" rel="stylesheet">
     <link href="{{ asset('css/style.css') }}" rel="stylesheet">
-
-
+    @stack('styles')
 
     <!-- Custom Theme Style -->
     <link href="{{ asset('assets/build/css/custom.min.css') }}" rel="stylesheet">
         <style>
           body{
             font-family: "open sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
-            background-color: #013C62;
+            background-color: #fff;
             font-size: 13px;
             margin: 0;
             padding: 0;
@@ -39,6 +38,9 @@
 
           input[type=text], select, input[type=number],input[type=email],input[type=password],input[type=file] {
               font-size: 13px;
+        }
+        .form-control{
+            font-size:13px !important;
         }
 
         button{
@@ -56,7 +58,7 @@
   <body class="nav-md">
     <div class="container body">
       <div class="main_container">
-        <div class="col-md-3 left_col" style="background: #013C62 !important;">
+        <div class="col-md-3 left_col menu_fixed" style="background: #013C62 !important;">
           <div class="left_col scroll-view" style="background: #013C62 !important;">
             <div class="navbar nav_title" style="border-bottom: 1px white solid;; margin:0; padding-bottom:5px 0px !important; background:#013C62;">
                 <a href="index.html" class="site_title" style="font-weight:600;"><i class="fa fa-home"></i> <span>PRISMA UNIB</span></a>
@@ -92,7 +94,7 @@
 
             <!-- /menu footer buttons -->
             <div class="sidebar-footer hidden-small" style="background:#172D44;">
-                <p style="color:white; font-style:italic;text-align:center; margin-bottom:0px; padding:5px;">Versi 2.0</p>
+                <p style="color:white; font-style:italic;text-align:center; margin-bottom:0px; padding:5px;">versi 2.0</p>
             </div>
             <!-- /menu footer buttons -->
           </div>

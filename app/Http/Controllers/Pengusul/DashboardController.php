@@ -10,13 +10,14 @@ use App\Dosen;
 class DashboardController extends Controller
 {
     public function index(){
-        if(Session::get('login') && Session::get('login',1)){
-            if(Session::get('akses','dosen')){
-                $user = Dosen::where('nip',Session::get('nip'))->get();
+        $sesi = Session::get('akses');
+        if(Session::get('login') && Session::get('login',1) && Session::get('akses',1)){
+            if($sesi == 1){
                 return view('pengusul/dashboard');
             }
             else{
-                return redirect()->route('panda.login.form')->with(['error' => 'Anda Tidak Terdaftar Sebagai Mahasiswa']);
+                Session::flush();
+                return redirect()->route('panda.login.form')->with(['error' => 'Anda Tidak Terdaftar Di Aplikasi']);
             }
         }
         else{

@@ -19,7 +19,6 @@ class CreateAnggaranPerjalananLainnyasTable extends Migration
             $table->string('material');
             $table->string('justifikasi_pembelian');
             $table->string('kuantitas');
-            $table->string('satuan');
             $table->string('harga_satuan');
             $table->timestamps();
         });

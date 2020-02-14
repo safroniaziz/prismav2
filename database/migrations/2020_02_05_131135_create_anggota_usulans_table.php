@@ -16,7 +16,16 @@ class CreateAnggotaUsulansTable extends Migration
         Schema::create('anggota_usulans', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('usulan_id');
-            $table->unsignedInteger('anggota_id');
+            $table->string('anggota_nip');
+            $table->string('anggota_nama');
+            $table->string('anggota_prodi_id');
+            $table->string('anggota_prodi_nama');
+            $table->string('anggota_fakultas_id');
+            $table->string('anggota_fakultas_nama');
+            $table->string('ketua_peneliti_nidn');
+            $table->string('anggota_jabatan_fungsional');
+            $table->string('anggota_jk');
+            $table->string('anggota_universitas');
             $table->timestamps();
         });
     }

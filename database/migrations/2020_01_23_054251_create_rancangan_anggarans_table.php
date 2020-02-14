@@ -15,7 +15,7 @@ class CreateRancanganAnggaransTable extends Migration
     {
         Schema::create('rancangan_anggarans', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('usulan_id');
+            $table->unsignedInteger('usulan_id')->unique();
         });
     }
 

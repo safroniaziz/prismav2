@@ -81,12 +81,12 @@
                                                             <div class="modal-body">
                                                                 <input type="hidden" name="id" id="id">
                                                                 <div class="form-group col-md-12">
-                                                                    <label for="exampleInputEmail1">Nama Skim</label>
+                                                                    <label>Nama Skim</label>
                                                                     <input type="text" name="nm_skim" id="nm_skim" class="form-control" required>
                                                                 </div>
 
                                                                 <div class="form-group col-md-12">
-                                                                    <label for="exampleInputEmail1">Tahun</label>
+                                                                    <label>Tahun</label>
                                                                     <input type="number" name="tahun" id="tahun" class="form-control" required>
                                                                 </div>
                                                             </div>
@@ -114,12 +114,12 @@
                                                 <div class="modal-body">
                                                     <div class="row">
                                                         <div class="form-group col-md-12">
-                                                            <label for="exampleInputEmail1">Nama Skim</label>
+                                                            <label>Nama Skim</label>
                                                             <input type="text" name="nm_skim" class="form-control" required>
                                                         </div>
 
                                                         <div class="form-group col-md-12">
-                                                            <label for="exampleInputEmail1">Tahun</label>
+                                                            <label>Tahun</label>
                                                             <input type="number" name="tahun" class="form-control" required>
                                                         </div>
                                                     </div>
