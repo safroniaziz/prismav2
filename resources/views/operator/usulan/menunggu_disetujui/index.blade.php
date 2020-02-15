@@ -73,6 +73,10 @@
                                 $no=1;
                             @endphp
                             @foreach ($usulans as $usulan)
+                                @php
+                                    $jumlah = count(explode('&nbsp;|&nbsp;',$usulan->nm_reviewer));
+                                @endphp
+                                @if ($jumlah < 2)
                                 <tr>
                                     <td> {{ $no++ }} </td>
                                     <td> <a onclick="detail( {{ $usulan->id }} )" id="detail">{{ $usulan->judul_penelitian }}</a> </td>
@@ -113,17 +117,10 @@
                                         @endif
                                     </td>
                                     <td>
-                                        @php
-                                            $jumlah = count(explode('&nbsp;|&nbsp;',$usulan->nm_reviewer));
-                                        @endphp
-
-                                        @if ($jumlah == 2)
-                                            <button class="btn btn-primary btn-sm" style="color:white; cursor:pointer;" disabled><i class="fa fa-user-plus"></i></button>
-                                            @elseif($jumlah < 2)
-                                            <a onclick="tambahReviewer({{ $usulan->id }})" class="btn btn-primary btn-sm" style="color:white; cursor:pointer;"><i class="fa fa-user-plus"></i></a>
-                                        @endif
+                                        <a onclick="tambahReviewer({{ $usulan->id }})" class="btn btn-primary btn-sm" style="color:white; cursor:pointer;"><i class="fa fa-user-plus"></i></a>
                                     </td>
                                 </tr>
+                                @endif
                             @endforeach
                         </tbody>
                     </table>

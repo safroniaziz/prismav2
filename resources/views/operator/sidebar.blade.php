@@ -18,7 +18,7 @@
 
 <li><a><i class="fa fa-reply"></i>Usulan Penelitian <span class="fa fa-chevron-down"></span></a>
     <ul class="nav child_menu">
-        <li><a href=" {{ route('operator.menunggu') }} ">Belum Ada Reviewer</a></li>
+        <li><a href=" {{ route('operator.menunggu') }} ">Tambah Reviewer Penelitian</a></li>
     </ul>
 </li>
 

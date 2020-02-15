@@ -67,43 +67,22 @@ class UsulanMenungguController extends Controller
 
     public function reviewerPost(Request $request){
         $panda = new UserLoginController();
-        if(preg_match('/[A-Za-z]/', $request->reviewer_id)){
-            $reviewers = '
-                {dosen(dsnPegNip:"'.$request->reviewer_id.'"){
-                    dsnPegNip
-                    prodi {
-                        prodiKode
-                        prodiNamaResmi
-                        fakultas {
-                        fakKode
-                        fakNamaResmi
-                        }
+        $reviewers = '
+            {dosen(dsnPegNip:"'.$request->reviewer_id.'"){
+                dsnPegNip
+                prodi {
+                    prodiKode
+                    prodiNamaResmi
+                    fakultas {
+                    fakKode
+                    fakNamaResmi
                     }
-                    pegawai {
-                    pegNama
-                    }
-                }}
-            ';
-        }
-        else{
-            $reviewers = '
-                {dosen(dsnPegNip:'.$request->reviewer_id.'){
-                    dsnPegNip
-                    prodi {
-                        prodiKode
-                        prodiNamaResmi
-                        fakultas {
-                        fakKode
-                        fakNamaResmi
-                        }
-                    }
-                    pegawai {
-                    pegNama
-                    }
-                }}
-            ';
-        }
-
+                }
+                pegawai {
+                pegNama
+                }
+            }}
+        ';
         $reviewer = $panda->panda($reviewers);
         $anggota = new Reviewer1;
         $anggota->usulan_id = $request->usulan_id;

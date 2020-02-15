@@ -27,12 +27,6 @@ Route::group(['prefix'  => 'operator/'],function(){
     Auth::routes();
 });
 
-Route::group(['prefix'  => 'operator/manajemen_dosen'],function(){
-    Route::get('/','Operator\DosenController@index')->name('operator.dosen');
-    Route::get('/get_data_dosen','Operator\DosenController@getDataDosen')->name('operator.get_data_dosen');
-    Route::get('/api','Operator\DosenController@dataTable')->name('operator.dosen_api');
-});
-
 Route::group(['prefix'  => 'operator/manajemen_skim'],function(){
     Route::get('/','Operator\SkimController@index')->name('operator.skim');
     Route::post('/','Operator\SkimController@post')->name('operator.skim.add');
