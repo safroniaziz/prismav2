@@ -1,16 +1,16 @@
 @extends('layouts.layout')
 @section('title', 'Dashboard')
-@section('login_as', 'Administrator')
 @section('user-login')
-    @if (Auth::check())
-    {{ Auth::user()->nm_user }}
+    @if(Session::get('login') && Session::get('login',1))
+        {{ Session::get('nm_dosen') }}
     @endif
 @endsection
 @section('user-login2')
-    @if (Auth::check())
-    {{ Auth::user()->nm_user }}
+    @if(Session::get('login') && Session::get('login',1))
+        {{ Session::get('nm_dosen') }}
     @endif
 @endsection
+@section('login_as', 'Reviewer')
 @section('sidebar-menu')
     @include('reviewer/sidebar')
 @endsection
@@ -61,7 +61,9 @@
                                 <th>Ketua Peneliti</th>
                                 <th>Anggota Kelompok</th>
                                 <th>Biaya Diusulkan</th>
+                                <th>Rancangan Anggaran</th>
                                 <th>Peta Jalan</th>
+                                <th>Review</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -83,11 +85,16 @@
                                     </td>
                                     <td> Rp. {{ number_format($usulan->biaya_diusulkan, 2) }} </td>
                                     <td>
+                                        <a href="{{ route('reviewer.usulan.anggaran.cetak',[$usulan->id]) }}" class="btn btn-primary btn-sm" style="color:white; cursor:pointer;"><i class="fa fa-print"></i></a>
+                                    </td>
+                                    <td>
                                         <a href="{{ asset('upload/peta_jalan/'.$usulan->peta_jalan) }}" download="{{ $usulan->peta_jalan }}">
-                                            <button type="button" class="btn btn-primary" style="padding:5px;font-size:13px;color:white;cursor:pointer;"><i class="fa fa-download"></i>&nbsp; Download</button>
+                                            <button type="button" class="btn btn-primary" style="padding:5px;font-size:13px;color:white;cursor:pointer; padding:7px;"><i class="fa fa-download"></i></button>
                                         </a>
                                     </td>
-
+                                    <td>
+                                        <a href=" {{ route('reviewer.usulan.review',[$usulan->id]) }} " class="btn btn-primary btn-sm" style="color:white;"><i class="fa fa-star"></i></a>
+                                    </td>
                                 </tr>
                             @endforeach
                         </tbody>
@@ -241,9 +248,9 @@
                         res +=
                         '<b>'+value.nm_anggota+'</b>'+
                         '<ul>'+
-                            '<li>'+'Nip : '+value.nip+'</li>'+
-                            '<li>'+'Fakultas : '+value.fakultas+'</li>'+
-                            '<li>'+'Program Studi : '+value.prodi+'</li>'+
+                            '<li>'+'Nip : '+value.anggota_nip+'</li>'+
+                            '<li>'+'Fakultas : '+value.anggota_fakultas_nama+'</li>'+
+                            '<li>'+'Program Studi : '+value.anggota_prodi_nama+'</li>'+
                         '</ul>';
                     });
                     $('#anggota_penelitian_detail').html(res);
@@ -257,9 +264,9 @@
                             res2 +=
                             '<b>'+value.nm_anggota+'</b>'+
                             '<ul>'+
-                                '<li>'+'Nip : '+value.nip+'</li>'+
-                                '<li>'+'Fakultas : '+value.fakultas+'</li>'+
-                                '<li>'+'Program Studi : '+value.prodi+'</li>'+
+                                '<li>'+'Nip : '+value.reviewer_nip+'</li>'+
+                                '<li>'+'Fakultas : '+value.reviewer_fakultas_nama+'</li>'+
+                                '<li>'+'Program Studi : '+value.reviewer_prodi_nama+'</li>'+
                             '</ul>';
                         });
                         $('#reviewer_penelitian_detail').html(res2);

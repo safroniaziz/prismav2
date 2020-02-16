@@ -13,7 +13,6 @@ class DashboardController extends Controller
         $sesi = Session::get('akses');
         if(Session::get('login') && Session::get('login',1) && Session::get('akses',1)){
             if($sesi == 2){
-                $user = Dosen::where('nip',Session::get('nip'))->get();
                 return view('reviewer/dashboard');
             }
             else{

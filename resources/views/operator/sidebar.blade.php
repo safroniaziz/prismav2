@@ -16,14 +16,21 @@
     </ul>
 </li>
 
-<li><a><i class="fa fa-reply"></i>Usulan Penelitian <span class="fa fa-chevron-down"></span></a>
+<li><a><i class="fa fa-reply"></i>Usulan Penelitian <span class="fa fa-chevron-down" ></span></a>
     <ul class="nav child_menu">
-        <li><a href=" {{ route('operator.menunggu') }} ">Tambah Reviewer Penelitian</a></li>
+        <li><a href=" {{ route('operator.menunggu') }} ">Tambah Reviewer</a></li>
+        <li><a href=" {{ route('operator.proses_review') }} ">Dalam Proses Review</a></li>
+    </ul>
+</li>
+
+<li><a><i class="fa fa-check-square"></i>Formulir Penilaian <span class="fa fa-chevron-down"></span></a>
+    <ul class="nav child_menu">
+        <li><a href=" {{ route('operator.variabel_penilaian') }} ">Variabel Penilaian</a></li>
     </ul>
 </li>
 
 <li>
-    <a href=" {{ route('operator.operator') }} "><i class="fa fa-home"></i>Manajemen Operator</a>
+    <a href=" {{ route('operator.operator') }} "><i class="fa fa-users"></i>Manajemen Operator</a>
 </li>
 
 <li style="padding-left:2px;">

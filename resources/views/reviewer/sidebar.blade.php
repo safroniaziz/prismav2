@@ -2,10 +2,12 @@
     <a href=" {{ route('reviewer.dashboard') }} "><i class="fa fa-home"></i>Dashboard</a>
 </li>
 
-<li><a><i class="fa fa-newspaper-o"></i>Usulan Penelitian <span class="fa fa-chevron-down"></span></a>
-    <ul class="nav child_menu">
-        <li><a href=" {{ route('reviewer.menunggu') }} ">Menunggu Direview</a></li>
-    </ul>
+<li
+    @if (Route::current()->getName() == "reviewer.usulan.review")
+    class="current-page"
+    @endif
+>
+    <a href=" {{ route('reviewer.menunggu') }} "><i class="fa fa-newspaper-o"></i>Review Penelitian</a>
 </li>
 
 <li>

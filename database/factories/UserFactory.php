@@ -14,13 +14,21 @@ use Faker\Generator as Faker;
 |
 */
 
-$factory->define(App\User::class, function (Faker $faker) {
+// $factory->define(App\User::class, function (Faker $faker) {
+//     return [
+//         'nm_user' => $faker->name,
+//         'username'  => $faker->name,
+//         'email' => $faker->unique()->safeEmail,
+//         'email_verified_at' => now(),
+//         'password' => '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm', // secret
+//         'remember_token' => Str::random(10),
+//     ];
+// });
+
+$factory->define(App\Formulir::class, function (Faker $faker) {
     return [
-        'nm_user' => $faker->name,
-        'username'  => $faker->name,
-        'email' => $faker->unique()->safeEmail,
-        'email_verified_at' => now(),
-        'password' => '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm', // secret
-        'remember_token' => Str::random(10),
+        'variabel' => $faker->sentence($nbWords = 2, $variableNbWords = true),
+        'deskripsi'  => $faker->text,
+        'persentase' => $faker->numberBetween($min = 50, $max = 100),
     ];
 });

@@ -46,7 +46,7 @@ class UsulanController extends Controller
             }
             else{
                 Session::flush();
-                return redirect()->route('panda.login.form')->with(['error' => 'Anda Tidak Terdaftar Sebagai Mahasiswa']);
+                return redirect()->route('panda.login.form')->with(['error' => 'Anda Tidak Memiliki Akses Login']);
             }
         }
         else{
@@ -91,7 +91,7 @@ class UsulanController extends Controller
             }
             else{
                 Session::flush();
-                return redirect()->route('panda.login.form')->with(['error' => 'Anda Tidak Terdaftar Sebagai Mahasiswa']);
+                return redirect()->route('panda.login.form')->with(['error' => 'Anda Tidak Memiliki Akses Login']);
             }
         }
         else{
@@ -110,7 +110,7 @@ class UsulanController extends Controller
             }
             else{
                 Session::flush();
-                return redirect()->route('panda.login.form')->with(['error' => 'Anda Tidak Terdaftar Sebagai Mahasiswa']);
+                return redirect()->route('panda.login.form')->with(['error' => 'Anda Tidak Memiliki Akses Login']);
             }
         }
         else{
@@ -181,7 +181,7 @@ class UsulanController extends Controller
             }
             else{
                 Session::flush();
-                return redirect()->route('panda.login.form')->with(['error' => 'Anda Tidak Terdaftar Sebagai Mahasiswa']);
+                return redirect()->route('panda.login.form')->with(['error' => 'Anda Tidak Memiliki Akses Login']);
             }
         }
         else{
@@ -226,7 +226,7 @@ class UsulanController extends Controller
             }
             else{
                 Session::flush();
-                return redirect()->route('panda.login.form')->with(['error' => 'Anda Tidak Terdaftar Sebagai Mahasiswa']);
+                return redirect()->route('panda.login.form')->with(['error' => 'Anda Tidak Memiliki Akses Login']);
             }
         }
         else{
@@ -252,7 +252,7 @@ class UsulanController extends Controller
             }
             else{
                 Session::flush();
-                return redirect()->route('panda.login.form')->with(['error' => 'Anda Tidak Terdaftar Sebagai Mahasiswa']);
+                return redirect()->route('panda.login.form')->with(['error' => 'Anda Tidak Memiliki Akses Login']);
             }
         }
         else{
@@ -272,7 +272,7 @@ class UsulanController extends Controller
             }
             else{
                 Session::flush();
-                return redirect()->route('panda.login.form')->with(['error' => 'Anda Tidak Terdaftar Sebagai Mahasiswa']);
+                return redirect()->route('panda.login.form')->with(['error' => 'Anda Tidak Memiliki Akses Login']);
             }
         }
         else{
@@ -304,7 +304,7 @@ class UsulanController extends Controller
             }
             else{
                 Session::flush();
-                return redirect()->route('panda.login.form')->with(['error' => 'Anda Tidak Terdaftar Sebagai Mahasiswa']);
+                return redirect()->route('panda.login.form')->with(['error' => 'Anda Tidak Memiliki Akses Login']);
             }
         }
         else{
@@ -323,7 +323,7 @@ class UsulanController extends Controller
             }
             else{
                 Session::flush();
-                return redirect()->route('panda.login.form')->with(['error' => 'Anda Tidak Terdaftar Sebagai Mahasiswa']);
+                return redirect()->route('panda.login.form')->with(['error' => 'Anda Tidak Memiliki Akses Login']);
             }
         }
         else{
@@ -391,7 +391,7 @@ class UsulanController extends Controller
             }
             else{
                 Session::flush();
-                return redirect()->route('panda.login.form')->with(['error' => 'Anda Tidak Terdaftar Sebagai Mahasiswa']);
+                return redirect()->route('panda.login.form')->with(['error' => 'Anda Tidak Memiliki Akses Login']);
             }
         }
         else{
@@ -421,7 +421,7 @@ class UsulanController extends Controller
             }
             else{
                 Session::flush();
-                return redirect()->route('panda.login.form')->with(['error' => 'Anda Tidak Terdaftar Sebagai Mahasiswa']);
+                return redirect()->route('panda.login.form')->with(['error' => 'Anda Tidak Memiliki Akses Login']);
             }
         }
         else{
@@ -461,7 +461,7 @@ class UsulanController extends Controller
             }
             else{
                 Session::flush();
-                return redirect()->route('panda.login.form')->with(['error' => 'Anda Tidak Terdaftar Sebagai Mahasiswa']);
+                return redirect()->route('panda.login.form')->with(['error' => 'Anda Tidak Memiliki Akses Login']);
             }
         }
         else{
@@ -491,7 +491,7 @@ class UsulanController extends Controller
             }
             else{
                 Session::flush();
-                return redirect()->route('panda.login.form')->with(['error' => 'Anda Tidak Terdaftar Sebagai Mahasiswa']);
+                return redirect()->route('panda.login.form')->with(['error' => 'Anda Tidak Memiliki Akses Login']);
             }
         }
         else{

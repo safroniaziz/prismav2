@@ -330,18 +330,18 @@
                                             <div class="form-group col-md-4">
                                                 <label for="exampleInputEmail1">Pilih Program Studi</label>
                                                 <select name="prodi_id" id="prodi_id" class="form-control" required style="font-size:13px;">
-                                                    <option value="" disabled selected>-- pilih prodi --</option>
+                                                    <option value="">-- pilih prodi --</option>
                                                 </select>
                                             </div>
 
                                             <div class="form-group col-md-4">
                                                 <label for="exampleInputEmail1">Pilih Anggota</label>
                                                 <select name="anggota_id" id="anggota_id" class="form-control" required style="font-size:13px;">
-                                                    <option value="" disabled selected>-- pilih anggota --</option>
+                                                    <option value="">-- pilih anggota --</option>
                                                 </select>
                                             </div>
                                             <div class="col-md-12">
-                                                 <button type="submit" style="font-size:13px;" class="btn btn-primary" id="btn-submit"><i class="fa fa-save"></i>&nbsp;Simpan</button>
+                                                 <button type="submit" style="font-size:13px;" class="btn btn-primary" disabled id="btn-submit-anggota"><i class="fa fa-save"></i>&nbsp;Simpan</button>
                                                  <button type="reset" style="font-size:13px;" class="btn btn-danger"><i class="fa fa-refresh"></i>&nbsp; Reset</button>
                                             </div>
                                         </div>
@@ -567,5 +567,17 @@
                 }
             });
         }
+
+        $(document).ready(function(){
+            $('#anggota_id').change(function(){
+                var status = $('#anggota_id').val();
+                if(status != null){
+                    $('#btn-submit-anggota').attr('disabled',false);
+                }
+                else{
+                    $('#btn-submit-anggota').attr('disabled',true);
+                }
+            });
+        });
     </script>
 @endpush

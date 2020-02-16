@@ -70,23 +70,46 @@ class UserLoginController extends Controller
 				// }
 				// else{
                     $dosen2 = $this->panda($data_dosen);
-                    if($dosen2['dosen'][0]['pegawai']['pegawai_simpeg'] != null){
-                        Session::put('nip',$dosen2['dosen'][0]['dsnPegNip']);
-                        Session::put('nm_dosen',$dosen2['dosen'][0]['pegawai']['pegNama']);
-                        Session::put('prodi_kode',$dosen2['dosen'][0]['prodi']['prodiKode']);
-                        Session::put('prodi_nama',$dosen2['dosen'][0]['prodi']['prodiNamaResmi']);
-                        Session::put('fakultas_nama',$dosen2['dosen'][0]['prodi']['fakultas']['fakKode']);
-                        Session::put('fakultas_kode',$dosen2['dosen'][0]['prodi']['fakultas']['fakNamaResmi']);
-                        Session::put('nidn',$dosen2['dosen'][0]['dsnNidn']);
-                        Session::put('jabatan',$dosen2['dosen'][0]['pegawai']['pegawai_simpeg']['pegNmJabatan']);
-                        Session::put('jk',$dosen2['dosen'][0]['pegawai']['pegawai_simpeg']['pegJenkel']);
-                        Session::put('login',1);
-                        Session::put('akses',1);
-                        if (!empty(Session::get('akses')) && Session::get('akses',1)) {
-                            return redirect()->route('pengusul.dashboard');
+                    if ($dosen2['dosen'][0]['pegawai']['pegawai_simpeg'] != null) {
+                        if($dosen2['dosen'][0]['pegawai']['pegIsAktif'] == 1){
+                            Session::put('nip',$dosen2['dosen'][0]['dsnPegNip']);
+                            Session::put('nm_dosen',$dosen2['dosen'][0]['pegawai']['pegNama']);
+                            Session::put('prodi_kode',$dosen2['dosen'][0]['prodi']['prodiKode']);
+                            Session::put('prodi_nama',$dosen2['dosen'][0]['prodi']['prodiNamaResmi']);
+                            Session::put('fakultas_nama',$dosen2['dosen'][0]['prodi']['fakultas']['fakKode']);
+                            Session::put('fakultas_kode',$dosen2['dosen'][0]['prodi']['fakultas']['fakNamaResmi']);
+                            Session::put('nidn',$dosen2['dosen'][0]['dsnNidn']);
+                            Session::put('jabatan',$dosen2['dosen'][0]['pegawai']['pegawai_simpeg']['pegNmJabatan']);
+                            Session::put('jk',$dosen2['dosen'][0]['pegawai']['pegawai_simpeg']['pegJenkel']);
+                            Session::put('login',1);
+                            Session::put('akses',1);
+                            if (!empty(Session::get('akses')) && Session::get('akses',1)) {
+                                return redirect()->route('pengusul.dashboard');
+                            }
+                            else{
+                                return redirect()->route('panda.login.form')->with(['error'	=> 'Username dan Password Salah !! !!']);
+                            }
                         }
-                        else{
-                            return redirect()->route('panda.login.form')->with(['error'	=> 'Username dan Password Salah !! !!']);
+                    }
+                    else{
+                        if($dosen2['dosen'][0]['pegawai']['pegIsAktif'] == 1){
+                            Session::put('nip',$dosen2['dosen'][0]['dsnPegNip']);
+                            Session::put('nm_dosen',$dosen2['dosen'][0]['pegawai']['pegNama']);
+                            Session::put('prodi_kode',$dosen2['dosen'][0]['prodi']['prodiKode']);
+                            Session::put('prodi_nama',$dosen2['dosen'][0]['prodi']['prodiNamaResmi']);
+                            Session::put('fakultas_nama',$dosen2['dosen'][0]['prodi']['fakultas']['fakKode']);
+                            Session::put('fakultas_kode',$dosen2['dosen'][0]['prodi']['fakultas']['fakNamaResmi']);
+                            Session::put('nidn',$dosen2['dosen'][0]['dsnNidn']);
+                            Session::put('jabatan',"");
+                            Session::put('jk',"");
+                            Session::put('login',1);
+                            Session::put('akses',1);
+                            if (!empty(Session::get('akses')) && Session::get('akses',1)) {
+                                return redirect()->route('pengusul.dashboard');
+                            }
+                            else{
+                                return redirect()->route('panda.login.form')->with(['error'	=> 'Username dan Password Salah !! !!']);
+                            }
                         }
                     }
 
@@ -105,23 +128,46 @@ class UserLoginController extends Controller
                 // }else{
                     $dosen2 = $this->panda($data_dosen);
 
-                    if($dosen2['dosen'][0]['pegawai']['pegIsAktif'] == 1){
-                        Session::put('nip',$dosen2['dosen'][0]['dsnPegNip']);
-                        Session::put('nm_dosen',$dosen2['dosen'][0]['pegawai']['pegNama']);
-                        Session::put('prodi_kode',$dosen2['dosen'][0]['prodi']['prodiKode']);
-                        Session::put('prodi_nama',$dosen2['dosen'][0]['prodi']['prodiNamaResmi']);
-                        Session::put('fakultas_nama',$dosen2['dosen'][0]['prodi']['fakultas']['fakKode']);
-                        Session::put('fakultas_kode',$dosen2['dosen'][0]['prodi']['fakultas']['fakNamaResmi']);
-                        Session::put('nidn',$dosen2['dosen'][0]['dsnNidn']);
-                        Session::put('jabatan',$dosen2['dosen'][0]['pegawai']['pegawai_simpeg']['pegNmJabatan']);
-                        Session::put('jk',$dosen2['dosen'][0]['pegawai']['pegawai_simpeg']['pegJenkel']);
-                        Session::put('login',1);
-                        Session::put('akses',1);
-                        if (!empty(Session::get('akses')) && Session::get('akses',1)) {
-                            return redirect()->route('pengusul.dashboard');
+                    if ($dosen2['dosen'][0]['pegawai']['pegawai_simpeg'] != null) {
+                        if($dosen2['dosen'][0]['pegawai']['pegIsAktif'] == 1){
+                            Session::put('nip',$dosen2['dosen'][0]['dsnPegNip']);
+                            Session::put('nm_dosen',$dosen2['dosen'][0]['pegawai']['pegNama']);
+                            Session::put('prodi_kode',$dosen2['dosen'][0]['prodi']['prodiKode']);
+                            Session::put('prodi_nama',$dosen2['dosen'][0]['prodi']['prodiNamaResmi']);
+                            Session::put('fakultas_nama',$dosen2['dosen'][0]['prodi']['fakultas']['fakKode']);
+                            Session::put('fakultas_kode',$dosen2['dosen'][0]['prodi']['fakultas']['fakNamaResmi']);
+                            Session::put('nidn',$dosen2['dosen'][0]['dsnNidn']);
+                            Session::put('jabatan',$dosen2['dosen'][0]['pegawai']['pegawai_simpeg']['pegNmJabatan']);
+                            Session::put('jk',$dosen2['dosen'][0]['pegawai']['pegawai_simpeg']['pegJenkel']);
+                            Session::put('login',1);
+                            Session::put('akses',1);
+                            if (!empty(Session::get('akses')) && Session::get('akses',1)) {
+                                return redirect()->route('pengusul.dashboard');
+                            }
+                            else{
+                                return redirect()->route('panda.login.form')->with(['error'	=> 'Username dan Password Salah !! !!']);
+                            }
                         }
-                        else{
-                            return redirect()->route('panda.login.form')->with(['error'	=> 'Username dan Password Salah !! !!']);
+                    }
+                    else{
+                        if($dosen2['dosen'][0]['pegawai']['pegIsAktif'] == 1){
+                            Session::put('nip',$dosen2['dosen'][0]['dsnPegNip']);
+                            Session::put('nm_dosen',$dosen2['dosen'][0]['pegawai']['pegNama']);
+                            Session::put('prodi_kode',$dosen2['dosen'][0]['prodi']['prodiKode']);
+                            Session::put('prodi_nama',$dosen2['dosen'][0]['prodi']['prodiNamaResmi']);
+                            Session::put('fakultas_nama',$dosen2['dosen'][0]['prodi']['fakultas']['fakKode']);
+                            Session::put('fakultas_kode',$dosen2['dosen'][0]['prodi']['fakultas']['fakNamaResmi']);
+                            Session::put('nidn',$dosen2['dosen'][0]['dsnNidn']);
+                            Session::put('jabatan',"");
+                            Session::put('jk',"");
+                            Session::put('login',1);
+                            Session::put('akses',1);
+                            if (!empty(Session::get('akses')) && Session::get('akses',1)) {
+                                return redirect()->route('pengusul.dashboard');
+                            }
+                            else{
+                                return redirect()->route('panda.login.form')->with(['error'	=> 'Username dan Password Salah !! !!']);
+                            }
                         }
                     }
                 // }
@@ -190,20 +236,26 @@ class UserLoginController extends Controller
     	$data = $this->panda($query)['portallogin'];
 
     	$data_dosen = '
-			{dosen(dsnPegNip: "'.$username.'") {
-              dsnPegNip
-              prodi {
+            {dosen(dsnPegNip: "'.$username.'") {
+                dsnPegNip
+                dsnNidn
+                prodi {
                 prodiKode
                 prodiNamaResmi
                 fakultas {
-                  fakKode
-                  fakNamaResmi
+                    fakKode
+                    fakNamaResmi
                 }
-              }
-			  pegawai{
-			    pegNama
-			  }
-			}}
+                }
+                pegawai{
+                pegNama
+                pegIsAktif
+                pegawai_simpeg {
+                    pegJenkel
+                    pegNmJabatan
+                }
+                }
+            }}
         ';
 
         if($data[0]['is_access']==1){
@@ -214,23 +266,46 @@ class UserLoginController extends Controller
 				// }
 				// else{
 					$dosen2 = $this->panda($data_dosen);
-                   if($dosen2['dosen'][0]['pegawai']['pegIsAktif'] == 1){
-                        Session::put('nip',$dosen2['dosen'][0]['dsnPegNip']);
-                        Session::put('nm_dosen',$dosen2['dosen'][0]['pegawai']['pegNama']);
-                        Session::put('prodi_kode',$dosen2['dosen'][0]['prodi']['prodiKode']);
-                        Session::put('prodi_nama',$dosen2['dosen'][0]['prodi']['prodiNamaResmi']);
-                        Session::put('fakultas_nama',$dosen2['dosen'][0]['prodi']['fakultas']['fakKode']);
-                        Session::put('fakultas_kode',$dosen2['dosen'][0]['prodi']['fakultas']['fakNamaResmi']);
-                        Session::put('nidn',$dosen2['dosen'][0]['dsnNidn']);
-                        Session::put('jabatan',$dosen2['dosen'][0]['pegawai']['pegawai_simpeg']['pegNmJabatan']);
-                        Session::put('jk',$dosen2['dosen'][0]['pegawai']['pegawai_simpeg']['pegJenKel']);
-                        Session::put('login',1);
-                        Session::put('akses',2);
-                        if (!empty(Session::get('akses')) && Session::get('akses',2)) {
-                            return redirect()->route('reviewer.dashboard');
+                    if ($dosen2['dosen'][0]['pegawai']['pegawai_simpeg'] != null) {
+                        if($dosen2['dosen'][0]['pegawai']['pegIsAktif'] == 1){
+                            Session::put('nip',$dosen2['dosen'][0]['dsnPegNip']);
+                            Session::put('nm_dosen',$dosen2['dosen'][0]['pegawai']['pegNama']);
+                            Session::put('prodi_kode',$dosen2['dosen'][0]['prodi']['prodiKode']);
+                            Session::put('prodi_nama',$dosen2['dosen'][0]['prodi']['prodiNamaResmi']);
+                            Session::put('fakultas_nama',$dosen2['dosen'][0]['prodi']['fakultas']['fakKode']);
+                            Session::put('fakultas_kode',$dosen2['dosen'][0]['prodi']['fakultas']['fakNamaResmi']);
+                            Session::put('nidn',$dosen2['dosen'][0]['dsnNidn']);
+                            Session::put('jabatan',$dosen2['dosen'][0]['pegawai']['pegawai_simpeg']['pegNmJabatan']);
+                            Session::put('jk',$dosen2['dosen'][0]['pegawai']['pegawai_simpeg']['pegJenkel']);
+                            Session::put('login',1);
+                            Session::put('akses',2);
+                            if (!empty(Session::get('akses')) && Session::get('akses',2)) {
+                                return redirect()->route('reviewer.dashboard');
+                            }
+                            else{
+                                return redirect()->route('panda.login.form')->with(['error'	=> 'Username dan Password Salah !! !!']);
+                            }
                         }
-                        else{
-                            return redirect()->route('panda.login.form')->with(['error'	=> 'Username dan Password Salah !! !!']);
+                    }
+                    else{
+                        if($dosen2['dosen'][0]['pegawai']['pegIsAktif'] == 1){
+                            Session::put('nip',$dosen2['dosen'][0]['dsnPegNip']);
+                            Session::put('nm_dosen',$dosen2['dosen'][0]['pegawai']['pegNama']);
+                            Session::put('prodi_kode',$dosen2['dosen'][0]['prodi']['prodiKode']);
+                            Session::put('prodi_nama',$dosen2['dosen'][0]['prodi']['prodiNamaResmi']);
+                            Session::put('fakultas_nama',$dosen2['dosen'][0]['prodi']['fakultas']['fakKode']);
+                            Session::put('fakultas_kode',$dosen2['dosen'][0]['prodi']['fakultas']['fakNamaResmi']);
+                            Session::put('nidn',$dosen2['dosen'][0]['dsnNidn']);
+                            Session::put('jabatan',"");
+                            Session::put('jk',"");
+                            Session::put('login',1);
+                            Session::put('akses',2);
+                            if (!empty(Session::get('akses')) && Session::get('akses',2)) {
+                                return redirect()->route('reviewer.dashboard');
+                            }
+                            else{
+                                return redirect()->route('panda.login.form')->with(['error'	=> 'Username dan Password Salah !! !!']);
+                            }
                         }
                     }
 				// }
@@ -247,23 +322,46 @@ class UserLoginController extends Controller
             //         return redirect()->route('panda.reviewer_login.form')->with(['error'	=> 'NIP Anda Tidak Terdaftar !!']);
                 // }else{
                     $dosen2 = $this->panda($data_dosen);
-                    if($dosen2['dosen'][0]['pegawai']['pegIsAktif'] == 1){
-                        Session::put('nip',$dosen2['dosen'][0]['dsnPegNip']);
-                        Session::put('nm_dosen',$dosen2['dosen'][0]['pegawai']['pegNama']);
-                        Session::put('prodi_kode',$dosen2['dosen'][0]['prodi']['prodiKode']);
-                        Session::put('prodi_nama',$dosen2['dosen'][0]['prodi']['prodiNamaResmi']);
-                        Session::put('fakultas_nama',$dosen2['dosen'][0]['prodi']['fakultas']['fakKode']);
-                        Session::put('fakultas_kode',$dosen2['dosen'][0]['prodi']['fakultas']['fakNamaResmi']);
-                        Session::put('nidn',$dosen2['dosen'][0]['dsnNidn']);
-                        Session::put('jabatan',$dosen2['dosen'][0]['pegawai']['pegawai_simpeg']['pegNmJabatan']);
-                        Session::put('jk',$dosen2['dosen'][0]['pegawai']['pegawai_simpeg']['pegJenKel']);
-                        Session::put('login',1);
-                        Session::put('akses',2);
-                        if (!empty(Session::get('akses')) && Session::get('akses',2)) {
-                            return redirect()->route('reviewer.dashboard');
+                    if ($dosen2['dosen'][0]['pegawai']['pegawai_simpeg'] != null) {
+                        if($dosen2['dosen'][0]['pegawai']['pegIsAktif'] == 1){
+                            Session::put('nip',$dosen2['dosen'][0]['dsnPegNip']);
+                            Session::put('nm_dosen',$dosen2['dosen'][0]['pegawai']['pegNama']);
+                            Session::put('prodi_kode',$dosen2['dosen'][0]['prodi']['prodiKode']);
+                            Session::put('prodi_nama',$dosen2['dosen'][0]['prodi']['prodiNamaResmi']);
+                            Session::put('fakultas_nama',$dosen2['dosen'][0]['prodi']['fakultas']['fakKode']);
+                            Session::put('fakultas_kode',$dosen2['dosen'][0]['prodi']['fakultas']['fakNamaResmi']);
+                            Session::put('nidn',$dosen2['dosen'][0]['dsnNidn']);
+                            Session::put('jabatan',$dosen2['dosen'][0]['pegawai']['pegawai_simpeg']['pegNmJabatan']);
+                            Session::put('jk',$dosen2['dosen'][0]['pegawai']['pegawai_simpeg']['pegJenkel']);
+                            Session::put('login',1);
+                            Session::put('akses',2);
+                            if (!empty(Session::get('akses')) && Session::get('akses',2)) {
+                                return redirect()->route('reviewer.dashboard');
+                            }
+                            else{
+                                return redirect()->route('panda.login.form')->with(['error'	=> 'Username dan Password Salah !! !!']);
+                            }
                         }
-                        else{
-                            return redirect()->route('panda.login.form')->with(['error'	=> 'Username dan Password Salah !! !!']);
+                    }
+                    else{
+                        if($dosen2['dosen'][0]['pegawai']['pegIsAktif'] == 1){
+                            Session::put('nip',$dosen2['dosen'][0]['dsnPegNip']);
+                            Session::put('nm_dosen',$dosen2['dosen'][0]['pegawai']['pegNama']);
+                            Session::put('prodi_kode',$dosen2['dosen'][0]['prodi']['prodiKode']);
+                            Session::put('prodi_nama',$dosen2['dosen'][0]['prodi']['prodiNamaResmi']);
+                            Session::put('fakultas_nama',$dosen2['dosen'][0]['prodi']['fakultas']['fakKode']);
+                            Session::put('fakultas_kode',$dosen2['dosen'][0]['prodi']['fakultas']['fakNamaResmi']);
+                            Session::put('nidn',$dosen2['dosen'][0]['dsnNidn']);
+                            Session::put('jabatan',"");
+                            Session::put('jk',"");
+                            Session::put('login',1);
+                            Session::put('akses',2);
+                            if (!empty(Session::get('akses')) && Session::get('akses',2)) {
+                                return redirect()->route('reviewer.dashboard');
+                            }
+                            else{
+                                return redirect()->route('panda.login.form')->with(['error'	=> 'Username dan Password Salah !! !!']);
+                            }
                         }
                     }
                 // }

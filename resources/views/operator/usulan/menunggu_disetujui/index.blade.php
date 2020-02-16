@@ -277,7 +277,7 @@
                                             </select>
                                         </div>
                                         <div class="col-md-12">
-                                             <button type="submit" style="font-size:13px;" class="btn btn-primary" id="btn-submit"><i class="fa fa-save"></i>&nbsp;Simpan</button>
+                                             <button type="submit" style="font-size:13px;" class="btn btn-primary" disabled id="btn-submit-reviewer"><i class="fa fa-save"></i>&nbsp;Simpan</button>
                                              <button type="reset" style="font-size:13px;" class="btn btn-danger"><i class="fa fa-refresh"></i>&nbsp; Reset</button>
                                         </div>
                                     </div>
@@ -456,5 +456,17 @@
                 }
             });
         }
+
+        $(document).ready(function(){
+            $('#reviewer_id').change(function(){
+                var status = $('#reviewer_id').val();
+                if(status != null){
+                    $('#btn-submit-reviewer').attr('disabled',false);
+                }
+                else{
+                    $('#btn-submit-reviewer').attr('disabled',true);
+                }
+            });
+        });
     </script>
 @endpush

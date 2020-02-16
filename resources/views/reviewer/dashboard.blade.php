@@ -10,7 +10,7 @@
         {{ Session::get('nm_dosen') }}
     @endif
 @endsection
-@section('login_as', 'Dosen Reviewer')
+@section('login_as', 'Reviewer')
 @section('sidebar-menu')
     @include('reviewer/sidebar')
 @endsection

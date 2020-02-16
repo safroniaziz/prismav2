@@ -33,10 +33,6 @@
                             <strong><i class="fa fa-info-circle"></i>&nbsp;Perhatian: </strong> Berikut adalah semua skim anda yang tersedia, silahkan tambahkan skim baru jika diperlukan !!
                         </div>
                     @endif
-                    <div class="alert alert-success alert-block" style="display:none;" id="berhasil">
-                        <button type="button" class="close" data-dismiss="alert">×</button>
-                        <i class="fa fa-success-circle"></i><strong>Berhasil :</strong> Status admin telah diubah !!
-                    </div>
                 </div>
                 <div class="col-md-12" style="margin-bottom:5px;">
                     <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#exampleModal">
