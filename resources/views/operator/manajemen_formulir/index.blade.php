@@ -17,7 +17,7 @@
 @section('content')
     <section class="panel" style="margin-bottom:20px;">
         <header class="panel-heading" style="color: #ffffff;background-color: #074071;border-color: #fff000;border-image: none;border-style: solid solid none;border-width: 4px 0px 0;border-radius: 0;font-size: 14px;font-weight: 700;padding: 15px;">
-            <i class="fa fa-home"></i>&nbsp;Manajemen Variabel Penilaian Penelitian
+            <i class="fa fa-home"></i>&nbsp;Manajemen Kriteria Penilaian Penelitian
         </header>
         <div class="panel-body" style="border-top: 1px solid #eee; padding:15px; background:white;">
             <div class="row" style="margin-right:-15px; margin-left:-15px;">
@@ -30,13 +30,13 @@
                         @else
                         <div class="alert alert-success alert-block" id="keterangan">
                             <button type="button" class="close" data-dismiss="alert">×</button>
-                            <strong><i class="fa fa-info-circle"></i>&nbsp;Perhatian: </strong> Berikut adalah semua variabel penilaian yang tersedia, silahkan tambahkan variabel penilaian baru jika diperlukan !!
+                            <strong><i class="fa fa-info-circle"></i>&nbsp;Perhatian: </strong> Berikut adalah semua kriteria penilaian yang tersedia, silahkan tambahkan kriteria penilaian baru jika diperlukan !!
                         </div>
                     @endif
                 </div>
                 <div class="col-md-12" style="margin-bottom:5px;">
                     <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#exampleModal">
-                        <i class="fa fa-plus" style="font-size:12px;"></i>&nbsp;Tambah Variabel Penilaian
+                        <i class="fa fa-plus" style="font-size:12px;"></i>&nbsp;Tambah Kriteria Penilaian
                     </button>
                 </div>
                 <div class="col-md-12">
@@ -44,9 +44,8 @@
                         <thead>
                             <tr>
                                 <th>No</th>
-                                <th>Variabel</th>
-                                <th>Deskripsi</th>
-                                <th>Persentase Nilai</th>
+                                <th>Kriteria Penilaian</th>
+                                <th>Bobot</th>
                                 <th>Aksi</th>
                             </tr>
                         </thead>
@@ -57,9 +56,8 @@
                             @foreach ($formulirs as $formulir)
                                 <tr>
                                     <td> {{ $no++ }} </td>
-                                    <td> {{ $formulir->variabel }} </td>
-                                    <td> {{ $formulir->deskripsi }} </td>
-                                    <td> {{ $formulir->persentase }} </td>
+                                    <td> {{ $formulir->kriteria_penilaian }} </td>
+                                    <td> {{ $formulir->bobot }} </td>
                                     <td>
                                         <a onclick="ubahFormulir({{ $formulir->id }})" class="btn btn-primary btn-sm" style="color:white; cursor:pointer;"><i class="fa fa-edit"></i></a>
                                         <a onclick="hapusFormulir({{ $formulir->id }})" class="btn btn-danger btn-sm" style="color:white; cursor:pointer;"><i class="fa fa-trash"></i></a>
@@ -69,28 +67,23 @@
                                         <div class="modal-dialog modal-lg" role="document">
                                         <div class="modal-content">
                                             <div class="modal-header">
-                                                <p style="font-size:15px;" class="modal-title" id="exampleModalLabel"><i class="fa fa-user"></i>&nbsp;Form Ubah Data Variabel Penilaian</p>
+                                                <p style="font-size:15px;" class="modal-title" id="exampleModalLabel"><i class="fa fa-user"></i>&nbsp;Form Ubah Data Kriteria Penilaian</p>
                                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                     <span aria-hidden="true">&times;</span>
                                                 </button>
                                             </div>
-                                            <form action=" {{ route('operator.variabel_penilaian.update') }} " method="POST" enctype="multipart/form-data">
+                                            <form action=" {{ route('operator.kriteria_penilaian.update') }} " method="POST" enctype="multipart/form-data">
                                                 {{ csrf_field() }} {{ method_field('PATCH') }}
                                                             <div class="modal-body">
                                                                 <input type="hidden" name="id" id="id">
                                                                 <div class="form-group col-md-12">
-                                                                    <label>Variabel Penilaian</label>
-                                                                    <input type="text" name="variabel" id="variabel" class="form-control" required placeholder="masukan variabel">
+                                                                    <label>Kriteria Penilaian</label>
+                                                                    <input type="text" name="kriteria_penilaian" id="kriteria_penilaian" class="form-control" required placeholder="masukan kriteria penilaian">
                                                                 </div>
 
                                                                 <div class="form-group col-md-12">
-                                                                    <label>Deskripsi</label>
-                                                                    <textarea name="deskripsi" id="deskripsi" class="form-control" cols="30" rows="3" placeholder="masukan deskripsi"></textarea>
-                                                                </div>
-
-                                                                <div class="form-group col-md-12">
-                                                                    <label>Persentase Nilai <a style="color:red;"><i>hanya angka</i></a></label>
-                                                                    <input type="number" name="persentase" id="persentase" class="form-control" required placeholder="masukan persentase">
+                                                                    <label>Bobot Nilai <a style="color:red;"><i>hanya angka</i></a></label>
+                                                                    <input type="number" name="bobot" id="bobot" class="form-control" required placeholder="masukan bobot">
                                                                 </div>
                                                             </div>
                                                     <div class="modal-footer">
@@ -107,28 +100,23 @@
                                 <div class="modal-dialog" role="document">
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                            <p style="font-size:15px;" class="modal-title" id="exampleModalLabel"><i class="fa fa-user"></i>&nbsp;Form Tambah Variabel Penilaian Baru</p>
+                                            <p style="font-size:15px;" class="modal-title" id="exampleModalLabel"><i class="fa fa-user"></i>&nbsp;Form Tambah Kriteria Penilaian Baru</p>
                                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                 <span aria-hidden="true">&times;</span>
                                             </button>
                                         </div>
-                                        <form action=" {{ route('operator.variabel_penilaian.add') }} " method="POST" enctype="multipart/form-data">
+                                        <form action=" {{ route('operator.kriteria_penilaian.add') }} " method="POST" enctype="multipart/form-data">
                                             {{ csrf_field() }} {{ method_field('POST') }}
                                                 <div class="modal-body">
                                                     <div class="row">
                                                         <div class="form-group col-md-12">
-                                                            <label>Variabel Penilaian</label>
-                                                            <input type="text" name="variabel" class="form-control" required placeholder="masukan variabel">
+                                                            <label>Kriteria Penilaian</label>
+                                                            <textarea name="kriteria_penilaian" class="form-control" cols="30" rows="3" placeholder="masukan kriteria penilaian"></textarea>
                                                         </div>
 
                                                         <div class="form-group col-md-12">
-                                                            <label>Deskripsi</label>
-                                                            <textarea name="deskripsi" class="form-control" id="" cols="30" rows="3" placeholder="masukan deskripsi"></textarea>
-                                                        </div>
-
-                                                        <div class="form-group col-md-12">
-                                                            <label>Persentase Nilai <a style="color:red;"><i>hanya angka</i></a></label>
-                                                            <input type="number" name="persentase" class="form-control" required placeholder="masukan persentase">
+                                                            <label>Bobot Nilai <a style="color:red;"><i>hanya angka</i></a></label>
+                                                            <input type="number" name="bobot" class="form-control" required placeholder="masukan bobot">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -153,11 +141,11 @@
                                 </button>
                             </div>
                             <div class="modal-body">
-                              Apakah anda yakin akan menghapus data Variabel Penilaian ?
+                              Apakah anda yakin akan menghapus data kriteria penilaian ?
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-outline-light btn-sm " style="color:white;" data-dismiss="modal"><i class="fa fa-close"></i>&nbsp;Close</button>
-                                <form method="POST" action="{{ route('operator.variabel_penilaian.delete') }}">
+                                <form method="POST" action="{{ route('operator.kriteria_penilaian.delete') }}">
                                     {{ csrf_field() }}
                                     {{ method_field('DELETE') }}
                                     <input type="hidden" name="id" id="id_hapus">
@@ -182,15 +170,14 @@
 
         function ubahFormulir(id){
             $.ajax({
-                url: "{{ url('operator/variabel_penilaian') }}"+'/'+ id + "/edit",
+                url: "{{ url('operator/kriteria_penilaian') }}"+'/'+ id + "/edit",
                 type: "GET",
                 dataType: "JSON",
                 success: function(data){
                     $('#modalubah').modal('show');
                     $('#id').val(data.id);
-                    $('#variabel').val(data.variabel);
-                    $('#deskripsi').val(data.deskripsi);
-                    $('#persentase').val(data.persentase);
+                    $('#kriteria_penilaian').val(data.kriteria_penilaian);
+                    $('#bobot').val(data.bobot);
                 },
                 error:function(){
                     alert("Nothing Data");

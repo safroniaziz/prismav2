@@ -20,12 +20,20 @@
     <ul class="nav child_menu">
         <li><a href=" {{ route('operator.menunggu') }} ">Tambah Reviewer</a></li>
         <li><a href=" {{ route('operator.proses_review') }} ">Dalam Proses Review</a></li>
+        <li><a href=" {{ route('operator.verifikasi') }} ">Menunggu Verifikasi</a></li>
+    </ul>
+</li>
+
+<li><a><i class="fa fa-reply"></i>Hasil Verifikasi <span class="fa fa-chevron-down" ></span></a>
+    <ul class="nav child_menu">
+        <li><a href=" {{ route('operator.diterima') }} ">Usulan Diterima</a></li>
+        <li><a href=" {{ route('operator.ditolak') }} ">Usulan Ditolak</a></li>
     </ul>
 </li>
 
 <li><a><i class="fa fa-check-square"></i>Formulir Penilaian <span class="fa fa-chevron-down"></span></a>
     <ul class="nav child_menu">
-        <li><a href=" {{ route('operator.variabel_penilaian') }} ">Variabel Penilaian</a></li>
+        <li><a href=" {{ route('operator.kriteria_penilaian') }} ">Kriteria Penilaian</a></li>
     </ul>
 </li>
 

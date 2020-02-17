@@ -134,8 +134,8 @@ class UserLoginController extends Controller
                             Session::put('nm_dosen',$dosen2['dosen'][0]['pegawai']['pegNama']);
                             Session::put('prodi_kode',$dosen2['dosen'][0]['prodi']['prodiKode']);
                             Session::put('prodi_nama',$dosen2['dosen'][0]['prodi']['prodiNamaResmi']);
-                            Session::put('fakultas_nama',$dosen2['dosen'][0]['prodi']['fakultas']['fakKode']);
-                            Session::put('fakultas_kode',$dosen2['dosen'][0]['prodi']['fakultas']['fakNamaResmi']);
+                            Session::put('fakultas_kode',$dosen2['dosen'][0]['prodi']['fakultas']['fakKode']);
+                            Session::put('fakultas_nama',$dosen2['dosen'][0]['prodi']['fakultas']['fakNamaResmi']);
                             Session::put('nidn',$dosen2['dosen'][0]['dsnNidn']);
                             Session::put('jabatan',$dosen2['dosen'][0]['pegawai']['pegawai_simpeg']['pegNmJabatan']);
                             Session::put('jk',$dosen2['dosen'][0]['pegawai']['pegawai_simpeg']['pegJenkel']);
@@ -155,8 +155,8 @@ class UserLoginController extends Controller
                             Session::put('nm_dosen',$dosen2['dosen'][0]['pegawai']['pegNama']);
                             Session::put('prodi_kode',$dosen2['dosen'][0]['prodi']['prodiKode']);
                             Session::put('prodi_nama',$dosen2['dosen'][0]['prodi']['prodiNamaResmi']);
-                            Session::put('fakultas_nama',$dosen2['dosen'][0]['prodi']['fakultas']['fakKode']);
-                            Session::put('fakultas_kode',$dosen2['dosen'][0]['prodi']['fakultas']['fakNamaResmi']);
+                            Session::put('fakultas_kode',$dosen2['dosen'][0]['prodi']['fakultas']['fakKode']);
+                            Session::put('fakultas_nama',$dosen2['dosen'][0]['prodi']['fakultas']['fakNamaResmi']);
                             Session::put('nidn',$dosen2['dosen'][0]['dsnNidn']);
                             Session::put('jabatan',"");
                             Session::put('jk',"");
@@ -272,8 +272,8 @@ class UserLoginController extends Controller
                             Session::put('nm_dosen',$dosen2['dosen'][0]['pegawai']['pegNama']);
                             Session::put('prodi_kode',$dosen2['dosen'][0]['prodi']['prodiKode']);
                             Session::put('prodi_nama',$dosen2['dosen'][0]['prodi']['prodiNamaResmi']);
-                            Session::put('fakultas_nama',$dosen2['dosen'][0]['prodi']['fakultas']['fakKode']);
-                            Session::put('fakultas_kode',$dosen2['dosen'][0]['prodi']['fakultas']['fakNamaResmi']);
+                            Session::put('fakultas_kode',$dosen2['dosen'][0]['prodi']['fakultas']['fakKode']);
+                            Session::put('fakultas_nama',$dosen2['dosen'][0]['prodi']['fakultas']['fakNamaResmi']);
                             Session::put('nidn',$dosen2['dosen'][0]['dsnNidn']);
                             Session::put('jabatan',$dosen2['dosen'][0]['pegawai']['pegawai_simpeg']['pegNmJabatan']);
                             Session::put('jk',$dosen2['dosen'][0]['pegawai']['pegawai_simpeg']['pegJenkel']);
@@ -293,8 +293,8 @@ class UserLoginController extends Controller
                             Session::put('nm_dosen',$dosen2['dosen'][0]['pegawai']['pegNama']);
                             Session::put('prodi_kode',$dosen2['dosen'][0]['prodi']['prodiKode']);
                             Session::put('prodi_nama',$dosen2['dosen'][0]['prodi']['prodiNamaResmi']);
-                            Session::put('fakultas_nama',$dosen2['dosen'][0]['prodi']['fakultas']['fakKode']);
-                            Session::put('fakultas_kode',$dosen2['dosen'][0]['prodi']['fakultas']['fakNamaResmi']);
+                            Session::put('fakultas_kode',$dosen2['dosen'][0]['prodi']['fakultas']['fakKode']);
+                            Session::put('fakultas_nama',$dosen2['dosen'][0]['prodi']['fakultas']['fakNamaResmi']);
                             Session::put('nidn',$dosen2['dosen'][0]['dsnNidn']);
                             Session::put('jabatan',"");
                             Session::put('jk',"");

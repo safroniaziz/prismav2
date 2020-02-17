@@ -93,7 +93,11 @@
                                         </a>
                                     </td>
                                     <td>
-                                        <a href=" {{ route('reviewer.usulan.review',[$usulan->id]) }} " class="btn btn-primary btn-sm" style="color:white;"><i class="fa fa-star"></i></a>
+                                        @if ($usulan->reviewer_id == null)
+                                            <a href=" {{ route('reviewer.usulan.review',[$usulan->id, $usulan->skim_id]) }} " class="btn btn-primary btn-sm" style="color:white;"><i class="fa fa-star"></i></a>
+                                            @else
+                                            <button class="btn btn-primary btn-sm" style="color:white;" disabled><i class="fa fa-star"></i></button>
+                                        @endif
                                     </td>
                                 </tr>
                             @endforeach

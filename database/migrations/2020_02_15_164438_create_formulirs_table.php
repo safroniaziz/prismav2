@@ -15,9 +15,9 @@ class CreateFormulirsTable extends Migration
     {
         Schema::create('formulirs', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('variabel');
-            $table->string('deskripsi');
-            $table->integer('persentase');
+            $table->string('kriteria_penilaian');
+            $table->string('bobot');
+            $table->unsignedInteger('skim_id');
             $table->timestamps();
         });
     }

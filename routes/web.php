@@ -53,12 +53,12 @@ Route::group(['prefix'  => 'operator/bidang_penelitian'],function(){
     Route::delete('/','Operator\BidangPenelitianController@delete')->name('operator.bidang.delete');
 });
 
-Route::group(['prefix'  => 'operator/variabel_penilaian'],function(){
-    Route::get('/','Operator\VariabelPenilaianController@index')->name('operator.variabel_penilaian');
-    Route::post('/','Operator\VariabelPenilaianController@post')->name('operator.variabel_penilaian.add');
-    Route::get('/{id}/edit','Operator\VariabelPenilaianController@edit')->name('operator.variabel_penilaian.edit');
-    Route::patch('/','Operator\VariabelPenilaianController@update')->name('operator.variabel_penilaian.update');
-    Route::delete('/','Operator\VariabelPenilaianController@delete')->name('operator.variabel_penilaian.delete');
+Route::group(['prefix'  => 'operator/kriteria_penilaian'],function(){
+    Route::get('/','Operator\KriteriaPenilaianController@index')->name('operator.kriteria_penilaian');
+    Route::post('/','Operator\KriteriaPenilaianController@post')->name('operator.kriteria_penilaian.add');
+    Route::get('/{id}/edit','Operator\KriteriaPenilaianController@edit')->name('operator.kriteria_penilaian.edit');
+    Route::patch('/','Operator\KriteriaPenilaianController@update')->name('operator.kriteria_penilaian.update');
+    Route::delete('/','Operator\KriteriaPenilaianController@delete')->name('operator.kriteria_penilaian.delete');
 });
 
 Route::group(['prefix'  => 'operator/usulan_dosen/menunggu_disetujui'],function(){
@@ -76,6 +76,19 @@ Route::group(['prefix'  => 'operator/usulan_dosen/proses_review'],function(){
     Route::get('/{id}/detail','Operator\UsulanProsesReviewController@detail')->name('operator.proses_review.deail');
     Route::get('/{id}/get_reviewer','Operator\UsulanProsesReviewController@getReviewer')->name('operator.usulan.get_reviewer');
     Route::get('/anggaran/{id}/cetak','Operator\UsulanProsesReviewController@anggaranCetak')->name('operator.usulan.anggaran.cetak');
+});
+
+Route::group(['prefix'  => 'operator/usulan_dosen/menunggu_verifikasi'],function(){
+    Route::get('/','Operator\VerifikasiUsulanController@index')->name('operator.verifikasi');
+    Route::get('/{id}/detail','Operator\VerifikasiUsulanController@detail')->name('operator.verifikasi.detail');
+    Route::get('/{id}/get_reviewer','Operator\VerifikasiUsulanController@getReviewer')->name('operator.verifikasi.get_reviewer');
+    Route::get('/anggaran/{id}/cetak','Operator\VerifikasiUsulanController@anggaranCetak')->name('operator.verifikasi.anggaran.cetak');
+    Route::patch('/verifikasi','Operator\VerifikasiUsulanController@verifikasi')->name('operator.verifikasi.verifikasi');
+});
+
+Route::group(['prefix'  => 'operator/usulan_dosen/hasil_verifikasi'],function(){
+    Route::get('/diterima','Operator\UsulanDiterimaController@diterima')->name('operator.diterima');
+    Route::get('/ditolak','Operator\UsulanDitolakController@ditolak')->name('operator.ditolak');
 });
 
 Route::group(['prefix'  => 'operator/manajemen_operator'],function(){
@@ -126,5 +139,6 @@ Route::group(['prefix'  => 'reviewer/usulan_dosen/menunggu_disetujui'],function(
     Route::get('/','Reviewer\UsulanMenungguController@index')->name('reviewer.menunggu');
     Route::get('/{id}/detail','Reviewer\UsulanMenungguController@detail')->name('reviewer.menunggu.detail');
     Route::get('/anggaran/{id}/cetak','Reviewer\UsulanMenungguController@anggaranCetak')->name('reviewer.usulan.anggaran.cetak');
-    Route::get('/{id}/review','Reviewer\UsulanMenungguController@review')->name('reviewer.usulan.review');
+    Route::get('/{id}/{skim_id}/review','Reviewer\UsulanMenungguController@review')->name('reviewer.usulan.review');
+    Route::post('/review','Reviewer\UsulanMenungguController@reviewPost')->name('reviewer.usulan.review_post');
 });
