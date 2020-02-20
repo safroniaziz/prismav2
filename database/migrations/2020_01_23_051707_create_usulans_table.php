@@ -33,7 +33,7 @@ class CreateUsulansTable extends Migration
             $table->string('peta_jalan')->nullable();
             $table->string('biaya_diusulkan');
             $table->string('tahun_usulan');
-            $table->enum('status_usulan',['0','1','2','3','4','5','6'])->default('0');
+            $table->enum('status_usulan',['0','1','2','3','4','5','6','7'])->default('0');
             $table->timestamps();
         });
     }
