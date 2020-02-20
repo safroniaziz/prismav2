@@ -35,6 +35,7 @@ class DashboardController extends Controller
         ];
         // return $data;
         $len = Count($data['usulan1']);
+        $totals = [];
         for ($i=0; $i <$len ; $i++) {
             $totals[] = [
                 'fakultas'  => $data['usulan1'][$i]->ketua_peneliti_fakultas_nama,
