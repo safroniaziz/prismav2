@@ -52,7 +52,6 @@
                 <div class="panel-body" style="border-top: 1px solid #eee; padding:15px; background:white;">
                     <div class="row">
                         @section('charts')
-                                @if (count($totals)>0)
                                 chart.data = [
                                     @foreach ($totals as $total)
                                         {
@@ -61,7 +60,6 @@
                                         },
                                     @endforeach
                                 ];
-                                @endif
                         @endsection
                         <div id="chartdiv"></div>
                     </div>
