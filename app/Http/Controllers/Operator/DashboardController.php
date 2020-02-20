@@ -46,7 +46,6 @@ class DashboardController extends Controller
         $bidang = Count(BidangPenelitian::all());
         $kriteria = Count(Formulir::all());
         $usulan = Count(LaporanAkhir::all());
-        return $totals;
         return view('operator/dashboard', compact('totals','skim','bidang','kriteria','usulan'));
     }
 }
