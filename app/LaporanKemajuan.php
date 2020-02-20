@@ -4,9 +4,10 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class UsulanDisetujui extends Model
+class LaporanKemajuan extends Model
 {
     protected $fillable = [
-        'usulan_id'
+        'usulan_id',
+        'file_kemajuan'
     ];
 }

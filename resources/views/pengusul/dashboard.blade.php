@@ -40,12 +40,12 @@
                     <!-- small box -->
                     <div class="small-box bg-aqua" style="margin-bottom:0px;">
                         <div class="inner">
-                        <h3>150</h3>
+                        <h3> {{ $usulans }} </h3>
 
-                        <p>New Orders</p>
+                        <p>Semua Usulan Saya</p>
                         </div>
                         <div class="icon">
-                        <i class="fa fa-home"></i>
+                        <i class="fa fa-list"></i>
                         </div>
                         <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
                     </div>
@@ -54,9 +54,9 @@
                     <!-- small box -->
                     <div class="small-box bg-red" style="margin-bottom:0px;">
                         <div class="inner">
-                        <h3>150</h3>
+                        <h3> {{ $belum_diteruskan }} </h3>
 
-                        <p>New Orders</p>
+                        <p>Usulan Belum Diteruskan</p>
                         </div>
                         <div class="icon">
                         <i class="fa fa-home"></i>
@@ -68,9 +68,9 @@
                     <!-- small box -->
                     <div class="small-box bg-yellow" style="margin-bottom:0px;">
                         <div class="inner">
-                        <h3>150</h3>
+                        <h3>{{ $didanai }}</h3>
 
-                        <p>New Orders</p>
+                        <p>Usulan Didanai</p>
                         </div>
                         <div class="icon">
                         <i class="fa fa-home"></i>
@@ -82,9 +82,9 @@
                     <!-- small box -->
                     <div class="small-box bg-green" style="margin-bottom:0px;">
                         <div class="inner">
-                        <h3>150</h3>
+                        <h3>{{ $tidak_didanai }}</h3>
 
-                        <p>New Orders</p>
+                        <p>Usulan Tidak Didanai</p>
                         </div>
                         <div class="icon">
                         <i class="fa fa-home"></i>

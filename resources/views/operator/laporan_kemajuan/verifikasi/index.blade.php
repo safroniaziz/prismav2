@@ -29,7 +29,7 @@
             <i class="fa fa-home"></i>&nbsp;Verifikasi Usulan Publikasi, Riset dan Pengabdian Kepada Masyarakat
         </header>
         <div class="panel-body" style="border-top: 1px solid #eee; padding:15px; background:white;">
-            <form action="{{ route('operator.verifikasi.verifikasi') }}" method="POST">
+            <form action="{{ route('operator.laporan_kemajuan.verifikasi.verifikasi') }}" method="POST">
 
                 <div class="row" style="margin-right:-15px; margin-left:-15px;">
                     <div class="col-md-12">
@@ -80,7 +80,7 @@
                                     <tr>
 
                                         <td style="text-align:center;">
-                                            @if($usulan->status_usulan != "3" && $usulan->status_usulan != "4")
+                                            @if($usulan->status_usulan != "6" && $usulan->status_usulan != "7")
                                             <input type="checkbox" name="ids[]" class="selectbox" value="{{ $usulan->id }}">
                                             @endif
                                         </td>
@@ -192,7 +192,7 @@
 
         function detail(id){
             $.ajax({
-                url: "{{ url('operator/usulan_dosen/menunggu_verifikasi') }}"+'/'+ id + "/detail",
+                url: "{{ url('operator/usulan_dosen/laporan_kemajuan/menunggu_verifikasi') }}"+'/'+ id + "/detail",
                 type: "GET",
                 dataType: "JSON",
                 success: function(data){

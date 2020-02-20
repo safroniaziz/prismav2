@@ -39,7 +39,7 @@
                         @else
                         <div class="alert alert-success alert-block" id="keterangan">
                             <button type="button" class="close" data-dismiss="alert">×</button>
-                            <strong><i class="fa fa-info-circle"></i>&nbsp;Perhatian: </strong> Silakan Review Semua Usulan Penelitian Dibawah Ini
+                            <strong><i class="fa fa-info-circle"></i>&nbsp;Perhatian: </strong> Berikut adalah semua usulan anda yang tersedia, silahkan tambahkan usulan baru jika diperlukan !!
                         </div>
                     @endif
                     <div class="alert alert-success alert-block" style="display:none;" id="usulan-berhasil">
@@ -57,12 +57,9 @@
                             <tr>
                                 <th>No</th>
                                 <th>Judul Penelitian</th>
-                                <th>Bidang Penelitian</th>
                                 <th>Ketua Peneliti</th>
                                 <th>Anggota Kelompok</th>
-                                <th>Biaya Diusulkan</th>
-                                <th>Rancangan Anggaran</th>
-                                <th>Peta Jalan</th>
+                                <th>Laporan Kemajuan</th>
                                 <th>Review</th>
                             </tr>
                         </thead>
@@ -74,7 +71,6 @@
                                 <tr>
                                     <td> {{ $no++ }} </td>
                                     <td> <a onclick="detail( {{ $usulan->id }} )" id="detail">{{ $usulan->judul_penelitian }}</a> </td>
-                                    <td> {{ $usulan->bidang_penelitian }} </td>
                                     <td> {{ $usulan->nm_ketua_peneliti }} </td>
                                     <td>
                                         @if ($usulan->nm_anggota == null)
@@ -83,18 +79,14 @@
                                             <label class="badge" style="font-size:12px;">&nbsp;{!! $usulan->nm_anggota !!}</label>
                                         @endif
                                     </td>
-                                    <td> Rp. {{ number_format($usulan->biaya_diusulkan, 2) }} </td>
                                     <td>
-                                        <a href="{{ route('reviewer.usulan.anggaran.cetak',[$usulan->id]) }}" class="btn btn-primary btn-sm" style="color:white; cursor:pointer;"><i class="fa fa-print"></i></a>
-                                    </td>
-                                    <td>
-                                        <a href="{{ asset('upload/peta_jalan/'.$usulan->peta_jalan) }}" download="{{ $usulan->peta_jalan }}">
+                                        <a href="{{ asset('upload/laporan_kemajuan/'.$usulan->file_kemajuan) }}" download="{{ $usulan->file_kemajuan }}">
                                             <button type="button" class="btn btn-primary" style="padding:5px;font-size:13px;color:white;cursor:pointer; padding:7px;"><i class="fa fa-download"></i></button>
                                         </a>
                                     </td>
                                     <td>
                                         @if ($usulan->reviewer_id == null)
-                                            <a href=" {{ route('reviewer.usulan.review',[$usulan->id, $usulan->skim_id]) }} " class="btn btn-primary btn-sm" style="color:white;"><i class="fa fa-star"></i></a>
+                                            <a href=" {{ route('reviewer.laporan_kemajuan.review',[$usulan->id, $usulan->skim_id]) }} " class="btn btn-primary btn-sm" style="color:white;"><i class="fa fa-star"></i></a>
                                             @else
                                             <button class="btn btn-primary btn-sm" style="color:white;" disabled><i class="fa fa-star"></i></button>
                                         @endif
@@ -230,7 +222,7 @@
 
         function detail(id){
             $.ajax({
-                url: "{{ url('reviewer/usulan_dosen/menunggu_disetujui') }}"+'/'+ id + "/detail",
+                url: "{{ url('reviewer/usulan_dosen/laporan_kemajuan') }}"+'/'+ id + "/detail",
                 type: "GET",
                 dataType: "JSON",
                 success: function(data){

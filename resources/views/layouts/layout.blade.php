@@ -57,9 +57,13 @@
 
   <body class="nav-md">
     <div class="container body">
-      <div class="main_container">
-        <div class="col-md-3 left_col menu_fixed" style="background: #013C62 !important;">
-          <div class="left_col scroll-view" style="background: #013C62 !important;">
+      <div class="main_container" style="background:#013C62;">
+        @if (Auth::check())
+            <div class="col-md-3 left_col menu_fixed" style="background: #013C62 !important; overflow:auto !important; scrollbar-width: none !important;">
+            @else
+            <div class="col-md-3 left_col menu_fixed" style="background: #013C62 !important;">
+        @endif
+        <div class="left_col scroll-view" style="background: #013C62 !important;">
             <div class="navbar nav_title" style="border-bottom: 1px white solid;; margin:0; padding-bottom:5px 0px !important; background:#013C62;">
                 <a href="index.html" class="site_title" style="font-weight:600;"><i class="fa fa-home"></i> <span>PRISMA UNIB</span></a>
               </div>

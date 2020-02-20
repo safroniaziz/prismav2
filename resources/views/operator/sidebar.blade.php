@@ -16,6 +16,12 @@
     </ul>
 </li>
 
+<li><a><i class="fa fa-check-square"></i>Formulir Penilaian <span class="fa fa-chevron-down"></span></a>
+    <ul class="nav child_menu">
+        <li><a href=" {{ route('operator.kriteria_penilaian') }} ">Kriteria Penilaian</a></li>
+    </ul>
+</li>
+
 <li><a><i class="fa fa-reply"></i>Usulan Penelitian <span class="fa fa-chevron-down" ></span></a>
     <ul class="nav child_menu">
         <li><a href=" {{ route('operator.menunggu') }} ">Tambah Reviewer</a></li>
@@ -24,21 +30,35 @@
     </ul>
 </li>
 
-<li><a><i class="fa fa-reply"></i>Hasil Verifikasi <span class="fa fa-chevron-down" ></span></a>
+<li><a><i class="fa fa-check-circle"></i>Hasil Verifikasi Usulan<span class="fa fa-chevron-down" ></span></a>
     <ul class="nav child_menu">
-        <li><a href=" {{ route('operator.diterima') }} ">Usulan Diterima</a></li>
-        <li><a href=" {{ route('operator.ditolak') }} ">Usulan Ditolak</a></li>
+        <li><a href=" {{ route('operator.diterima') }} ">Usulan Didanai</a></li>
+        <li><a href=" {{ route('operator.ditolak') }} ">Usulan Tidak Didanai</a></li>
     </ul>
 </li>
 
-<li><a><i class="fa fa-check-square"></i>Formulir Penilaian <span class="fa fa-chevron-down"></span></a>
+
+<li><a><i class="fa fa-upload"></i>Laporan Kemajuan <span class="fa fa-chevron-down" ></span></a>
     <ul class="nav child_menu">
-        <li><a href=" {{ route('operator.kriteria_penilaian') }} ">Kriteria Penilaian</a></li>
+        <li><a href=" {{ route('operator.laporan_kemajuan') }} ">Tambah Reviewer</a></li>
+        <li><a href=" {{ route('operator.laporan_kemajuan.proses_review') }} ">Dalam Proses Review</a></li>
+        <li><a href=" {{ route('operator.laporan_kemajuan.verifikasi') }} ">Menunggu Verifikasi</a></li>
+    </ul>
+</li>
+
+<li><a><i class="fa fa-check-circle"></i>Hasil Lap. Kemajuan<span class="fa fa-chevron-down" ></span></a>
+    <ul class="nav child_menu">
+        <li><a href=" {{ route('operator.laporan_kemajuan_diterima') }} ">Laporan Kemajuan Disetujui</a></li>
+        <li><a href=" {{ route('operator.laporan_kemajuan_ditolak') }} ">Laporan Kemajuan Tidak Disetujui</a></li>
     </ul>
 </li>
 
 <li>
-    <a href=" {{ route('operator.operator') }} "><i class="fa fa-users"></i>Manajemen Operator</a>
+    <a href=" {{ route('operator.laporan_akhir') }} "><i class="fa fa-list"></i>Laporan Akhir</a>
+</li>
+
+<li>
+    <a href=" {{ route('operator.operator') }} "><i class="fa fa-user"></i>Manajemen Operator</a>
 </li>
 
 <li style="padding-left:2px;">

@@ -12,6 +12,7 @@ use App\Fakultas;
 use App\Prodi;
 use App\RancanganAnggaran;
 use App\AnggotaUsulan;
+use App\UsulanDisetujui;
 use PDF;
 
 class VerifikasiUsulanController extends Controller
@@ -22,41 +23,23 @@ class VerifikasiUsulanController extends Controller
     }
 
     public function index(){
-        $usulans = Usulan::leftJoin('anggota_usulans','anggota_usulans.usulan_id','usulans.id')
-                            ->leftJoin('skims','skims.id','usulans.skim_id')
-                            ->leftJoin('bidang_penelitians','bidang_penelitians.id','usulans.bidang_id')
-                            ->leftJoin('reviewer1s','reviewer1s.usulan_id','usulans.id')
-                            ->select('usulans.id','judul_penelitian','nm_bidang as bidang_penelitian',
-                                    'abstrak','kata_kunci','peta_jalan','biaya_diusulkan','status_usulan','ketua_peneliti_prodi_nama','ketua_peneliti_nama as nm_ketua_peneliti',
-                                    DB::raw('group_concat(distinct concat(anggota_usulans.anggota_nama) SEPARATOR "<br>") as "nm_anggota" '),
-                                    DB::raw('SUM(reviewer_nip) as jumlah')
-                                    )
-                            ->where('usulans.status_usulan','2')
+        $usulans = Usulan::leftJoin('nilai_formulirs','nilai_formulirs.usulan_id','usulans.id')
+                            ->leftJoin('formulirs','formulirs.id','nilai_formulirs.formulir_id')
+                            ->select('usulans.id','judul_penelitian',DB::raw('SUM(skor * (bobot/100)/2) as totalskor'))
                             ->groupBy('usulans.id')
+                            ->where('status_usulan','2')
                             ->get();
         return view('operator/usulan/verifikasi.index',compact('usulans'));
     }
 
     public function detail($id){
-        $usulan = Usulan::leftJoin('anggota_usulans','anggota_usulans.usulan_id','usulans.id')
-                        ->leftJoin('skims','skims.id','usulans.skim_id')
-                        ->leftJoin('bidang_penelitians','bidang_penelitians.id','usulans.bidang_id')
-                        ->select('usulans.id','judul_penelitian','nm_bidang as bidang_penelitian','ketua_peneliti_fakultas_nama','ketua_peneliti_prodi_nama',
-                                'ketua_peneliti_nama as nm_ketua_peneliti','ketua_peneliti_nip as nip','kata_kunci','nm_skim','abstrak','kata_kunci','peta_jalan','biaya_diusulkan','tahun_usulan')
-                        ->where('usulans.id',$id)
-                        ->first();
-        $anggotas = AnggotaUsulan::select('anggota_nama as nm_anggota','anggota_prodi_nama','anggota_fakultas_nama','anggota_nip')
-                                    ->where('usulan_id',$id)
-                                    ->get();
-        $reviewers = Reviewer1::select('reviewer_nama as nm_anggota','reviewer_prodi_nama','reviewer_fakultas_nama','reviewer_nip')
-                                    ->where('usulan_id',$id)
-                                    ->get();
-        $data = [
-            'usulan'        => $usulan,
-            'anggotas'      => $anggotas,
-            'reviewers'      => $reviewers,
-        ];
-        return $data;
+        $usulan = Usulan::leftJoin('nilai_formulirs','nilai_formulirs.usulan_id','usulans.id')
+                            ->leftJoin('formulirs','formulirs.id','nilai_formulirs.formulir_id')
+                            ->select('usulans.id','judul_penelitian',DB::raw('SUM(skor * (bobot/100)/2) as skor'),'kriteria_penilaian')
+                            ->where('usulans.id',$id)
+                            ->groupBy('formulirs.id')
+                            ->get();
+        return $usulan;
     }
 
     public function getReviewer($id){
@@ -92,13 +75,30 @@ class VerifikasiUsulanController extends Controller
     }
 
     public function verifikasi(Request $request){
-        $ids = $request->get('ids');
-        $status = '3';
-        $dbs = Usulan::whereIn('id', explode(',', $ids))->update([
-            'status_usulan' => $status,
-        ]);
-        return $dbs;
+        if (!empty($request->ids)) {
+            if ($request->verifikasi == "Setujui") {
+                for ($i=0; $i < count($request->ids); $i++) {
+                    $ver = Usulan::find($request->ids[$i]);
+                    $ver->status_usulan =   "3";
+                    $ver->update();
 
-        return redirect()->route('operator.verifikasi')->with(['success'    =>  'Usulan Penelitian berhasil diverifikasi !!']);
+                    $setuju = new UsulanDisetujui;
+                    $setuju->usulan_id = $request->ids[$i];
+                    $setuju->save();
+                }
+            }
+            else{
+                for ($i=0; $i < count($request->ids); $i++) {
+                    $ver = Usulan::find($request->ids[$i]);
+                    $ver->status_usulan =   "4";
+                    $ver->update();
+                }
+            }
+            return redirect()->route('operator.verifikasi')->with(['success'    =>  'Usulan Penelitian berhasil diverifikasi !!']);
+        }
+        else{
+            return redirect()->route('operator.verifikasi')->with(['error'    =>  'Harap pilih usulan penelitian terlebih dahulu !!']);
+        }
+
     }
 }

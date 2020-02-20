@@ -489,21 +489,41 @@
                     $("#bahan_habis").hide();
                     $("#peralatan_penunjang").hide();
                     $("#perjalanan_lainnya").hide();
+
+                    $('#honor_output input').prop('required',true);
+                    $('#bahan_habis input').prop('required',false);
+                    $('#peralatan_penunjang input').prop('required',false);
+                    $('#perjalanan_lainnya input').prop('required',false);
                 }else if(jenis == "bahan_habis"){
                     $("#bahan_habis").show();
                     $("#peralatan_penunjang").hide();
                     $("#perjalanan_lainnya").hide();
                     $("#honor_output").hide();
+
+                    $('#honor_output input').prop('required',false);
+                    $('#bahan_habis input').prop('required',true);
+                    $('#peralatan_penunjang input').prop('required',false);
+                    $('#perjalanan_lainnya input').prop('required',false);
                 }else if(jenis == "peralatan_penunjang"){
                     $("#bahan_habis").hide();
                     $("#peralatan_penunjang").show();
                     $("#perjalanan_lainnya").hide();
                     $("#honor_output").hide();
+
+                    $('#honor_output input').prop('required',false);
+                    $('#bahan_habis input').prop('required',false);
+                    $('#peralatan_penunjang input').prop('required',true);
+                    $('#perjalanan_lainnya input').prop('required',false);
                 }else if(jenis == "perjalanan_lainnya"){
                     $("#bahan_habis").hide();
                     $("#peralatan_penunjang").hide();
                     $("#perjalanan_lainnya").show();
                     $("#honor_output").hide();
+
+                    $('#honor_output input').prop('required',false);
+                    $('#bahan_habis input').prop('required',false);
+                    $('#peralatan_penunjang input').prop('required',false);
+                    $('#perjalanan_lainnya input').prop('required',true);
                 }
             });
         });

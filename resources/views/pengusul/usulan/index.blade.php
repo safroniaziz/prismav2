@@ -179,22 +179,22 @@
                                                                 </div>
                                                                 <div class="form-group col-md-6">
                                                                     <label for="exampleInputEmail1">Biaya Yang Diusulkan :</label>
-                                                                    <input type="number" name="biaya_diusulkan" id="biaya_diusulkan" class="form-control">
+                                                                    <input type="number" name="biaya_diusulkan" id="biaya_diusulkan" class="form-control" required>
                                                                 </div>
                                                                 <div class="form-group col-md-12">
                                                                     <label for="exampleInputEmail1">File Peta Jalan : <a style="color:red; font-style:italic; font-size:12px;">Harap masukan file pdf</a></label>
-                                                                    <input type="file" name="peta_jalan" id="peta_jalan" accept="application/pdf" class="form-control" style="padding-bottom:30px;">
+                                                                    <input type="file" name="peta_jalan" id="peta_jalan" accept="application/pdf" class="form-control" style="padding-bottom:30px;" required>
                                                                     <div style="color:red;" style="margin-bottom:10px;">
                                                                         File Lama :<a id="peta_name"></a>
                                                                     </div>
                                                                 </div>
                                                                 <div class="form-group col-md-12">
                                                                     <label for="exampleInputEmail1">Abstrak</label>
-                                                                    <textarea name="abstrak_edit" id="abstrak_edit" cols="30" rows="10"></textarea>
+                                                                    <textarea name="abstrak_edit" id="abstrak_edit" cols="30" rows="10" required></textarea>
                                                                 </div>
                                                                 <div class="form-group col-md-12">
                                                                     <label for="exampleInputEmail1">Kata Kunci</label>
-                                                                    <input id="tags_2" type="text" name="kata_kunci[]" id="kata_kunci" class="tags form-control" />
+                                                                    <input id="tags_2" type="text" name="kata_kunci[]" id="kata_kunci" class="tags form-control" required />
                                                                     <div id="suggestions-container" style="position: relative; float: left; width: 250px;"></div>
                                                                 </div>
                                                             </div>
@@ -249,7 +249,7 @@
                                                         </div>
                                                         <div class="form-group col-md-6">
                                                             <label for="exampleInputEmail1">Biaya Yang Diusulkan :</label>
-                                                            <input type="number" name="biaya_diusulkan" class="form-control">
+                                                            <input type="number" name="biaya_diusulkan" class="form-control" required>
                                                         </div>
                                                         <div class="form-group col-md-12">
                                                             <label for="exampleInputEmail1">File Peta Jalan : <a style="color:red; font-style:italic; font-size:12px;">Harap masukan file pdf</a></label>
@@ -257,11 +257,11 @@
                                                         </div>
                                                         <div class="form-group col-md-12">
                                                             <label for="exampleInputEmail1">Abstrak</label>
-                                                            <textarea name="abstrak" cols="30" rows="10"></textarea>
+                                                            <textarea name="abstrak" cols="30" rows="10" required></textarea>
                                                         </div>
                                                         <div class="form-group col-md-12">
                                                             <label for="exampleInputEmail1">Kata Kunci</label>
-                                                            <input id="tags_1" type="text" name="kata_kunci[]" class="tags form-control" />
+                                                            <input id="tags_1" type="text" name="kata_kunci[]" class="tags form-control" required />
                                                             <div id="suggestions-container" style="position: relative; float: left; width: 250px;"></div>
                                                         </div>
                                                     </div>

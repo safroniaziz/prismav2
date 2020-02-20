@@ -205,22 +205,43 @@ class UsulanController extends Controller
                           fakNamaResmi
                         }
                       }
-                    pegawai {
-                      pegNama
-                    }
+                      pegawai{
+                        pegNama
+                        pegIsAktif
+                        pegawai_simpeg {
+                            pegJenkel
+                            pegNmJabatan
+                        }
+                      }
 
                   }}
                 ';
                 $details = $panda->panda($detail);
-                $anggota = new AnggotaUsulan;
-                $anggota->usulan_id = $request->usulan_id;
-                $anggota->anggota_nip = $request->anggota_id;
-                $anggota->anggota_nama = $details['dosen'][0]['pegawai']['pegNama'];
-                $anggota->anggota_prodi_id = $details['dosen'][0]['prodi']['prodiKode'];
-                $anggota->anggota_prodi_nama = $details['dosen'][0]['prodi']['prodiNamaResmi'];
-                $anggota->anggota_fakultas_id = $details['dosen'][0]['prodi']['fakultas']['fakKode'];
-                $anggota->anggota_fakultas_nama = $details['dosen'][0]['prodi']['fakultas']['fakNamaResmi'];
-                $anggota->save();
+                if ($details['dosen'][0]['pegawai']['pegawai_simpeg'] != null) {
+                    $anggota = new AnggotaUsulan;
+                    $anggota->usulan_id = $request->usulan_id;
+                    $anggota->anggota_nip = $request->anggota_id;
+                    $anggota->anggota_nama = $details['dosen'][0]['pegawai']['pegNama'];
+                    $anggota->anggota_prodi_id = $details['dosen'][0]['prodi']['prodiKode'];
+                    $anggota->anggota_prodi_nama = $details['dosen'][0]['prodi']['prodiNamaResmi'];
+                    $anggota->anggota_fakultas_id = $details['dosen'][0]['prodi']['fakultas']['fakKode'];
+                    $anggota->anggota_fakultas_nama = $details['dosen'][0]['prodi']['fakultas']['fakNamaResmi'];
+                    $anggota->anggota_jabatan_fungsional = $details['dosen'][0]['pegawai']['pegawai_simpeg']['pegNmJabatan'];
+                    $anggota->anggota_jk = $details['dosen'][0]['pegawai']['pegawai_simpeg']['pegJenkel'];
+                    $anggota->anggota_universitas = "Universitas Bengkulu";
+                    $anggota->save();
+                }
+                else{
+                    $anggota = new AnggotaUsulan;
+                    $anggota->usulan_id = $request->usulan_id;
+                    $anggota->anggota_nip = $request->anggota_id;
+                    $anggota->anggota_nama = $details['dosen'][0]['pegawai']['pegNama'];
+                    $anggota->anggota_prodi_id = $details['dosen'][0]['prodi']['prodiKode'];
+                    $anggota->anggota_prodi_nama = $details['dosen'][0]['prodi']['prodiNamaResmi'];
+                    $anggota->anggota_fakultas_id = $details['dosen'][0]['prodi']['fakultas']['fakKode'];
+                    $anggota->anggota_fakultas_nama = $details['dosen'][0]['prodi']['fakultas']['fakNamaResmi'];
+                    $anggota->save();
+                }
 
                 return redirect()->route('pengusul.usulan')->with(['success' =>  'Anggota berhasil ditambahkan !']);
             }
