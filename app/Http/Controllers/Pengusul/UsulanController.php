@@ -217,6 +217,7 @@ class UsulanController extends Controller
                   }}
                 ';
                 $details = $panda->panda($detail);
+                // return $details['dosen'][0]['pegawai']['pegNama'];
                 if ($details['dosen'][0]['pegawai']['pegawai_simpeg'] != null) {
                     $anggota = new AnggotaUsulan;
                     $anggota->usulan_id = $request->usulan_id;
