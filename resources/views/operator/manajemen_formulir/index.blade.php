@@ -44,6 +44,7 @@
                         <thead>
                             <tr>
                                 <th>No</th>
+                                <th>Skim Penilaian</th>
                                 <th>Kriteria Penilaian</th>
                                 <th>Bobot</th>
                                 <th>Aksi</th>
@@ -56,6 +57,7 @@
                             @foreach ($formulirs as $formulir)
                                 <tr>
                                     <td> {{ $no++ }} </td>
+                                    <td> {{ $formulir->nm_skim }} </td>
                                     <td> {{ $formulir->kriteria_penilaian }} </td>
                                     <td> {{ $formulir->bobot }} </td>
                                     <td>
@@ -76,6 +78,17 @@
                                                 {{ csrf_field() }} {{ method_field('PATCH') }}
                                                             <div class="modal-body">
                                                                 <input type="hidden" name="id" id="id">
+
+                                                                <div class="form-group col-md-12">
+                                                                    <label>Skim Penelitian</label>
+                                                                    <select name="skim_id" id="skim_id" class="form-control" required id="">
+                                                                        <option value="" disabled selected>-- pilih skim penelitian --</option>
+                                                                        @foreach ($skims as $skim)
+                                                                            <option value="{{ $skim->id }}"> {{ $skim->nm_skim }} </option>
+                                                                        @endforeach
+                                                                    </select>
+                                                                </div>
+
                                                                 <div class="form-group col-md-12">
                                                                     <label>Kriteria Penilaian</label>
                                                                     <input type="text" name="kriteria_penilaian" id="kriteria_penilaian" class="form-control" required placeholder="masukan kriteria penilaian">
@@ -109,6 +122,16 @@
                                             {{ csrf_field() }} {{ method_field('POST') }}
                                                 <div class="modal-body">
                                                     <div class="row">
+                                                        <div class="form-group col-md-12">
+                                                            <label>Skim Penelitian</label>
+                                                            <select name="skim_id" class="form-control" required id="">
+                                                                <option value="" disabled selected>-- pilih skim penelitian --</option>
+                                                                @foreach ($skims as $skim)
+                                                                    <option value=" {{ $skim->id }} "> {{ $skim->nm_skim }} </option>
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
+
                                                         <div class="form-group col-md-12">
                                                             <label>Kriteria Penilaian</label>
                                                             <textarea name="kriteria_penilaian" class="form-control" cols="30" rows="3" placeholder="masukan kriteria penilaian"></textarea>
@@ -176,6 +199,7 @@
                 success: function(data){
                     $('#modalubah').modal('show');
                     $('#id').val(data.id);
+                    $('#skim_id').val(data.skim_id);
                     $('#kriteria_penilaian').val(data.kriteria_penilaian);
                     $('#bobot').val(data.bobot);
                 },

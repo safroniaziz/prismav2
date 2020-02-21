@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Operator;
 use App\Formulir;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Carbon;
+use App\Skim;
 
 class KriteriaPenilaianController extends Controller
 {
@@ -14,21 +16,23 @@ class KriteriaPenilaianController extends Controller
     }
 
     public function index(){
-        $formulirs = Formulir::select('id','kriteria_penilaian','bobot')->get();
-        return view('operator/manajemen_formulir.index',compact('formulirs'));
+        $skims = Skim::where('tahun',date('Y'))->get();
+        $formulirs = Formulir::join('skims','skims.id','formulirs.skim_id')->select('formulirs.id','nm_skim','kriteria_penilaian','bobot')->get();
+        return view('operator/manajemen_formulir.index',compact('formulirs','skims'));
     }
 
     public function post(Request $request){
         $formulir = new Formulir;
         $formulir->kriteria_penilaian = $request->kriteria_penilaian;
         $formulir->bobot = $request->bobot;
+        $formulir->skim_id = $request->skim_id;
         $formulir->save();
 
         return redirect()->route('operator.kriteria_penilaian')->with(['success' =>  'Kriteria Penilaian baru berhasil ditambahkan !']);
     }
 
     public function edit($id){
-        $formulir = Formulir::find($id);
+        $formulir = Formulir::join('skims','skims.id','formulirs.skim_id')->select('formulirs.id','skims.id as skim_id','nm_skim','kriteria_penilaian','bobot')->where('formulirs.id',$id)->first();
         return $formulir;
     }
 
