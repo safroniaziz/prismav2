@@ -33,6 +33,7 @@ Route::group(['prefix'  => 'operator/manajemen_skim'],function(){
     Route::get('/{id}/edit','Operator\SkimController@edit')->name('operator.skim.edit');
     Route::patch('/','Operator\SkimController@update')->name('operator.skim.update');
     Route::delete('/','Operator\SkimController@delete')->name('operator.skim.delete');
+    Route::get('/generate','Operator\SkimController@generate')->name('operator.skim.generate');
 });
 
 Route::group(['prefix'  => 'operator/manajemen_prodi'],function(){
@@ -152,13 +153,17 @@ Route::group(['prefix'  => 'pengusul/manajemen_usulan'],function(){
     Route::post('/anggota','Pengusul\UsulanController@anggotaPost')->name('pengusul.usulan.anggota_post');
     Route::get('/{id}/get_anggota','Pengusul\UsulanController@getAnggota')->name('pengusul.usulan.get_anggota');
     Route::get('/cari_prodi','Pengusul\UsulanController@cariProdi')->name('admin.pembahasan.cari_prodi');
-    Route::get('/cari_anggota','Pengusul\UsulanController@cariAnggota')->name('admin.pembahasan.cari_anggota');
+    Route::get('/cari_anggota','Pengusul\UsulanController@cariAnggota')->name('deta.pembahasan.cari_anggota');
     Route::patch('/usulkan','Pengusul\UsulanController@usulkan')->name('pengusul.usulan.usulkan');
-    Route::post('/anggaran','Pengusul\UsulanController@anggaranPost')->name('pengusul.usulan.anggaran_post');
+    Route::post('/anggaran_honor','Pengusul\UsulanController@anggaranHonorPost')->name('pengusul.usulan.anggaran_honor_post');
+    Route::post('/anggaran_habis','Pengusul\UsulanController@anggaranHabisPost')->name('pengusul.usulan.anggaran_habis_post');
+    Route::post('/anggaran_penunjang','Pengusul\UsulanController@anggaranPenunjangPost')->name('pengusul.usulan.anggaran_penunjang_post');
+    Route::post('/anggaran_lainnya','Pengusul\UsulanController@anggaranLainnyaPost')->name('pengusul.usulan.anggaran_lainnya_post');
     Route::get('/anggaran/{id}/cetak','Pengusul\UsulanController@anggaranCetak')->name('pengusul.usulan.anggaran.cetak');
     Route::get('/','Pengusul\UsulanController@index')->name('pengusul.usulan');
     Route::get('/{id}/detail_anggaran','Pengusul\UsulanController@detailAnggaran')->name('pengusul.usulan.detail_anggaran');
     Route::get('/{id}/get_anggaran','Pengusul\UsulanController@getAnggaran')->name('pengusul.usulan.get_anggaran');
+    Route::get('/{id}/detail_judul','Pengusul\UsulanController@detailJudul')->name('pengusul.usulan.detail_judul');
 });
 
 Route::group(['prefix'  => 'pengusul/upload_laporan_kemajuan'],function(){

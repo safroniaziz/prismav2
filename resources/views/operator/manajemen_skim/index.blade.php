@@ -33,11 +33,14 @@
                             <strong><i class="fa fa-info-circle"></i>&nbsp;Perhatian: </strong> Berikut adalah semua skim anda yang tersedia, silahkan tambahkan skim baru jika diperlukan !!
                         </div>
                     @endif
+                    <div class="alert alert-warning alert-block" id="proses" style="display:none;">
+                        <button type="button" class="close" data-dismiss="alert">×</button>
+                        <strong><i class="fa fa-info-circle"></i>&nbsp;Perhatian: </strong> Proses update membutuhkan beberapa waktu, harap tunggu !
+                    </div>
                 </div>
                 <div class="col-md-12" style="margin-bottom:5px;">
-                    <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#exampleModal">
-                        <i class="fa fa-plus" style="font-size:12px;"></i>&nbsp;Tambah Skim
-                    </button>
+                    <a href="{{ route('operator.skim.generate') }}" id="generate" class="btn btn-primary btn-sm"><i class="fa fa-spinner fa-spin"></i>&nbsp; Generate Data</a>
+                    <a class="btn btn-warning  btn-flat"  style=" display:none;color:white; font-size:12px;" id="tunggu"><i class="fa fa-cog fa-spin"></i>&nbsp;Harap Tunggu</a>
                 </div>
                 <div class="col-md-12">
                     <table class="table table-striped table-bordered" id="table" style="width:100%;">
@@ -46,7 +49,6 @@
                                 <th>No</th>
                                 <th>Nama Skim</th>
                                 <th>Tahun</th>
-                                <th>Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -57,104 +59,17 @@
                                 <tr>
                                     <td> {{ $no++ }} </td>
                                     <td> {{ $skim->nm_skim }} </td>
-                                    <td> {{ $skim->tahun }} </td>
                                     <td>
-                                        <a onclick="ubahSkim({{ $skim->id }})" class="btn btn-primary btn-sm" style="color:white; cursor:pointer;"><i class="fa fa-edit"></i></a>
-                                        <a onclick="hapusSkim({{ $skim->id }})" class="btn btn-danger btn-sm" style="color:white; cursor:pointer;"><i class="fa fa-trash"></i></a>
+                                        @if ($skim->tahun == null)
+                                            <label for="" class="badge badge-danger" style="padding:5px;">-</label>
+                                            @else
+                                            {{ $skim->tahun }}
+                                        @endif
                                     </td>
-                                    <!-- Modal Ubah -->
-                                    <div class="modal fade" id="modalubah" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                        <div class="modal-dialog modal-lg" role="document">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <p style="font-size:15px;" class="modal-title" id="exampleModalLabel"><i class="fa fa-user"></i>&nbsp;Form Ubah Data Skim</p>
-                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                    <span aria-hidden="true">&times;</span>
-                                                </button>
-                                            </div>
-                                            <form action=" {{ route('operator.skim.update') }} " method="POST" enctype="multipart/form-data">
-                                                {{ csrf_field() }} {{ method_field('PATCH') }}
-                                                            <div class="modal-body">
-                                                                <input type="hidden" name="id" id="id">
-                                                                <div class="form-group col-md-12">
-                                                                    <label>Nama Skim</label>
-                                                                    <input type="text" name="nm_skim" id="nm_skim" class="form-control" required>
-                                                                </div>
-
-                                                                <div class="form-group col-md-12">
-                                                                    <label>Tahun</label>
-                                                                    <input type="number" name="tahun" id="tahun" class="form-control" required>
-                                                                </div>
-                                                            </div>
-                                                    <div class="modal-footer">
-                                                        <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-close"></i>&nbsp;Batalkan</button>
-                                                        <button type="submit" class="btn btn-primary"><i class="fa fa-check-circle"></i>&nbsp;Simpan Perubahan</button>
-                                                    </div>
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
                                 </tr>
                             @endforeach
-                            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                <div class="modal-dialog" role="document">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <p style="font-size:15px;" class="modal-title" id="exampleModalLabel"><i class="fa fa-user"></i>&nbsp;Form Tambah Skim Baru</p>
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>
-                                        <form action=" {{ route('operator.skim.add') }} " method="POST" enctype="multipart/form-data">
-                                            {{ csrf_field() }} {{ method_field('POST') }}
-                                                <div class="modal-body">
-                                                    <div class="row">
-                                                        <div class="form-group col-md-12">
-                                                            <label>Nama Skim</label>
-                                                            <input type="text" name="nm_skim" class="form-control" required>
-                                                        </div>
-
-                                                        <div class="form-group col-md-12">
-                                                            <label>Tahun</label>
-                                                            <input type="number" name="tahun" class="form-control" required>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-close"></i>&nbsp;Batalkan</button>
-                                                    <button type="submit" class="btn btn-primary" id="btn-submit"><i class="fa fa-save"></i>&nbsp;Simpan</button>
-                                                </div>
-                                            </div>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
                         </tbody>
                     </table>
-                    <div class="modal modal-danger fade" id="modalhapus" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                        <div class="modal-dialog" role="document">
-                          <div class="modal-content">
-                            <div class="modal-header modal-header-danger">
-                                <p style="font-size:15px;" class="modal-title" id="exampleModalLabel"><i class="fa fa-user"></i>&nbsp;Form Konfirmasi Hapus Data Operator</p>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div class="modal-body">
-                              Apakah anda yakin akan menghapus data skim ?
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-outline-light btn-sm " style="color:white;" data-dismiss="modal"><i class="fa fa-close"></i>&nbsp;Close</button>
-                                <form method="POST" action="{{ route('operator.skim.delete') }}">
-                                    {{ csrf_field() }}
-                                    {{ method_field('DELETE') }}
-                                    <input type="hidden" name="id" id="id_hapus">
-                                    <button type="submit" class="btn btn-outline-light btn-sm" style="color:white;"><i class="fa fa-check-circle"></i>&nbsp; Ya, Hapus Data !</button>
-                                </form>
-                            </div>
-                          </div>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
@@ -173,26 +88,14 @@
             });
         } );
 
-        function ubahSkim(id){
-            $.ajax({
-                url: "{{ url('operator/manajemen_skim') }}"+'/'+ id + "/edit",
-                type: "GET",
-                dataType: "JSON",
-                success: function(data){
-                    $('#modalubah').modal('show');
-                    $('#id').val(data.id);
-                    $('#nm_skim').val(data.nm_skim);
-                    $('#tahun').val(data.tahun);
-                },
-                error:function(){
-                    alert("Nothing Data");
-                }
+        $(document).ready(function(){
+            $("#generate").click(function(){
+                $('#tunggu').show();
+                $('#generate').hide();
+                $('#keterangan').hide();
+                $('#proses').show();
+                $('#berhasil').hide();
             });
-        }
-
-        function hapusSkim(id){
-            $('#modalhapus').modal('show');
-            $('#id_hapus').val(id);
-        }
+        });
     </script>
 @endpush

@@ -18,7 +18,7 @@ class HasilLaporanKemajuanController extends Controller
     public function diterima(){
         $usulans = UsulanDisetujui2::join('usulans','usulans.id','usulan_disetujui2s.usulan_id')
                                     ->leftJoin('anggota_usulans','anggota_usulans.usulan_id','usulans.id')
-                                    ->select('usulans.id','judul_penelitian',
+                                    ->select('usulans.id','judul_kegiatan',
                                             'ketua_peneliti_nama as nm_ketua_peneliti',
                                             DB::raw('group_concat(distinct concat(anggota_usulans.anggota_nama) SEPARATOR "<br>") as "nm_anggota" ')
                                             )
@@ -30,7 +30,7 @@ class HasilLaporanKemajuanController extends Controller
 
     public function ditolak(){
         $usulans = Usulan::leftJoin('anggota_usulans','anggota_usulans.usulan_id','usulans.id')
-                                    ->select('usulans.id','judul_penelitian',
+                                    ->select('usulans.id','judul_kegiatan',
                                             'ketua_peneliti_nama as nm_ketua_peneliti',
                                             DB::raw('group_concat(distinct concat(anggota_usulans.anggota_nama) SEPARATOR "<br>") as "nm_anggota" ')
                                             )

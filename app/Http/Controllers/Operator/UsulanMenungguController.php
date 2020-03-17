@@ -26,12 +26,12 @@ class UsulanMenungguController extends Controller
     }
 
     public function index(){
+        $panda = new UserLoginController();
         $usulans = Usulan::leftJoin('anggota_usulans','anggota_usulans.usulan_id','usulans.id')
                             ->leftJoin('skims','skims.id','usulans.skim_id')
-                            ->leftJoin('bidang_penelitians','bidang_penelitians.id','usulans.bidang_id')
                             ->leftJoin('reviewer1s','reviewer1s.usulan_id','usulans.id')
-                            ->select('usulans.id','judul_penelitian','nm_bidang as bidang_penelitian',
-                                    'abstrak','kata_kunci','peta_jalan','biaya_diusulkan','status_usulan','ketua_peneliti_prodi_nama','ketua_peneliti_nama as nm_ketua_peneliti',
+                            ->select('usulans.id','judul_kegiatan','jenis_kegiatan',
+                                    'abstrak','kata_kunci','peta_jalan','file_usulan','biaya_diusulkan','status_usulan','tahun_usulan','ketua_peneliti_prodi_nama','ketua_peneliti_nama as nm_ketua_peneliti',
                                     DB::raw('group_concat(distinct concat(anggota_usulans.anggota_nama) SEPARATOR "<br>") as "nm_anggota" '),
                                     DB::raw('group_concat(distinct concat(reviewer1s.reviewer_nama) SEPARATOR "&nbsp;|&nbsp;") as "nm_reviewer" '),
                                     DB::raw('SUM(reviewer_nip) as jumlah')
@@ -40,27 +40,34 @@ class UsulanMenungguController extends Controller
                             ->groupBy('usulans.id')
                             ->get();
         $fakultas = Fakultas::select('fakultas_kode','nm_fakultas')->get();
-        return view('operator/usulan/menunggu_disetujui.index',compact('usulans','fakultas'));
+        $dosen = '
+                    {dosen(limit:1500) {
+                        dsnPegNip
+                        pegawai {
+                            pegNama
+                            pegGelarDepan
+                            pegGelarBelakang
+                            pegIsAktif
+                        }
+                    }}
+                ';
+        $dosens = $panda->panda($dosen);
+        return view('operator/usulan/menunggu_disetujui.index',compact('usulans','fakultas','dosens'));
     }
 
     public function detail($id){
         $usulan = Usulan::leftJoin('anggota_usulans','anggota_usulans.usulan_id','usulans.id')
                         ->leftJoin('skims','skims.id','usulans.skim_id')
-                        ->leftJoin('bidang_penelitians','bidang_penelitians.id','usulans.bidang_id')
-                        ->select('usulans.id','judul_penelitian','nm_bidang as bidang_penelitian','ketua_peneliti_fakultas_nama','ketua_peneliti_prodi_nama',
-                                'ketua_peneliti_nama as nm_ketua_peneliti','ketua_peneliti_nip as nip','kata_kunci','nm_skim','abstrak','kata_kunci','peta_jalan','biaya_diusulkan','tahun_usulan')
+                        ->select('usulans.id','judul_kegiatan','jenis_kegiatan','ketua_peneliti_fakultas_nama as fakultas','ketua_peneliti_prodi_nama as prodi',
+                                'ketua_peneliti_nama as nm_ketua_peneliti','ketua_peneliti_nip as nip','kata_kunci','nm_skim','abstrak','kata_kunci')
                         ->where('usulans.id',$id)
                         ->first();
-        $anggotas = AnggotaUsulan::select('anggota_nama as nm_anggota','anggota_prodi_nama','anggota_fakultas_nama','anggota_nip')
-                                    ->where('usulan_id',$id)
-                                    ->get();
-        $reviewers = Reviewer1::select('reviewer_nama as nm_anggota','reviewer_prodi_nama','reviewer_fakultas_nama','reviewer_nip')
+        $anggotas = AnggotaUsulan::select('anggota_nama as nm_anggota','anggota_prodi_nama as prodi','anggota_fakultas_nama as fakultas','anggota_nip as nip')
                                     ->where('usulan_id',$id)
                                     ->get();
         $data = [
             'usulan'        => $usulan,
             'anggotas'      => $anggotas,
-            'reviewers'      => $reviewers,
         ];
         return $data;
     }
@@ -102,7 +109,7 @@ class UsulanMenungguController extends Controller
                                 ->where('usulan_id',$id)
                                 ->groupBy('reviewer_nip')
                                 ->get();
-        $usulan = Usulan::select('judul_penelitian')->where('id',$id)->first();
+        $usulan = Usulan::select('judul_kegiatan')->where('id',$id)->first();
         $data = [
             'reviewers'    =>  $reviewer,
             'usulan'    =>  $usulan,

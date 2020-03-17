@@ -39,11 +39,11 @@
                     @endif
                     <div class="alert alert-warning alert-block" id="proses" style="display:none;">
                         <button type="button" class="close" data-dismiss="alert">×</button>
-                        <strong><i class="fa fa-info-circle"></i>&nbsp;Perhatian: </strong> Proses update membutuhkan beberapa waktu, harap tunggu !
+                        <strong><i class="fa fa-info-circle"></i>&nbsp;Perhatian: </strong> Proses generate membutuhkan beberapa waktu, harap tunggu !
                     </div>
                 </div>
                 <div class="col-md-12">
-                    <a href="{{ route('operator.get_data_fakultas') }}" class="btn btn-primary  btn-flat" onclick="updatePortal()" style="font-size:12px;"  id="update"><i class="fa fa-refresh"></i>&nbsp;Update Data</a>
+                    <a href="{{ route('operator.get_data_fakultas') }}" class="btn btn-primary  btn-flat" onclick="updatePortal()" style="font-size:12px;"  id="update"><i class="fa fa-refresh"></i>&nbsp;Generate Data</a>
                     <a class="btn btn-warning  btn-flat"  style=" display:none;color:white; font-size:12px;" id="tunggu"><i class="fa fa-cog fa-spin"></i>&nbsp;Harap Tunggu</a>
                 </div>
                 <div class="col-md-12">

@@ -70,7 +70,7 @@
                             @foreach ($usulans as $usulan)
                                 <tr>
                                     <td> {{ $no++ }} </td>
-                                    <td> <a onclick="detail( {{ $usulan->id }} )" id="detail">{{ $usulan->judul_penelitian }}</a> </td>
+                                    <td> <a onclick="detail( {{ $usulan->id }} )" id="detail">{{ $usulan->judul_kegiatan }}</a> </td>
                                     <td> {{ $usulan->nm_ketua_peneliti }} </td>
                                     <td>
                                         @if ($usulan->nm_anggota == null)
@@ -119,7 +119,7 @@
                                                 <td style="width:20%;">Judul Penelitian</td>
                                                 <td> : </td>
                                                 <td>
-                                                    <p id="judul_penelitian_detail"></p>
+                                                    <p id="judul_kegiatan_detail"></p>
                                                 </td>
                                             </tr>
                                             <tr>
@@ -227,7 +227,7 @@
                 dataType: "JSON",
                 success: function(data){
                     $('#modaldetail').modal('show');
-                    $('#judul_penelitian_detail').text(data['usulan'].judul_penelitian);
+                    $('#judul_kegiatan_detail').text(data['usulan'].judul_kegiatan);
                     $('#skim_penelitian_detail').text(data['usulan'].nm_skim);
                     $('#bidang_penelitian_detail').text(data['usulan'].bidang_penelitian);
                     $('#ketua_peneliti_detail').text(data['usulan'].nm_ketua_peneliti);

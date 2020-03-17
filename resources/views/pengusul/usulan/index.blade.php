@@ -14,6 +14,18 @@
 @section('sidebar-menu')
     @include('pengusul/sidebar')
 @endsection
+@push('styles')
+    <style>
+        #selengkapnya{
+            color:#5A738E;
+            text-decoration:none;
+            cursor:pointer;
+        }
+        #selengkapnya:hover{
+            color:#007bff;
+        }
+    </style>
+@endpush
 @section('content')
     <section class="panel" style="margin-bottom:20px;">
         <header class="panel-heading" style="color: #ffffff;background-color: #074071;border-color: #fff000;border-image: none;border-style: solid solid none;border-width: 4px 0px 0;border-radius: 0;font-size: 14px;font-weight: 700;padding: 15px;">
@@ -57,18 +69,15 @@
                     <table class="table table-striped table-bordered" id="table" style="width:100%;">
                         <thead>
                             <tr>
-                                <th>No</th>
-                                <th>Judul Penelitian</th>
-                                <th>Bidang Penelitian</th>
-                                <th>Ketua Peneliti</th>
-                                <th>Anggota Kelompok</th>
-                                <th>Detail Anggota</th>
-                                <th>Biaya Diusulkan</th>
-                                <th>Kelola Anggaran</th>
-                                <th>Peta Jalan</th>
-                                <th>Status Usulan</th>
-                                <th>Usulkan</th>
-                                <th>Aksi</th>
+                                <th style="text-align:center;">No</th>
+                                <th style="text-align:center;">Judul Kegiatan</th>
+                                <th style="text-align:center;">Anggota Kelompok</th>
+                                <th style="text-align:center;">Biaya Diusulkan</th>
+                                <th style="text-align:center;">File Usulan</th>
+                                <th style="text-align:center;">Peta Jalan</th>
+                                <th style="text-align:center;">Status Usulan</th>
+                                <th style="text-align:center;">Usulkan</th>
+                                <th style="text-align:center;">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -78,31 +87,47 @@
                             @foreach ($usulans as $usulan)
                                 <tr>
                                     <td> {{ $no++ }} </td>
-                                    <td> {{ $usulan->judul_penelitian }} </td>
-                                    <td> {{ $usulan->bidang_penelitian }} </td>
-                                    <td> {{ $usulan->ketua_peneliti_nama }} </td>
-                                    <td>
+                                    <td style="width:30% !important;">
+                                        {!! $usulan->shortJudul !!}
+                                        <a onclick="selengkapnya({{ $usulan->id }})" id="selengkapnya">selengkapnya</a>
+                                        <br>
+                                        <hr style="margin-bottom:5px !important; margin-top:5px !important;">
+                                        <span style="font-size:10px !important;" for="" class="badge badge-info">{{ $usulan->jenis_kegiatan }}</span>
+                                        <span style="font-size:10px !important;" for="" class="badge badge-danger">{{ $usulan->ketua_peneliti_nama }}</span>
+                                        <span style="font-size:10px !important;" for="" class="badge badge-secondary">{{ $usulan->tahun_usulan }}</span>
+                                    </td>
+                                    <td style="width:27% !important; text-align:center;">
                                         @if ($usulan->nm_anggota == null)
-                                            <label class="badge badge-danger"><i class="fa fa-close" style="padding:5px;"></i>&nbsp;Belum ditambahkan</label>
+                                            <a style="color:red;"><i>belum ditambahkan</i></a>
                                             @else
                                             <label class="badge" style="font-size:12px;">&nbsp;{!! $usulan->nm_anggota !!}</label>
                                         @endif
+                                        <br>
+                                        <hr style="margin-bottom:5px !important; margin-top:5px !important;">
+                                        <a onclick="tambahAnggota({{ $usulan->id }})" class="btn btn-primary btn-sm" style="color:white; cursor:pointer;"><i class="fa fa-user-plus"></i>&nbsp; tambah anggota</a>
+
                                     </td>
-                                    <td>
-                                        <a onclick="tambahAnggota({{ $usulan->id }})" class="btn btn-primary btn-sm" style="color:white; cursor:pointer;"><i class="fa fa-user-plus"></i></a>
+                                    <td style="width:25%; text-align:center;">
+                                        <a>Rp. {{ number_format($usulan->biaya_diusulkan, 2) }}</a>
+                                        <br>
+                                        <hr style="margin-bottom:5px !important; margin-top:5px !important;">
+                                        <a href="{{ route('pengusul.usulan.detail_anggaran',[$usulan->id]) }}" class="btn btn-primary btn-sm" style="color:white; cursor:pointer;"><i class="fa fa-gear"></i>&nbsp; kelola anggaran</a>
                                     </td>
-                                    <td> Rp. {{ number_format($usulan->biaya_diusulkan, 2) }} </td>
-                                    <td>
-                                        <a href="{{ route('pengusul.usulan.detail_anggaran',[$usulan->id]) }}" class="btn btn-primary btn-sm" style="color:white; cursor:pointer;"><i class="fa fa-gear"></i></a>
+                                    <td style="text-align:center">
+                                        @if ($usulan->file_usulan == null)
+                                            <label class="badge badge-danger"><i class="fa fa-close" style="padding:5px;"></i></label>
+                                            @else
+                                            <label class="badge badge-success"><i class="fa fa-check-circle" style="padding:5px;"></i></label>
+                                        @endif
                                     </td>
-                                    <td>
+                                    <td style="text-align:center">
                                         @if ($usulan->peta_jalan == null)
                                             <label class="badge badge-danger"><i class="fa fa-close" style="padding:5px;"></i></label>
                                             @else
                                             <label class="badge badge-success"><i class="fa fa-check-circle" style="padding:5px;"></i></label>
                                         @endif
                                     </td>
-                                    <td>
+                                    <td style="text-align:center">
                                         @if ($usulan->status_usulan == '0')
                                             <label class="badge badge-warning" style="color:white;"><i class="fa fa-clock-o" style="padding:5px;"></i>&nbsp;belum diusulkan</label>
                                             @elseif($usulan->status_usulan == "1")
@@ -113,7 +138,7 @@
                                             <label class="badge badge-danger" style="color:white;"><i class="fa fa-close" style="padding:5px;"></i>&nbsp;ditolak</label>
                                         @endif
                                     </td>
-                                    <td>
+                                    <td style="text-align:center">
                                         @if ($usulan->nm_anggota != null && $usulan->status_usulan != "1" && $usulan->peta_jalan != null)
                                             <a onclick="usulkan( {{ $usulan->id }} )" class="btn btn-primary btn-sm" style="color:white;font-size:13px;cursor:pointer"><i class="fa fa-arrow-right"></i></a>
                                             @elseif($usulan->nm_anggota !=null && $usulan->peta_jalan == null && $usulan->status_usulan != "1")
@@ -128,8 +153,8 @@
                                             <a style="color:red;"><i>harap lengkapi anggota kelompok dan peta jalan</i></a>
                                         @endif
                                     </td>
-                                    <td>
-                                        @if ($usulan->status_usulan ==1)
+                                    <td style="text-align:center">
+                                        @if ($usulan->status_usulan != 0)
                                             <button class="btn btn-primary btn-sm" disabled style="color:white; cursor:pointer;"><i class="fa fa-edit"></i></button>
                                             <button class="btn btn-danger btn-sm" disabled style="color:white; cursor:pointer;"><i class="fa fa-trash"></i></button>
                                             @else
@@ -151,17 +176,13 @@
                                                 {{ csrf_field() }} {{ method_field('PATCH') }}
                                                             <div class="modal-body">
                                                                 <input type="hidden" name="id" id="id">
-                                                                <div class="form-group col-md-12">
-                                                                    <label for="exampleInputEmail1">Judul Penelitian</label>
-                                                                    <textarea name="judul_penelitian" id="judul_penelitian" cols="30" rows="3" class="form-control" required></textarea>
-                                                                </div>
+
                                                                 <div class="form-group col-md-6">
-                                                                    <label for="exampleInputEmail1">Bidang Penelitian</label></label>
-                                                                    <select name="bidang_id" class="form-control" id="bidang_id" style="font-size:13px;" required>
-                                                                        <option value="" disabled selected>-- pilih bidang penelitian --</option>
-                                                                        @foreach ($bidangs as $bidang)
-                                                                            <option value="{{ $bidang->id }}"> {{ $bidang->nm_bidang }} </option>
-                                                                        @endforeach
+                                                                    <label for="exampleInputEmail1">Jenis Kegiatan</label></label>
+                                                                    <select name="jenis_kegiatan" class="form-control" id="jenis_kegiatan" style="font-size:13px;" required>
+                                                                        <option value="" disabled selected>-- pilih jenis kegiatan --</option>
+                                                                        <option value="penelitian">Penelitian</option>
+                                                                        <option value="pengabdian">Pengabdian</option>
                                                                     </select>
                                                                 </div>
                                                                 <div class="form-group col-md-6">
@@ -173,6 +194,22 @@
                                                                         @endforeach
                                                                     </select>
                                                                 </div>
+                                                                <div class="form-group col-md-12">
+                                                                    <label for="exampleInputEmail1">Judul Kegiatan</label>
+                                                                    <textarea name="judul_kegiatan" id="judul_kegiatan" cols="30" rows="3" class="form-control" required></textarea>
+                                                                </div>
+                                                                <div class="form-group col-md-12">
+                                                                    <label for="exampleInputEmail1">Abstrak</label>
+                                                                    <textarea name="abstrak" id="abstrak_edit" cols="30" rows="10" required></textarea>
+                                                                </div>
+                                                                <div class="form-group col-md-12">
+                                                                    <label for="exampleInputEmail1">Tujuan Kegiatan</label>
+                                                                    <textarea name="tujuan" id="tujuan_edit" cols="30" rows="10" required></textarea>
+                                                                </div>
+                                                                <div class="form-group col-md-12">
+                                                                    <label for="exampleInputEmail1">Luaran Kegiatan</label>
+                                                                    <textarea name="luaran" id="luaran" class="form-control" cols="30" rows="3" required></textarea>
+                                                                </div>
                                                                 <div class="form-group col-md-6">
                                                                     <label for="exampleInputEmail1">Ketua Peneliti : </label>
                                                                     <input type="text" name="ketua_peneliti" id="ketua_peneliti" value="{{ Session::get('nm_dosen') }}" disabled class="form-control">
@@ -181,20 +218,26 @@
                                                                     <label for="exampleInputEmail1">Biaya Yang Diusulkan :</label>
                                                                     <input type="number" name="biaya_diusulkan" id="biaya_diusulkan" class="form-control" required>
                                                                 </div>
-                                                                <div class="form-group col-md-12">
+                                                                <div class="form-group col-md-6">
                                                                     <label for="exampleInputEmail1">File Peta Jalan : <a style="color:red; font-style:italic; font-size:12px;">Harap masukan file pdf</a></label>
                                                                     <input type="file" name="peta_jalan" id="peta_jalan" accept="application/pdf" class="form-control" style="padding-bottom:30px;" required>
                                                                     <div style="color:red;" style="margin-bottom:10px;">
                                                                         File Lama :<a id="peta_name"></a>
                                                                     </div>
                                                                 </div>
-                                                                <div class="form-group col-md-12">
-                                                                    <label for="exampleInputEmail1">Abstrak</label>
-                                                                    <textarea name="abstrak_edit" id="abstrak_edit" cols="30" rows="10" required></textarea>
+
+                                                                <div class="form-group col-md-6">
+                                                                    <label for="exampleInputEmail1">File Usulan : <a style="color:red; font-style:italic; font-size:12px;">Harap masukan file microsoft word</a></label>
+                                                                    <input type="file" name="file_usulan" id="file_usulan" accept=".doc, .docx" class="form-control" style="padding-bottom:30px;" required>
+                                                                    <div style="color:red;" style="margin-bottom:10px;">
+                                                                        File Lama :<a id="usulan_name"></a>
+                                                                    </div>
                                                                 </div>
+
+
                                                                 <div class="form-group col-md-12">
                                                                     <label for="exampleInputEmail1">Kata Kunci</label>
-                                                                    <input id="tags_2" type="text" name="kata_kunci[]" id="kata_kunci" class="tags form-control" required />
+                                                                    <input id="tags_2" type="text" name="kata_kunci[]" id="kata_kunci" class="tags form-control" />
                                                                     <div id="suggestions-container" style="position: relative; float: left; width: 250px;"></div>
                                                                 </div>
                                                             </div>
@@ -221,17 +264,12 @@
                                             {{ csrf_field() }} {{ method_field('POST') }}
                                                 <div class="modal-body">
                                                     <div class="row">
-                                                        <div class="form-group col-md-12">
-                                                            <label for="exampleInputEmail1">Judul Penelitian</label>
-                                                            <textarea name="judul_penelitian" cols="30" rows="3" class="form-control" required></textarea>
-                                                        </div>
                                                         <div class="form-group col-md-6">
-                                                            <label for="exampleInputEmail1">Bidang Penelitian</label></label>
-                                                            <select name="bidang_id" class="form-control" style="font-size:13px;" required>
-                                                                <option value="" disabled selected>-- pilih bidang penelitian --</option>
-                                                                @foreach ($bidangs as $bidang)
-                                                                    <option value=" {{ $bidang->id }}"> {{ $bidang->nm_bidang }} </option>
-                                                                @endforeach
+                                                            <label for="exampleInputEmail1">Jenis Kegiatan</label></label>
+                                                            <select name="jenis_kegiatan" class="form-control" id="jenis_kegiatan" style="font-size:13px;" required>
+                                                                <option value="" disabled selected>-- pilih jenis kegiatan --</option>
+                                                                <option value="penelitian">Penelitian</option>
+                                                                <option value="pengabdian">Pengabdian</option>
                                                             </select>
                                                         </div>
                                                         <div class="form-group col-md-6">
@@ -243,6 +281,22 @@
                                                                 @endforeach
                                                             </select>
                                                         </div>
+                                                        <div class="form-group col-md-12">
+                                                            <label for="exampleInputEmail1">Judul Kegiatan</label>
+                                                            <textarea name="judul_kegiatan" cols="30" rows="3" class="form-control" required></textarea>
+                                                        </div>
+                                                        <div class="form-group col-md-12">
+                                                            <label for="exampleInputEmail1">Abstrak</label>
+                                                            <textarea name="abstrak" id="abstrak" class="form-control" cols="30" rows="10" required></textarea>
+                                                        </div>
+                                                        <div class="form-group col-md-12">
+                                                            <label for="exampleInputEmail1">Tujuan Kegiatan</label>
+                                                            <textarea name="tujuan" id="tujuan" class="form-control" cols="30" rows="10" required></textarea>
+                                                        </div>
+                                                        <div class="form-group col-md-12">
+                                                            <label for="exampleInputEmail1">Luaran Kegiatan</label>
+                                                            <textarea name="luaran" class="form-control" cols="30" rows="3" required></textarea>
+                                                        </div>
                                                         <div class="form-group col-md-6">
                                                             <label for="exampleInputEmail1">Ketua Peneliti : </label>
                                                             <input type="text" name="ketua_peneliti" value="{{ Session::get('nm_dosen') }}" disabled class="form-control">
@@ -251,16 +305,19 @@
                                                             <label for="exampleInputEmail1">Biaya Yang Diusulkan :</label>
                                                             <input type="number" name="biaya_diusulkan" class="form-control" required>
                                                         </div>
-                                                        <div class="form-group col-md-12">
+                                                        <div class="form-group col-md-6">
                                                             <label for="exampleInputEmail1">File Peta Jalan : <a style="color:red; font-style:italic; font-size:12px;">Harap masukan file pdf</a></label>
                                                             <input type="file" name="peta_jalan" id="peta_jalan1" accept="application/pdf" class="form-control" style="padding-bottom:30px;" required>
                                                         </div>
-                                                        <div class="form-group col-md-12">
-                                                            <label for="exampleInputEmail1">Abstrak</label>
-                                                            <textarea name="abstrak" cols="30" rows="10" required></textarea>
+
+                                                        <div class="form-group col-md-6">
+                                                            <label for="exampleInputEmail1">File Usulan : <a style="color:red; font-style:italic; font-size:12px;">Harap masukan file microsoft word</a></label>
+                                                            <input type="file" name="file_usulan" id="file_usulan1" accept=".doc, .docx" class="form-control" style="padding-bottom:30px;" required>
                                                         </div>
+
+
                                                         <div class="form-group col-md-12">
-                                                            <label for="exampleInputEmail1">Kata Kunci</label>
+                                                            <label for="exampleInputEmail1">Kata Kunci <a style="color:red"><i>harap diisi</i></a></label>
                                                             <input id="tags_1" type="text" name="kata_kunci[]" class="tags form-control" required />
                                                             <div id="suggestions-container" style="position: relative; float: left; width: 250px;"></div>
                                                         </div>
@@ -317,29 +374,30 @@
                                     <div class="modal-body">
                                         <input type="hidden" name="usulan_id" id="usulan_id">
                                         <div class="row">
-                                            <div class="form-group col-md-4">
-                                                <label for="exampleInputEmail1">Pilih Fakultas</label>
-                                                <select name="fakultas_id" id="fakultas_id" class="form-control" required style="font-size:13px;">
-                                                    <option value="" disabled selected>-- pilih fakultas --</option>
-                                                    @foreach ($fakultas as $fakultas)
-                                                        <option value=" {{ $fakultas->fakultas_kode }} "> {{ $fakultas->nm_fakultas }} </option>
+                                            <div class="form-group col-md-12">
+                                                <label for="exampleInputEmail1">Pilih Anggota Kelompok</label>
+                                                <select name="anggota_id" id="anggota_id" class="form-control" required style="font-size:13px; width:100%;">
+                                                    <option value="" disabled selected>-- pilih anggota kelompok --</option>
+                                                    @foreach ($dosens as $dosen)
+                                                        @for ($i = 0; $i <sizeof($dosen) ; $i++)
+                                                            @if ($dosen[$i]['pegawai']['pegIsAktif'] == 1)
+                                                                @if ($dosen[$i]['pegawai']['pegNama'] != "0" || $dosen[$i]['pegawai']['pegNama'] != "000000000")
+                                                                    @if ($dosen[$i]['pegawai']['pegGelarDepan'] != "null" && $dosen[$i]['pegawai']['pegGelarBelakang'] != "null")
+                                                                        <option value=" {{ $dosen[$i]['dsnPegNip'] }} "> {{ $dosen[$i]['pegawai']['pegGelarDepan'] }} {{ $dosen[$i]['pegawai']['pegNama'] }} {{ $dosen[$i]['pegawai']['pegGelarBelakang'] }} </option>
+                                                                            @elseif($dosen[$i]['pegawai']['pegGelarDepan'] != "null" && $dosen[$i]['pegawai']['pegGelarBelakang'] == "null")
+                                                                            <option value=" {{ $dosen[$i]['dsnPegNip'] }} "> {{ $dosen[$i]['pegawai']['pegGelarDepan'] }} {{ $dosen[$i]['pegawai']['pegNama'] }} </option>
+                                                                                @elseif($dosen[$i]['pegawai']['pegGelarDepan'] == "null" && $dosen[$i]['pegawai']['pegGelarBelakang'] != "null")
+                                                                                <option value=" {{ $dosen[$i]['dsnPegNip'] }} "> {{ $dosen[$i]['pegawai']['pegNama'] }} {{ $dosen[$i]['pegawai']['pegGelarBelakang'] }}</option>
+                                                                                    @else
+                                                                                    <option value=" {{ $dosen[$i]['dsnPegNip'] }} "> {{ $dosen[$i]['pegawai']['pegNama'] }} </option>
+                                                                    @endif
+                                                                @endif
+                                                            @endif
+                                                        @endfor
                                                     @endforeach
                                                 </select>
                                             </div>
 
-                                            <div class="form-group col-md-4">
-                                                <label for="exampleInputEmail1">Pilih Program Studi</label>
-                                                <select name="prodi_id" id="prodi_id" class="form-control" required style="font-size:13px;">
-                                                    <option value="">-- pilih prodi --</option>
-                                                </select>
-                                            </div>
-
-                                            <div class="form-group col-md-4">
-                                                <label for="exampleInputEmail1">Pilih Anggota</label>
-                                                <select name="anggota_id" id="anggota_id" class="form-control" required style="font-size:13px;">
-                                                    <option value="">-- pilih anggota --</option>
-                                                </select>
-                                            </div>
                                             <div class="col-md-12">
                                                  <button type="submit" style="font-size:13px;" class="btn btn-primary" disabled id="btn-submit-anggota"><i class="fa fa-save"></i>&nbsp;Simpan</button>
                                                  <button type="reset" style="font-size:13px;" class="btn btn-danger"><i class="fa fa-refresh"></i>&nbsp; Reset</button>
@@ -416,6 +474,29 @@
                 </div>
             </div>
         </div>
+        <!-- Modal Detail -->
+        <div class="modal fade" id="modaldetail" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Informasi Detail Judul Kegiatan</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                </div>
+                <div class="modal-body">
+                    <h6 style="font-weight:bold;">Judul Kegiatan:</h6>
+                    <hr>
+                    <div id="detail-text" style="text-align:justify; font-weight:bold; ">
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal" style="font-size:12px;"><i class="fa fa-close"></i>&nbsp;Keluar</button>
+                </div>
+            </div>
+            </div>
+        </div>
     </section>
 @endsection
 @push('scripts')
@@ -423,6 +504,8 @@
     <script>
             CKEDITOR.replace( 'abstrak_edit', {height:150});
             CKEDITOR.replace( 'abstrak', {height:150});
+            CKEDITOR.replace( 'tujuan', {height:150});
+            CKEDITOR.replace( 'tujuan_edit', {height:150});
     </script>
     <script>
         $(document).ready(function() {
@@ -445,12 +528,16 @@
                 success: function(data){
                     $('#modalubah').modal('show');
                     $('#id').val(data.id);
-                    $('#judul_penelitian').val(data.judul_penelitian);
-                    $('#bidang_id').val(data.bidang_id);
+                    $('#judul_kegiatan').val(data.judul_kegiatan);
+                    $('#jenis_kegiatan').val(data.jenis_kegiatan);
                     $('#skim_id').val(data.skim_id);
                     $('#biaya_diusulkan').val(data.biaya_diusulkan);
+                    $('#tujuan_edit').val(data.tujuan);
+                    $('#luaran').val(data.luaran);
                     CKEDITOR.instances['abstrak_edit'].setData(data.abstrak);
+                    CKEDITOR.instances['tujuan_edit'].setData(data.tujuan);
                     $('#peta_name').text(data.peta_jalan);
+                    $('#usulan_name').text(data.file_usulan);
                 },
                 error:function(){
                     alert("Nothing Data");
@@ -471,7 +558,7 @@
                 success: function(data){
                     $('#modalanggota').modal('show');
                     $('#usulan_id').val(id);
-                    $('#judul').text(data['usulan'].judul_penelitian);
+                    $('#judul').text(data['usulan'].judul_kegiatan);
                     var res='';
                     var no = 1;
                     $.each (data['anggotas'], function (key, value) {
@@ -485,6 +572,22 @@
                         '</tr>';
                     });
                     $('#tbody').html(res);
+                },
+                error:function(){
+                    alert("Nothing Data");
+                }
+            });
+        }
+
+        function selengkapnya(id){
+            $.ajax({
+                url: "{{ url('pengusul/manajemen_usulan') }}"+'/'+ id + "/detail_judul",
+                type: "GET",
+                dataType: "JSON",
+                success: function(data){
+                $('#modaldetail').modal('show');
+                    $('#id').val(data.id);
+                    $('#detail-text').text(data.judul_kegiatan);
                 },
                 error:function(){
                     alert("Nothing Data");
@@ -578,6 +681,10 @@
                     $('#btn-submit-anggota').attr('disabled',true);
                 }
             });
+        });
+
+        $(document).ready(function() {
+            $("#anggota_id").select2({ dropdownParent: "#modalanggota" });
         });
     </script>
 @endpush

@@ -25,7 +25,7 @@ class VerifikasiUsulanController extends Controller
     public function index(){
         $usulans = Usulan::leftJoin('nilai_formulirs','nilai_formulirs.usulan_id','usulans.id')
                             ->leftJoin('formulirs','formulirs.id','nilai_formulirs.formulir_id')
-                            ->select('usulans.id','judul_penelitian',DB::raw('SUM(skor * (bobot/100)/2) as totalskor'))
+                            ->select('usulans.id','judul_kegiatan',DB::raw('SUM(skor * (bobot/100)/2) as totalskor'))
                             ->groupBy('usulans.id')
                             ->where('status_usulan','2')
                             ->get();
@@ -35,7 +35,7 @@ class VerifikasiUsulanController extends Controller
     public function detail($id){
         $usulan = Usulan::leftJoin('nilai_formulirs','nilai_formulirs.usulan_id','usulans.id')
                             ->leftJoin('formulirs','formulirs.id','nilai_formulirs.formulir_id')
-                            ->select('usulans.id','judul_penelitian',DB::raw('SUM(skor * (bobot/100)/2) as skor'),'kriteria_penilaian')
+                            ->select('usulans.id','judul_kegiatan',DB::raw('SUM(skor * (bobot/100)/2) as skor'),'kriteria_penilaian')
                             ->where('usulans.id',$id)
                             ->groupBy('formulirs.id')
                             ->get();
@@ -47,7 +47,7 @@ class VerifikasiUsulanController extends Controller
                                 ->where('usulan_id',$id)
                                 ->groupBy('reviewer_nip')
                                 ->get();
-        $usulan = Usulan::select('judul_penelitian')->where('id',$id)->first();
+        $usulan = Usulan::select('judul_kegiatan')->where('id',$id)->first();
         $data = [
             'reviewers'    =>  $reviewer,
             'usulan'    =>  $usulan,

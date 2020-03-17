@@ -25,7 +25,7 @@ class VerifikasiLaporanKemajuanController extends Controller
     public function index(){
         $usulans = Usulan::leftJoin('nilai_formulir2s','nilai_formulir2s.usulan_id','usulans.id')
                             ->leftJoin('formulirs','formulirs.id','nilai_formulir2s.formulir_id')
-                            ->select('usulans.id','judul_penelitian',DB::raw('SUM(skor * (bobot/100)/2) as totalskor'))
+                            ->select('usulans.id','judul_kegiatan',DB::raw('SUM(skor * (bobot/100)/2) as totalskor'))
                             ->groupBy('usulans.id')
                             ->where('status_usulan','5')
                             ->get();
@@ -35,7 +35,7 @@ class VerifikasiLaporanKemajuanController extends Controller
     public function detail($id){
         $usulan = Usulan::leftJoin('nilai_formulir2s','nilai_formulir2s.usulan_id','usulans.id')
                             ->leftJoin('formulirs','formulirs.id','nilai_formulir2s.formulir_id')
-                            ->select('usulans.id','judul_penelitian',DB::raw('SUM(skor * (bobot/100)/2) as skor'),'kriteria_penilaian')
+                            ->select('usulans.id','judul_kegiatan',DB::raw('SUM(skor * (bobot/100)/2) as skor'),'kriteria_penilaian')
                             ->where('usulans.id',$id)
                             ->groupBy('formulirs.id')
                             ->get();

@@ -23,11 +23,10 @@ class UsulanMenungguController extends Controller
             if($sesi == 2){
                 $usulans = Usulan::leftJoin('anggota_usulans','anggota_usulans.usulan_id','usulans.id')
                                     ->leftJoin('skims','skims.id','usulans.skim_id')
-                                    ->leftJoin('bidang_penelitians','bidang_penelitians.id','usulans.bidang_id')
                                     ->leftJoin('reviewer1s','reviewer1s.usulan_id','usulans.id')
                                     ->leftJoin('nilai_formulirs','nilai_formulirs.reviewer_id','reviewer1s.reviewer_nip')
-                                    ->select('usulans.id','judul_penelitian','nm_bidang as bidang_penelitian','ketua_peneliti_universitas','skims.id as skim_id','ketua_peneliti_prodi_nama',
-                                            'ketua_peneliti_nama as nm_ketua_peneliti','abstrak','kata_kunci','peta_jalan','biaya_diusulkan','status_usulan',
+                                    ->select('usulans.id','judul_kegiatan','jenis_kegiatan','ketua_peneliti_universitas','skims.id as skim_id','ketua_peneliti_prodi_nama',
+                                            'ketua_peneliti_nama as nm_ketua_peneliti','abstrak','tahun_usulan','kata_kunci','peta_jalan','file_usulan','biaya_diusulkan','status_usulan',
                                             DB::raw('group_concat(distinct concat(anggota_nama) SEPARATOR "<br>") as "nm_anggota" '),
                                             DB::raw('group_concat(distinct concat(reviewer_nama) SEPARATOR "<br>") as "nm_reviewer" '),
                                             'nilai_formulirs.reviewer_id'
@@ -55,8 +54,7 @@ class UsulanMenungguController extends Controller
             if($sesi == 2){
                 $usulan = Usulan::leftJoin('anggota_usulans','anggota_usulans.usulan_id','usulans.id')
                                 ->leftJoin('skims','skims.id','usulans.skim_id')
-                                ->leftJoin('bidang_penelitians','bidang_penelitians.id','usulans.bidang_id')
-                                ->select('usulans.id','judul_penelitian','nm_bidang as bidang_penelitian','ketua_peneliti_fakultas_nama','ketua_peneliti_prodi_nama',
+                                ->select('usulans.id','judul_kegiatan','jenis_kegiatan','ketua_peneliti_fakultas_nama','ketua_peneliti_prodi_nama',
                                         'ketua_peneliti_nama as nm_ketua_peneliti','ketua_peneliti_nip','kata_kunci','nm_skim','abstrak','kata_kunci','peta_jalan','biaya_diusulkan','tahun_usulan')
                                 ->where('usulans.id',$id)
                                 ->first();
@@ -118,11 +116,11 @@ class UsulanMenungguController extends Controller
         if(Session::get('login') && Session::get('login',1) && Session::get('akses',2)){
             if($sesi == 2){
                 // $cek = NilaiFormulir::select('usulan_id')
-                $judul_penelitian = Usulan::select('judul_penelitian')->where('id',$id)->first();
+                $judul_kegiatan = Usulan::select('judul_kegiatan')->where('id',$id)->first();
                 $id_usulan = $id;
                 $jumlah =  Count(Formulir::join('skims','skims.id','formulirs.skim_id')->where('skims.id',$skim_id)->get());
                 $formulirs = Formulir::join('skims','skims.id','formulirs.skim_id')->select('formulirs.id','kriteria_penilaian','bobot')->where('skims.id',$skim_id)->get();
-                return view('reviewer/usulan/menunggu.review',compact('judul_penelitian','id_usulan','jumlah','formulirs'));
+                return view('reviewer/usulan/menunggu.review',compact('judul_kegiatan','id_usulan','jumlah','formulirs'));
             }
             else{
                 Session::flush();

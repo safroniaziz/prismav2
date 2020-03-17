@@ -85,7 +85,7 @@
                                             @endif
                                         </td>
                                         <td> {{ $no++ }} </td>
-                                        <td> {{ $usulan->judul_penelitian }} </td>
+                                        <td> {{ $usulan->judul_kegiatan }} </td>
                                         <td style="padding:15px 27px;"> {{ number_format($usulan->totalskor, 2) }} </td>
                                         <td style="padding:15px 30px;">
                                             <a onclick="detail({{ $usulan->id }})" class="btn btn-primary btn-sm" style="color:white; cursor:pointer;"><i class="fa fa-info-circle"></i></a>

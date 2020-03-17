@@ -27,8 +27,8 @@ use Faker\Generator as Faker;
 
 $factory->define(App\Formulir::class, function (Faker $faker) {
     return [
-        'kriteria_penilaian' => $faker->sentence($nbWords = 2, $variableNbWords = true),
+        ['kriteria_penilaian' => $faker->sentence($nbWords = 2, $variableNbWords = true),
         'bobot' => $faker->numberBetween($min = 50, $max = 100),
-        'skim_id' => '1',
+        'skim_id' => '1'],
     ];
 });

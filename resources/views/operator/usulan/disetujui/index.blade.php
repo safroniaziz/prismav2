@@ -53,7 +53,7 @@
                             @foreach ($usulans as $usulan)
                                 <tr>
                                     <td> {{ $no++ }} </td>
-                                    <td> {{ $usulan->judul_penelitian }} </td>
+                                    <td> {{ $usulan->judul_kegiatan }} </td>
                                     <td>
                                         <label for="" class="badge" style="font-size:12px;">{!! $usulan->nm_ketua_peneliti !!}</label>
                                     </td>

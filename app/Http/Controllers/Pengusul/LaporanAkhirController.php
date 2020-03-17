@@ -17,7 +17,7 @@ class LaporanAkhirController extends Controller
             if($sesi == 1){
                 $usulans = Usulan::leftJoin('anggota_usulans','anggota_usulans.usulan_id','usulans.id')
                                     ->leftJoin('laporan_akhirs','laporan_akhirs.usulan_id','usulans.id')
-                                    ->select('usulans.id','judul_penelitian','file_akhir')
+                                    ->select('usulans.id','judul_kegiatan','file_akhir')
                                     ->where('usulans.ketua_peneliti_nip',Session::get('nip'))
                                     ->where('status_usulan','6')
                                     ->groupBy('usulans.id')

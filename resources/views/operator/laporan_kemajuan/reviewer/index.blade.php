@@ -66,7 +66,7 @@
                                 @if ($jumlah < 2)
                                     <tr>
                                         <td> {{ $no++ }} </td>
-                                        <td> {{ $usulan->judul_penelitian }} </td>
+                                        <td> {{ $usulan->judul_kegiatan }} </td>
                                         <td style="font-weight:bold;"> {{ $usulan->ketua_peneliti_nama }} </td>
                                         <td>
                                             <label class="badge">
@@ -188,7 +188,7 @@
                 success: function(data){
                     $('#modalreviewer').modal('show');
                     $('#usulan_id').val(id);
-                    $('#judul').text(data['usulan'].judul_penelitian);
+                    $('#judul').text(data['usulan'].judul_kegiatan);
                     var res='';
                     var no = 1;
                     $.each (data['reviewers'], function (key, value) {

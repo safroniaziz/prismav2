@@ -58,7 +58,7 @@
                                 @if ($jumlah == 2)
                                 <tr>
                                     <td> {{ $no++ }} </td>
-                                    <td>{{ $usulan->judul_penelitian }}</td>
+                                    <td>{{ $usulan->judul_kegiatan }}</td>
                                     <td> {{ $usulan->nm_ketua_peneliti }} </td>
                                     <td>
                                         @if ($usulan->nm_anggota == null)

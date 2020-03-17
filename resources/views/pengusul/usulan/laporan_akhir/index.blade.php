@@ -65,7 +65,7 @@
                             @foreach ($usulans as $usulan)
                                 <tr>
                                     <td> {{ $no++ }} </td>
-                                    <td> {{ $usulan->judul_penelitian }} </td>
+                                    <td> {{ $usulan->judul_kegiatan }} </td>
                                     <td style="text-align:center;">
                                         @if ($usulan->file_akhir == null)
                                             <a style="color:red;"><i>belum diupload</i></a>

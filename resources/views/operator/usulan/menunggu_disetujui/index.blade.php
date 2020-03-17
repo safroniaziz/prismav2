@@ -21,6 +21,14 @@
             cursor: pointer !important;
             color:teal;
         }
+        #selengkapnya{
+            color:#5A738E;
+            text-decoration:none;
+            cursor:pointer;
+        }
+        #selengkapnya:hover{
+            color:#007bff;
+        }
     </style>
 @endpush
 @section('content')
@@ -55,17 +63,13 @@
                     <table class="table table-striped table-bordered" id="table" style="width:100%;">
                         <thead>
                             <tr>
-                                <th>No</th>
-                                <th>Judul Penelitian</th>
-                                <th>Bidang Penelitian</th>
-                                <th>Ketua Peneliti</th>
-                                <th>Anggota Kelompok</th>
-                                <th>Biaya Diusulkan</th>
-                                <th>Rancangan Anggaran</th>
-                                <th>Peta Jalan Penelitian</th>
-                                <th>Status Usulan</th>
-                                <th>Reviewer</th>
-                                <th>Tambah Reviewer</th>
+                                <th style="text-align:center;">No</th>
+                                <th style="text-align:center;">Judul Penelitian</th>
+                                <th style="text-align:center;">Anggota Kelompok</th>
+                                <th style="text-align:center;">Biaya Diusulkan</th>
+                                <th style="text-align:center;">Status Usulan</th>
+                                <th style="text-align:center;">Reviewer</th>
+                                <th style="text-align:center;">Tambah Reviewer</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -79,9 +83,19 @@
                                 @if ($jumlah < 2)
                                 <tr>
                                     <td> {{ $no++ }} </td>
-                                    <td> <a onclick="detail( {{ $usulan->id }} )" id="detail">{{ $usulan->judul_penelitian }}</a> </td>
-                                    <td> {{ $usulan->bidang_penelitian }} </td>
-                                    <td> {{ $usulan->nm_ketua_peneliti }} </td>
+                                    <td style="width:40% !important;">
+                                        {!! $usulan->shortJudul !!}
+                                        <a onclick="detail({{ $usulan->id }})" id="selengkapnya">selengkapnya</a>
+                                        <br>
+                                        <hr style="margin-bottom:5px !important; margin-top:5px !important;">
+                                        <span style="font-size:10px !important;" for="" class="badge badge-info">{{ $usulan->jenis_kegiatan }}</span>
+                                        <span style="font-size:10px !important;" for="" class="badge badge-danger">{{ $usulan->nm_ketua_peneliti }}</span>
+                                        <span style="font-size:10px !important;" for="" class="badge badge-secondary">{{ $usulan->tahun_usulan }}</span>
+                                        <hr style="margin-bottom:5px !important; margin-top:5px !important;">
+                                        <a href="{{ asset('upload/file_usulan/'.$usulan->file_usulan) }}" download="{{ $usulan->file_usulan }}"><i class="fa fa-download"></i>&nbsp; download file usulan</a>
+                                        <br>
+                                        <a href="{{ asset('upload/peta_jalan/'.$usulan->peta_jalan) }}" download="{{ $usulan->peta_jalan }}"><i class="fa fa-download"></i>&nbsp; download file peta jalan</a>
+                                   </td>
                                     <td>
                                         @if ($usulan->nm_anggota == null)
                                             <label class="badge badge-danger"><i class="fa fa-close" style="padding:5px;"></i>&nbsp;Belum ditambahkan</label>
@@ -89,16 +103,13 @@
                                             <label class="badge" style="font-size:12px;">&nbsp;{!! $usulan->nm_anggota !!}</label>
                                         @endif
                                     </td>
-                                    <td> Rp. {{ number_format($usulan->biaya_diusulkan, 2) }} </td>
-                                    <td>
-                                        <a href="{{ route('operator.usulan.anggaran.cetak',[$usulan->id]) }}" class="btn btn-primary btn-sm" style="color:white; cursor:pointer;"><i class="fa fa-print"></i></a>
+                                    <td style="width:30%; text-align:center;">
+                                        <a>Rp. {{ number_format($usulan->biaya_diusulkan, 2) }}</a>
+                                        <br>
+                                        <hr style="margin-bottom:5px !important; margin-top:5px !important;">
+                                        <a href="{{ route('operator.usulan.anggaran.cetak',[$usulan->id]) }}" class="btn btn-primary btn-sm" style="color:white; cursor:pointer;"><i class="fa fa-print"></i>&nbsp; Cetak</a>
                                     </td>
-                                    <td>
-                                        <a href="{{ asset('upload/peta_jalan/'.$usulan->peta_jalan) }}" download="{{ $usulan->peta_jalan }}">
-                                            <button type="button" class="btn btn-primary" style="padding:7px;font-size:13px;color:white;cursor:pointer;"><i class="fa fa-download"></i></button>
-                                        </a>
-                                    </td>
-                                    <td>
+                                    <td style="text-align:center;">
                                         @if ($usulan->status_usulan == '0')
                                             <label class="badge badge-warning" style="color:white;"><i class="fa fa-clock-o" style="padding:5px;"></i>&nbsp;belum diusulkan</label>
                                             @elseif($usulan->status_usulan == "1")
@@ -116,7 +127,7 @@
                                             <label class="badge" style="font-size:12px;">&nbsp;{!! $usulan->nm_reviewer !!}</label>
                                         @endif
                                     </td>
-                                    <td>
+                                    <td style="text-align:center;">
                                         <a onclick="tambahReviewer({{ $usulan->id }})" class="btn btn-primary btn-sm" style="color:white; cursor:pointer;"><i class="fa fa-user-plus"></i></a>
                                     </td>
                                 </tr>
@@ -148,7 +159,14 @@
                                                 <td style="width:20%;">Judul Penelitian</td>
                                                 <td> : </td>
                                                 <td>
-                                                    <p id="judul_penelitian_detail"></p>
+                                                    <p id="judul_kegiatan_detail"></p>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Jenis Kegiatan</td>
+                                                <td> : </td>
+                                                <td>
+                                                    <p style="text-transform:capitalize;" id="jenis_kegiatan_detail"></p>
                                                 </td>
                                             </tr>
                                             <tr>
@@ -156,13 +174,6 @@
                                                 <td> : </td>
                                                 <td>
                                                     <p id="skim_penelitian_detail"></p>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>Bidang Penelitian</td>
-                                                <td> : </td>
-                                                <td>
-                                                    <p id="bidang_penelitian_detail"></p>
                                                 </td>
                                             </tr>
                                             <tr>
@@ -185,13 +196,6 @@
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td>Reviewer Penelitian</td>
-                                                <td> : </td>
-                                                <td>
-                                                    <p id="reviewer_penelitian_detail"></p>
-                                                </td>
-                                            </tr>
-                                            <tr>
                                                 <td>Abstrak</td>
                                                 <td> : </td>
                                                 <td>
@@ -203,27 +207,6 @@
                                                 <td> : </td>
                                                 <td>
                                                     <p id="kata_kunci_detail"></p>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>Peta Jalan</td>
-                                                <td> : </td>
-                                                <td>
-                                                    <p id="peta_jalan_detail"></p>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>Biaya Diusulkan</td>
-                                                <td> : </td>
-                                                <td>
-                                                    <p id="biaya_diusulkan_detail"></p>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>Tahun Usulan</td>
-                                                <td> : </td>
-                                                <td>
-                                                    <p id="tahun_usulan_detail"></p>
                                                 </td>
                                             </tr>
                                         </table>
@@ -253,29 +236,30 @@
                                 <div class="modal-body">
                                     <input type="hidden" name="usulan_id" id="usulan_id">
                                     <div class="row">
-                                        <div class="form-group col-md-4">
-                                            <label for="exampleInputEmail1">Pilih Fakultas</label>
-                                            <select name="fakultas_id" id="fakultas_id" class="form-control" required style="font-size:13px;">
-                                                <option value="" disabled selected>-- pilih fakultas --</option>
-                                                @foreach ($fakultas as $fakultas)
-                                                    <option value=" {{ $fakultas->fakultas_kode }} "> {{ $fakultas->nm_fakultas }} </option>
+                                        <div class="form-group col-md-12">
+                                            <label for="exampleInputEmail1">Pilih Reviewer</label>
+                                            <select name="reviewer_id" id="reviewer_id" class="form-control" required style="font-size:13px; width:100%;">
+                                                <option value="" disabled selected>-- pilih reviewer --</option>
+                                                @foreach ($dosens as $dosen)
+                                                    @for ($i = 0; $i <sizeof($dosen) ; $i++)
+                                                        @if ($dosen[$i]['pegawai']['pegIsAktif'] == 1)
+                                                            @if ($dosen[$i]['pegawai']['pegNama'] != "0" || $dosen[$i]['pegawai']['pegNama'] != "000000000")
+                                                                @if ($dosen[$i]['pegawai']['pegGelarDepan'] != "null" && $dosen[$i]['pegawai']['pegGelarBelakang'] != "null")
+                                                                    <option value=" {{ $dosen[$i]['dsnPegNip'] }} "> {{ $dosen[$i]['pegawai']['pegGelarDepan'] }} {{ $dosen[$i]['pegawai']['pegNama'] }} {{ $dosen[$i]['pegawai']['pegGelarBelakang'] }} </option>
+                                                                        @elseif($dosen[$i]['pegawai']['pegGelarDepan'] != "null" && $dosen[$i]['pegawai']['pegGelarBelakang'] == "null")
+                                                                        <option value=" {{ $dosen[$i]['dsnPegNip'] }} "> {{ $dosen[$i]['pegawai']['pegGelarDepan'] }} {{ $dosen[$i]['pegawai']['pegNama'] }} </option>
+                                                                            @elseif($dosen[$i]['pegawai']['pegGelarDepan'] == "null" && $dosen[$i]['pegawai']['pegGelarBelakang'] != "null")
+                                                                            <option value=" {{ $dosen[$i]['dsnPegNip'] }} "> {{ $dosen[$i]['pegawai']['pegNama'] }} {{ $dosen[$i]['pegawai']['pegGelarBelakang'] }}</option>
+                                                                                @else
+                                                                                <option value=" {{ $dosen[$i]['dsnPegNip'] }} "> {{ $dosen[$i]['pegawai']['pegNama'] }} </option>
+                                                                @endif
+                                                            @endif
+                                                        @endif
+                                                    @endfor
                                                 @endforeach
                                             </select>
                                         </div>
 
-                                        <div class="form-group col-md-4">
-                                            <label for="exampleInputEmail1">Pilih Program Studi</label>
-                                            <select name="prodi_id" id="prodi_id" class="form-control" required style="font-size:13px;">
-                                                <option value="" disabled selected>-- pilih prodi --</option>
-                                            </select>
-                                        </div>
-
-                                        <div class="form-group col-md-4">
-                                            <label for="exampleInputEmail1">Pilih Reviewer</label>
-                                            <select name="reviewer_id" id="reviewer_id" class="form-control" required style="font-size:13px;">
-                                                <option value="" disabled selected>-- pilih reviewer --</option>
-                                            </select>
-                                        </div>
                                         <div class="col-md-12">
                                              <button type="submit" style="font-size:13px;" class="btn btn-primary" disabled id="btn-submit-reviewer"><i class="fa fa-save"></i>&nbsp;Simpan</button>
                                              <button type="reset" style="font-size:13px;" class="btn btn-danger"><i class="fa fa-refresh"></i>&nbsp; Reset</button>
@@ -331,18 +315,15 @@
                 dataType: "JSON",
                 success: function(data){
                     $('#modaldetail').modal('show');
-                    $('#judul_penelitian_detail').text(data['usulan'].judul_penelitian);
+                    $('#judul_kegiatan_detail').text(data['usulan'].judul_kegiatan);
                     $('#skim_penelitian_detail').text(data['usulan'].nm_skim);
-                    $('#bidang_penelitian_detail').text(data['usulan'].bidang_penelitian);
+                    $('#jenis_kegiatan_detail').text(data['usulan'].jenis_kegiatan);
                     $('#ketua_peneliti_detail').text(data['usulan'].nm_ketua_peneliti);
                     $('#ketua_nip').text(data['usulan'].nip);
                     $('#ketua_prodi').text(data['usulan'].prodi);
                     $('#ketua_fakultas').text(data['usulan'].fakultas);
                     $('#abstrak_detail').html(data['usulan'].abstrak);
                     $('#kata_kunci_detail').html(data['usulan'].kata_kunci);
-                    $('#peta_jalan_detail').html(data['usulan'].peta_jalan);
-                    $('#biaya_diusulkan_detail').html(data['usulan'].biaya_diusulkan);
-                    $('#tahun_usulan_detail').html(data['usulan'].tahun_usulan);
                     var res='';
                     $.each (data['anggotas'], function (key, value) {
                         res +=
@@ -355,22 +336,22 @@
                     });
                     $('#anggota_penelitian_detail').html(res);
 
-                    if (data['reviewers'][0] == null) {
-                        $('#reviewer_penelitian_detail').html("<i style="+"color:red;"+">Reviewer Belum Ditambahkan !!"+"</i>");
-                    }
-                    else{
-                        var res2='';
-                        $.each (data['reviewers'], function (key, value) {
-                            res2 +=
-                            '<b>'+value.nm_anggota+'</b>'+
-                            '<ul>'+
-                                '<li>'+'Nip : '+value.nip+'</li>'+
-                                '<li>'+'Fakultas : '+value.fakultas+'</li>'+
-                                '<li>'+'Program Studi : '+value.prodi+'</li>'+
-                            '</ul>';
-                        });
-                        $('#reviewer_penelitian_detail').html(res2);
-                    }
+                    // if (data['reviewers'][0] == null) {
+                    //     $('#reviewer_penelitian_detail').html("<i style="+"color:red;"+">Reviewer Belum Ditambahkan !!"+"</i>");
+                    // }
+                    // else{
+                    //     var res2='';
+                    //     $.each (data['reviewers'], function (key, value) {
+                    //         res2 +=
+                    //         '<b>'+value.nm_anggota+'</b>'+
+                    //         '<ul>'+
+                    //             '<li>'+'Nip : '+value.nip+'</li>'+
+                    //             '<li>'+'Fakultas : '+value.fakultas+'</li>'+
+                    //             '<li>'+'Program Studi : '+value.prodi+'</li>'+
+                    //         '</ul>';
+                    //     });
+                    //     $('#reviewer_penelitian_detail').html(res2);
+                    // }
                 },
                 error:function(){
                     alert("Nothing Data");
@@ -436,7 +417,7 @@
                 success: function(data){
                     $('#modalreviewer').modal('show');
                     $('#usulan_id').val(id);
-                    $('#judul').text(data['usulan'].judul_penelitian);
+                    $('#judul').text(data['usulan'].judul_kegiatan);
                     var res='';
                     var no = 1;
                     $.each (data['reviewers'], function (key, value) {
@@ -467,6 +448,10 @@
                     $('#btn-submit-reviewer').attr('disabled',true);
                 }
             });
+        });
+
+        $(document).ready(function() {
+            $("#reviewer_id").select2({ dropdownParent: "#modalreviewer" });
         });
     </script>
 @endpush

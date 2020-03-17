@@ -16,7 +16,7 @@ class CreateSkimsTable extends Migration
         Schema::create('skims', function (Blueprint $table) {
             $table->increments('id');
             $table->string('nm_skim');
-            $table->string('tahun');
+            $table->string('tahun')->nullable();
             $table->timestamps();
         });
     }

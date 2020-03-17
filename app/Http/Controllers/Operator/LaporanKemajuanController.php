@@ -23,7 +23,7 @@ class LaporanKemajuanController extends Controller
         $usulans = Usulan::leftJoin('anggota_usulans','anggota_usulans.usulan_id','usulans.id')
                                     ->leftJoin('reviewer2s','reviewer2s.usulan_id','usulans.id')
                                     ->join('laporan_kemajuans','laporan_kemajuans.usulan_id','usulans.id')
-                                    ->select('usulans.id','judul_penelitian','ketua_peneliti_nama','file_kemajuan',
+                                    ->select('usulans.id','judul_kegiatan','ketua_peneliti_nama','file_kemajuan',
                                     DB::raw('group_concat(distinct concat(anggota_usulans.anggota_nama) SEPARATOR "<br>") as "nm_anggota" '),
                                     DB::raw('group_concat(distinct concat(reviewer2s.reviewer_nama) SEPARATOR "&nbsp;|&nbsp;") as "nm_reviewer" ')
                                     )
@@ -38,7 +38,7 @@ class LaporanKemajuanController extends Controller
                                 ->where('usulan_id',$id)
                                 ->groupBy('reviewer_nip')
                                 ->get();
-        $usulan = Usulan::select('judul_penelitian')->where('id',$id)->first();
+        $usulan = Usulan::select('judul_kegiatan')->where('id',$id)->first();
         $data = [
             'reviewers'    =>  $reviewer,
             'usulan'    =>  $usulan,

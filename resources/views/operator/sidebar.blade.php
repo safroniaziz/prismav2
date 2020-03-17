@@ -9,11 +9,8 @@
     </ul>
 </li>
 
-<li><a><i class="fa fa-info-circle"></i>Skim & Bidang <span class="fa fa-chevron-down"></span></a>
-    <ul class="nav child_menu">
-        <li><a href=" {{ route('operator.skim') }} ">Skim Penelitian</a></li>
-        <li><a href=" {{ route('operator.bidang') }} ">Bidang Penelitian</a></li>
-    </ul>
+<li>
+    <a href=" {{ route('operator.skim') }} "><i class="fa fa-info-circle"></i>Skim Penelitian</a>
 </li>
 
 <li><a><i class="fa fa-check-square"></i>Formulir Penilaian <span class="fa fa-chevron-down"></span></a>

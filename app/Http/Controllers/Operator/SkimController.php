@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Operator;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Skim;
+use GuzzleHttp\Client;
 
 class SkimController extends Controller
 {
@@ -18,33 +19,22 @@ class SkimController extends Controller
         return view('operator/manajemen_skim.index',compact('skims'));
     }
 
-    public function post(Request $request){
-        $skim = new Skim;
-        $skim->nm_skim = $request->nm_skim;
-        $skim->tahun = $request->tahun;
-        $skim->save();
+    public function generate(){
+        Skim::truncate();
+        $client = new Client();
+        $skims = json_decode($client->get('https://prisma.unib.ac.id/Api/skim')->getBody()->getContents(),true);
+        for ($i=0; $i < count($skims) ; $i++) {
+            $skim = new Skim;
+            if ($skims[$i]['tahun'] != "0000") {
+                $skim->nm_skim = $skims[$i]['skim_ppm'];
+                $skim->tahun = $skims[$i]['tahun'];
+            }
+            else{
+                $skim->nm_skim = $skims[$i]['skim_ppm'];
+            }
+            $skim->save();
+        }
 
-        return redirect()->route('operator.skim')->with(['success' =>  'Skim baru berhasil ditambahkan !']);
-    }
-
-    public function edit($id){
-        $skim = Skim::find($id);
-        return $skim;
-    }
-
-    public function update(Request $request){
-        $skim = Skim::find($request->id);
-        $skim->nm_skim = $request->nm_skim;
-        $skim->tahun = $request->tahun;
-        $skim->update();
-
-        return redirect()->route('operator.skim')->with(['success' =>  'Skim berhasil diubah !']);
-    }
-
-    public function delete(Request $request){
-        $skim = Skim::find($request->id);
-        $skim->delete();
-
-        return redirect()->route('operator.skim')->with(['success' =>  'Skim berhasil dihapus !']);
+        return redirect()->route('operator.skim')->with(['success' =>  'Skim berhasil diupdate !']);
     }
 }

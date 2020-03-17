@@ -17,7 +17,7 @@ class LaporanKemajuanController extends Controller
             if($sesi == 1){
                 $usulans = Usulan::leftJoin('anggota_usulans','anggota_usulans.usulan_id','usulans.id')
                                     ->leftJoin('laporan_kemajuans','laporan_kemajuans.usulan_id','usulans.id')
-                                    ->select('usulans.id','judul_penelitian','file_kemajuan')
+                                    ->select('usulans.id','judul_kegiatan','file_kemajuan')
                                     ->where('usulans.ketua_peneliti_nip',Session::get('nip'))
                                     ->where('status_usulan','3')
                                     ->orWhere('status_usulan','6')

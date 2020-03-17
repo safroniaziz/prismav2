@@ -13,9 +13,9 @@ class UsulansTableSeeder extends Seeder
     {
         $usulan = [
             [
-                'judul_penelitian'  =>  'Analisis Dan Pemetaan Daerah Banjir Dengan Metode Fuzzy Simple Adaptive Weighting Berbasis Spasial Guna Memetakan Tingkat Daerah Rawan Banjir (Studi Kasus: Daerah Aliran Sungai Bengkulu)',
+                'judul_kegiatan'  =>  'Analisis Dan Pemetaan Daerah Banjir Dengan Metode Fuzzy Simple Adaptive Weighting Berbasis Spasial Guna Memetakan Tingkat Daerah Rawan Banjir (Studi Kasus: Daerah Aliran Sungai Bengkulu)',
                 'skim_id' =>  1,
-                'bidang_id' =>  1,
+                'jenis_kegiatan' =>  "penelitian",
                 'ketua_peneliti_nip' =>  "197308142006042001",
                 'ketua_peneliti_nama' =>  "Ernawati",
                 'abstrak' =>  "Kota Bengkulu yang terletak di pesisir barat Pulau Sumatra memiliki garis pantai sepanjang 7 km dengan berbagai khasanah keindahan pantai yang dimiliki. Pantai di Kota Bengkulu merupakan muara dua aliran sungai, yaitu; Sungai Bengkulu dan Sungai Jenggalu. Sungai-sungai tersebut sering terjadi luapan air hujan dari hulu sungai, yang berasal dari 5 kabupaten lainnya. Aktivitas di hulu sungai yang sudah tidak terkendali akibat aktivitas pertambangan dan perkebunan, mengakibatkan banjir khususnya yang terjadi di area sekitar Daerah Aliran Sungai (DAS) Sungai Bengkulu. Banjir yang terjadi di DAS Sungai Bengkulu tidak hanya merugikan materi, tetapi telah memakan korban nyawa akibat dari banjir tersebut.
@@ -30,9 +30,9 @@ class UsulansTableSeeder extends Seeder
             ],
 
             [
-                'judul_penelitian'  =>  'Sistem Informasi Tesis Maksi FEB Universitas Bengkulu adalah aplikasi yang digunakan untuk melakukan kegiatan bimbingan mahasiswa kepada dosen, ',
+                'judul_kegiatan'  =>  'Sistem Informasi Tesis Maksi FEB Universitas Bengkulu adalah aplikasi yang digunakan untuk melakukan kegiatan bimbingan mahasiswa kepada dosen, ',
                 'skim_id' =>  1,
-                'bidang_id' =>  1,
+                'jenis_kegiatan' =>  "penelitian",
                 'ketua_peneliti_nip' =>  "198909032015041004",
                 'ketua_peneliti_nama' =>  "Yudi Setiawan",
                 'abstrak' =>  "Sistem Informasi ini mencakup segala hal yang berhubungan dengan tesis mahasiswa, dimulai dari proses bimbingan sebelum melakukan seminar
