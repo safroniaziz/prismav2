@@ -21,6 +21,14 @@
             cursor: pointer !important;
             color:teal;
         }
+        #selengkapnya{
+            color:#5A738E;
+            text-decoration:none;
+            cursor:pointer;
+        }
+        #selengkapnya:hover{
+            color:#007bff;
+        }
     </style>
 @endpush
 @section('content')
@@ -53,9 +61,9 @@
                         <thead>
                             <tr>
                                 <th>No</th>
-                                <th>Judul Penelitian</th>
-                                <th>Laporan Kemajuan</th>
-                                <th>Upload Laporan</th>
+                                <th>Judul Kegiatan</th>
+                                <th style="text-align:center;">Laporan Kemajuan</th>
+                                <th style="text-align:center;">Upload Laporan</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -65,7 +73,15 @@
                             @foreach ($usulans as $usulan)
                                 <tr>
                                     <td> {{ $no++ }} </td>
-                                    <td> {{ $usulan->judul_kegiatan }} </td>
+                                    <td style="width:30% !important;">
+                                        {!! $usulan->shortJudul !!}
+                                        <a onclick="selengkapnya({{ $usulan->id }})" id="selengkapnya">selengkapnya</a>
+                                        <br>
+                                        <hr style="margin-bottom:5px !important; margin-top:5px !important;">
+                                        <span style="font-size:10px !important; text-transform:capitalize;" for="" class="badge badge-info">{{ $usulan->jenis_kegiatan }}</span>
+                                        <span style="font-size:10px !important;" for="" class="badge badge-danger">{{ $usulan->ketua_peneliti_nama }}</span>
+                                        <span style="font-size:10px !important;" for="" class="badge badge-secondary">{{ $usulan->tahun_usulan }}</span>
+                                    </td>
                                     <td style="text-align:center;">
                                         @if ($usulan->file_kemajuan == null)
                                             <a style="color:red;"><i>belum diupload</i></a>
@@ -116,6 +132,29 @@
                         </div>
                     </div>
                 </div>
+                <!-- Modal Detail -->
+                <div class="modal fade" id="modaldetail" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Informasi Detail Judul Kegiatan</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        </div>
+                        <div class="modal-body">
+                            <h6 style="font-weight:bold;">Judul Kegiatan:</h6>
+                            <hr>
+                            <div id="detail-text" style="text-align:justify; font-weight:bold; ">
+
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger" data-dismiss="modal" style="font-size:12px;"><i class="fa fa-close"></i>&nbsp;Keluar</button>
+                        </div>
+                    </div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -132,6 +171,22 @@
         function uploadLaporan(id){
             $('#modalupload').modal('show');
             $('#id_usulan').val(id);
+        }
+
+        function selengkapnya(id){
+            $.ajax({
+                url: "{{ url('pengusul/upload_laporan_kemajuan') }}"+'/'+ id + "/detail_judul",
+                type: "GET",
+                dataType: "JSON",
+                success: function(data){
+                $('#modaldetail').modal('show');
+                    $('#id').val(data.id);
+                    $('#detail-text').text(data.judul_kegiatan);
+                },
+                error:function(){
+                    alert("Nothing Data");
+                }
+            });
         }
     </script>
 @endpush

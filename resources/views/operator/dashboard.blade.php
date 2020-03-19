@@ -43,7 +43,7 @@
         <div class="col-md-9">
             <section class="panel">
                 <header class="panel-heading" style="color: #ffffff;background-color: #074071;border-color: #fff000;border-image: none;border-style: solid solid none;border-width: 4px 0px 0;border-radius: 0;font-size: 14px;font-weight: 700;padding: 15px;">
-                    <i class="fa fa-bar-chart"></i>&nbsp;Statistik Jumlah Penelitian Di Danai Per Fakultas
+                    <i class="fa fa-bar-chart"></i>&nbsp;Statistik Jumlah Dose Di Danai Per Fakultas
                     <span class="tools pull-right" style="margin-top:-5px;">
                         <a class="fa fa-chevron-down" href="javascript:;" style="float: left;margin-left: 3px;padding: 10px;text-decoration: none;"></a>
                         <a class="fa fa-times" href="javascript:;" style="float: left;margin-left: 3px;padding: 10px;text-decoration: none;"></a>

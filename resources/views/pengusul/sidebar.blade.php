@@ -14,7 +14,11 @@
     <a href=" {{ route('pengusul.laporan_kemajuan') }} "><i class="fa fa-upload"></i>Upload Laporan Kemajuan</a>
 </li>
 
-<li>
+<li
+    @if (Route::current()->getName() == "pengusul.laporan_akhir.luaran")
+        class="current-page"
+    @endif
+>
     <a href=" {{ route('pengusul.laporan_akhir') }} "><i class="fa fa-upload"></i>Upload Laporan Akhir</a>
 </li>
 

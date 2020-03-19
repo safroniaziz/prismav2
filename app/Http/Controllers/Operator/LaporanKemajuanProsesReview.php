@@ -23,7 +23,8 @@ class LaporanKemajuanProsesReview extends Controller
     public function index(){
         $usulans = Usulan::leftJoin('anggota_usulans','anggota_usulans.usulan_id','usulans.id')
                             ->leftJoin('reviewer2s','reviewer2s.usulan_id','usulans.id')
-                            ->select('usulans.id','judul_kegiatan',
+                            ->leftJoin('laporan_kemajuans','laporan_kemajuans.usulan_id','usulans.id')
+                            ->select('usulans.id','judul_kegiatan','file_kemajuan','jenis_kegiatan','tahun_usulan',
                                     'ketua_peneliti_nama as nm_ketua_peneliti',
                                     DB::raw('group_concat(distinct concat(anggota_usulans.anggota_nama) SEPARATOR "<br>") as "nm_anggota" '),
                                     DB::raw('group_concat(distinct concat(reviewer2s.reviewer_nama) SEPARATOR "&nbsp;|&nbsp;") as "nm_reviewer" ')

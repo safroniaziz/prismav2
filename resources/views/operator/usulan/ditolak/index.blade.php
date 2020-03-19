@@ -41,9 +41,9 @@
                         <thead>
                             <tr>
                                 <th>No</th>
-                                <th>Judul Penelitian</th>
+                                <th>Judul Kegiatan</th>
                                 <th>Ketua Penelitian</th>
-                                <th>Anggota Penelitian</th>
+                                <th>Anggota Kegiatan</th>
                             </tr>
                         </thead>
                         <tbody>

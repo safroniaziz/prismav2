@@ -30,7 +30,7 @@
                         @else
                         <div class="alert alert-success alert-block" id="keterangan">
                             <button type="button" class="close" data-dismiss="alert">×</button>
-                            <strong><i class="fa fa-info-circle"></i>&nbsp;Perhatian: </strong> Silahkan review judul penelitian : {{ $judul_kegiatan->judul_kegiatan }}
+                            <strong><i class="fa fa-info-circle"></i>&nbsp;Perhatian: </strong> Silahkan review Judul Kegiatan : {{ $judul_kegiatan->judul_kegiatan }}
                         </div>
                     @endif
                     @if ($message = Session::get('error'))

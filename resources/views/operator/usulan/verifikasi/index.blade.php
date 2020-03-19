@@ -21,6 +21,14 @@
             cursor: pointer !important;
             color:teal;
         }
+        #selengkapnya{
+            color:#5A738E;
+            text-decoration:none;
+            cursor:pointer;
+        }
+        #selengkapnya:hover{
+            color:#007bff;
+        }
     </style>
 @endpush
 @section('content')
@@ -67,7 +75,7 @@
                                         <input type="checkbox" class="form-control selectall">
                                     </th>
                                     <th>No</th>
-                                    <th>Judul Penelitian</th>
+                                    <th>Judul Kegiatan</th>
                                     <th>Total Skor</th>
                                     <th>Detail Skor</th>
                                 </tr>
@@ -85,7 +93,19 @@
                                             @endif
                                         </td>
                                         <td> {{ $no++ }} </td>
-                                        <td> {{ $usulan->judul_kegiatan }} </td>
+                                        <td style="width:40% !important;">
+                                            {!! $usulan->shortJudul !!}
+                                            <a onclick="selengkapnya({{ $usulan->id }})" id="selengkapnya">selengkapnya</a>
+                                            <br>
+                                            <hr style="margin-bottom:5px !important; margin-top:5px !important;">
+                                            <span style="font-size:10px !important; text-transform:capitalize;" for="" class="badge badge-info">{{ $usulan->jenis_kegiatan }}</span>
+                                            <span style="font-size:10px !important;" for="" class="badge badge-danger">{{ $usulan->ketua_peneliti_nama }}</span>
+                                            <span style="font-size:10px !important;" for="" class="badge badge-secondary">{{ $usulan->tahun_usulan }}</span>
+                                            <hr style="margin-bottom:5px !important; margin-top:5px !important;">
+                                            <a href="{{ asset('upload/file_usulan/'.$usulan->file_usulan) }}" download="{{ $usulan->file_usulan }}"><i class="fa fa-download"></i>&nbsp; download file usulan</a>
+                                            <br>
+                                            <a href="{{ asset('upload/peta_jalan/'.$usulan->peta_jalan) }}" download="{{ $usulan->peta_jalan }}"><i class="fa fa-download"></i>&nbsp; download file peta jalan</a>
+                                       </td>
                                         <td style="padding:15px 27px;"> {{ number_format($usulan->totalskor, 2) }} </td>
                                         <td style="padding:15px 30px;">
                                             <a onclick="detail({{ $usulan->id }})" class="btn btn-primary btn-sm" style="color:white; cursor:pointer;"><i class="fa fa-info-circle"></i></a>
@@ -177,7 +197,29 @@
                     </div>
                 </div>
             </form>
+            <!-- Modal Detail -->
+            <div class="modal fade" id="modaldetailjudul" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Informasi Detail Judul Kegiatan</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    </div>
+                    <div class="modal-body">
+                        <h6 style="font-weight:bold;">Judul Kegiatan:</h6>
+                        <hr>
+                        <div id="detail-text" style="text-align:justify; font-weight:bold; ">
 
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal" style="font-size:12px;"><i class="fa fa-close"></i>&nbsp;Keluar</button>
+                    </div>
+                </div>
+                </div>
+            </div>
         </div>
     </section>
 @endsection
@@ -234,5 +276,21 @@
                 $('.selectall').prop('checked', false);
             }
         });
+
+        function selengkapnya(id){
+            $.ajax({
+                url: "{{ url('operator/usulan_dosen/menunggu_verifikasi') }}"+'/'+ id + "/detail_judul",
+                type: "GET",
+                dataType: "JSON",
+                success: function(data){
+                $('#modaldetailjudul').modal('show');
+                    $('#id').val(data.id);
+                    $('#detail-text').text(data.judul_kegiatan);
+                },
+                error:function(){
+                    alert("Nothing Data");
+                }
+            });
+        }
     </script>
 @endpush

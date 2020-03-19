@@ -20,17 +20,30 @@ class LaporanKemajuanController extends Controller
     }
 
     public function index(){
+        $panda = new UserLoginController();
         $usulans = Usulan::leftJoin('anggota_usulans','anggota_usulans.usulan_id','usulans.id')
                                     ->leftJoin('reviewer2s','reviewer2s.usulan_id','usulans.id')
                                     ->join('laporan_kemajuans','laporan_kemajuans.usulan_id','usulans.id')
-                                    ->select('usulans.id','judul_kegiatan','ketua_peneliti_nama','file_kemajuan',
+                                    ->select('usulans.id','judul_kegiatan','ketua_peneliti_nama','file_kemajuan','jenis_kegiatan','tahun_usulan',
                                     DB::raw('group_concat(distinct concat(anggota_usulans.anggota_nama) SEPARATOR "<br>") as "nm_anggota" '),
                                     DB::raw('group_concat(distinct concat(reviewer2s.reviewer_nama) SEPARATOR "&nbsp;|&nbsp;") as "nm_reviewer" ')
                                     )
                                     ->groupBy('usulans.id')
                                     ->get();
         $fakultas = Fakultas::select('fakultas_kode','nm_fakultas')->get();
-        return view('operator/laporan_kemajuan/reviewer.index',compact('usulans','fakultas'));
+        $dosen = '
+            {dosen(limit:1500) {
+                    dsnPegNip
+                    pegawai {
+                        pegNama
+                        pegGelarDepan
+                        pegGelarBelakang
+                        pegIsAktif
+                    }
+                }}
+            ';
+        $dosens = $panda->panda($dosen);
+        return view('operator/laporan_kemajuan/reviewer.index',compact('usulans','fakultas','dosens'));
     }
 
     public function getReviewer($id){
@@ -104,5 +117,10 @@ class LaporanKemajuanController extends Controller
         $anggota->save();
 
         return redirect()->route('operator.laporan_kemajuan')->with(['success' =>  'Reviewer berhasil ditambahkan !']);
+    }
+
+    public function detailJudul($id){
+        $judul = Usulan::find($id);
+        return $judul;
     }
 }

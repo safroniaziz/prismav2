@@ -25,7 +25,7 @@ class VerifikasiUsulanController extends Controller
     public function index(){
         $usulans = Usulan::leftJoin('nilai_formulirs','nilai_formulirs.usulan_id','usulans.id')
                             ->leftJoin('formulirs','formulirs.id','nilai_formulirs.formulir_id')
-                            ->select('usulans.id','judul_kegiatan',DB::raw('SUM(skor * (bobot/100)/2) as totalskor'))
+                            ->select('usulans.id','jenis_kegiatan','ketua_peneliti_nama','tahun_usulan','judul_kegiatan',DB::raw('SUM(skor * (bobot/100)/2) as totalskor'))
                             ->groupBy('usulans.id')
                             ->where('status_usulan','2')
                             ->get();
@@ -99,6 +99,10 @@ class VerifikasiUsulanController extends Controller
         else{
             return redirect()->route('operator.verifikasi')->with(['error'    =>  'Harap pilih usulan penelitian terlebih dahulu !!']);
         }
+    }
 
+    public function detailJudul($id){
+        $judul = Usulan::find($id);
+        return $judul;
     }
 }

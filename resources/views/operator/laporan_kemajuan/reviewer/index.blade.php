@@ -21,6 +21,14 @@
             cursor: pointer !important;
             color:teal;
         }
+        #selengkapnya{
+            color:#5A738E;
+            text-decoration:none;
+            cursor:pointer;
+        }
+        #selengkapnya:hover{
+            color:#007bff;
+        }
     </style>
 @endpush
 @section('content')
@@ -48,11 +56,10 @@
                         <thead>
                             <tr>
                                 <th>No</th>
-                                <th>Judul Penelitian</th>
-                                <th>Ketua Penelitian</th>
-                                <th>Anggota Penelitian</th>
-                                <th>Laporan Kemajuan</th>
-                                <th>Tambah Reviewer</th>
+                                <th style="text-align:center;">Judul Kegiatan</th>
+                                <th style="text-align:center;">Anggota Kegiatan</th>
+                                <th style="text-align:center;">Reviewer Laporan Kemajuan</th>
+                                <th style="text-align:center;">Tambah Reviewer</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -66,19 +73,28 @@
                                 @if ($jumlah < 2)
                                     <tr>
                                         <td> {{ $no++ }} </td>
-                                        <td> {{ $usulan->judul_kegiatan }} </td>
-                                        <td style="font-weight:bold;"> {{ $usulan->ketua_peneliti_nama }} </td>
-                                        <td>
-                                            <label class="badge">
+                                        <td style="width:40% !important;">
+                                            {!! $usulan->shortJudul !!}
+                                            <a onclick="selengkapnya({{ $usulan->id }})" id="selengkapnya">selengkapnya</a>
+                                            <br>
+                                            <hr style="margin-bottom:5px !important; margin-top:5px !important;">
+                                            <span style="font-size:10px !important; text-transform:capitalize;" for="" class="badge badge-info">{{ $usulan->jenis_kegiatan }}</span>
+                                            <span style="font-size:10px !important;" for="" class="badge badge-danger">{{ $usulan->ketua_peneliti_nama }}</span>
+                                            <span style="font-size:10px !important;" for="" class="badge badge-secondary">{{ $usulan->tahun_usulan }}</span>
+                                            <hr style="margin-bottom:5px !important; margin-top:5px !important;">
+                                            <a href="{{ asset('upload/laporan_kemajuan/'.$usulan->file_kemajuan) }}" download="{{ $usulan->file_kemajuan }}"><i class="fa fa-download"></i>&nbsp; download file laporan kemajuan</a>
+                                       </td>
+                                        <td style="font-weight:bold; text-align:center;">
                                                 {!! $usulan->nm_anggota !!}
-                                            </label>
                                         </td>
-                                        <td>
-                                            <a href="{{ asset('upload/laporan_kemajuan/'.$usulan->file_kemajuan) }}" download="{{ $usulan->file_kemajuan }}">
-                                                <button type="button" class="btn btn-primary" style="padding:7px;font-size:13px;color:white;cursor:pointer;"><i class="fa fa-download"></i></button>
-                                            </a>
+                                        <td style="text-align:center;">
+                                            @if ($usulan->nm_reviewer == null || $usulan->nm_reviewer == "")
+                                                <label class="badge badge-danger" style="padding:5px;">-</label>
+                                                @else
+                                                <label class="badge" style="font-size:12px;">&nbsp;{!! $usulan->nm_reviewer !!}</label>
+                                            @endif
                                         </td>
-                                        <td>
+                                        <td style="text-align:center;">
                                             <a onclick="tambahReviewer({{ $usulan->id }})" class="btn btn-primary btn-sm" style="color:white; cursor:pointer;"><i class="fa fa-user-plus"></i></a>
                                         </td>
                                     </tr>
@@ -91,7 +107,7 @@
                         <div class="modal-dialog modal-lg" role="document">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <p style="font-size:15px;" class="modal-title" id="exampleModalLabel"><i class="fa fa-user"></i>&nbsp;Form Tambah Anggota Penelitian</p>
+                                    <p style="font-size:15px;" class="modal-title" id="exampleModalLabel"><i class="fa fa-user"></i>&nbsp;Form Tambah Anggota Kegiatan</p>
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
                                     </button>
@@ -101,27 +117,27 @@
                                         <div class="modal-body">
                                             <input type="hidden" name="usulan_id" id="usulan_id">
                                             <div class="row">
-                                                <div class="form-group col-md-4">
-                                                    <label for="exampleInputEmail1">Pilih Fakultas</label>
-                                                    <select name="fakultas_id" id="fakultas_id" class="form-control" required style="font-size:13px;">
-                                                        <option value="" disabled selected>-- pilih fakultas --</option>
-                                                        @foreach ($fakultas as $fakultas)
-                                                            <option value=" {{ $fakultas->fakultas_kode }} "> {{ $fakultas->nm_fakultas }} </option>
-                                                        @endforeach
-                                                    </select>
-                                                </div>
-
-                                                <div class="form-group col-md-4">
-                                                    <label for="exampleInputEmail1">Pilih Program Studi</label>
-                                                    <select name="prodi_id" id="prodi_id" class="form-control" required style="font-size:13px;">
-                                                        <option value="" disabled selected>-- pilih prodi --</option>
-                                                    </select>
-                                                </div>
-
-                                                <div class="form-group col-md-4">
-                                                    <label for="exampleInputEmail1">Pilih Reviewer</label>
-                                                    <select name="reviewer_id" id="reviewer_id" class="form-control" required style="font-size:13px;">
+                                                <div class="form-group col-md-12">
+                                                    <label for="exampleInputEmail1">Pilih Reviewer Kegiatan</label>
+                                                    <select name="reviewer_id" id="reviewer_id" class="form-control" required style="font-size:13px; width:100%;">
                                                         <option value="" disabled selected>-- pilih reviewer --</option>
+                                                        @foreach ($dosens as $dosen)
+                                                            @for ($i = 0; $i <sizeof($dosen) ; $i++)
+                                                                @if ($dosen[$i]['pegawai']['pegIsAktif'] == 1)
+                                                                    @if ($dosen[$i]['pegawai']['pegNama'] != "0" || $dosen[$i]['pegawai']['pegNama'] != "000000000")
+                                                                        @if ($dosen[$i]['pegawai']['pegGelarDepan'] != "null" && $dosen[$i]['pegawai']['pegGelarBelakang'] != "null")
+                                                                            <option value=" {{ $dosen[$i]['dsnPegNip'] }} "> {{ $dosen[$i]['pegawai']['pegGelarDepan'] }} {{ $dosen[$i]['pegawai']['pegNama'] }} {{ $dosen[$i]['pegawai']['pegGelarBelakang'] }} </option>
+                                                                                @elseif($dosen[$i]['pegawai']['pegGelarDepan'] != "null" && $dosen[$i]['pegawai']['pegGelarBelakang'] == "null")
+                                                                                <option value=" {{ $dosen[$i]['dsnPegNip'] }} "> {{ $dosen[$i]['pegawai']['pegGelarDepan'] }} {{ $dosen[$i]['pegawai']['pegNama'] }} </option>
+                                                                                    @elseif($dosen[$i]['pegawai']['pegGelarDepan'] == "null" && $dosen[$i]['pegawai']['pegGelarBelakang'] != "null")
+                                                                                    <option value=" {{ $dosen[$i]['dsnPegNip'] }} "> {{ $dosen[$i]['pegawai']['pegNama'] }} {{ $dosen[$i]['pegawai']['pegGelarBelakang'] }}</option>
+                                                                                        @else
+                                                                                        <option value=" {{ $dosen[$i]['dsnPegNip'] }} "> {{ $dosen[$i]['pegawai']['pegNama'] }} </option>
+                                                                        @endif
+                                                                    @endif
+                                                                @endif
+                                                            @endfor
+                                                        @endforeach
                                                     </select>
                                                 </div>
                                                 <div class="col-md-12">
@@ -134,7 +150,7 @@
                                                 <div class="col-md-12 table-responsive">
                                                     <div class="alert alert-success alert-block" id="berhasil">
                                                         <button type="button" class="close" data-dismiss="alert">×</button>
-                                                        <strong><i class="fa fa-info-circle"></i>&nbsp;Perhatian: </strong> Berikut adalah reviewer penelitian dengan judul : <a style="font-weight:bold; font-size:12px; text-decoration:underline;" id="judul"></a>
+                                                        <strong><i class="fa fa-info-circle"></i>&nbsp;Perhatian: </strong> Berikut adalah Reviewer Kegiatan dengan judul : <a style="font-weight:bold; font-size:12px; text-decoration:underline;" id="judul"></a>
                                                     </div>
                                                     <table class="table table-bordered table-striped" id="anggota" style="width:100%;">
                                                         <thead>
@@ -160,6 +176,29 @@
                                 </form>
                             </div>
                         </div>
+                    </div>
+                </div>
+                 <!-- Modal Detail -->
+                <div class="modal fade" id="modaldetail" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Informasi Detail Judul Kegiatan</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        </div>
+                        <div class="modal-body">
+                            <h6 style="font-weight:bold;">Judul Kegiatan:</h6>
+                            <hr>
+                            <div id="detail-text" style="text-align:justify; font-weight:bold; ">
+
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger" data-dismiss="modal" style="font-size:12px;"><i class="fa fa-close"></i>&nbsp;Keluar</button>
+                        </div>
+                    </div>
                     </div>
                 </div>
             </div>
@@ -269,6 +308,26 @@
                 }
                 });
             })
+        });
+
+        function selengkapnya(id){
+            $.ajax({
+                url: "{{ url('operator/usulan_dosen/laporan_kemajuan') }}"+'/'+ id + "/detail_judul",
+                type: "GET",
+                dataType: "JSON",
+                success: function(data){
+                    $('#modaldetail').modal('show');
+                    $('#id').val(data.id);
+                    $('#detail-text').text(data.judul_kegiatan);
+                },
+                error:function(){
+                    alert("Nothing Data");
+                }
+            });
+        }
+
+        $(document).ready(function() {
+            $("#reviewer_id").select2({ dropdownParent: "#modalreviewer" });
         });
     </script>
 @endpush

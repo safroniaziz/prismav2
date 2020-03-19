@@ -64,7 +64,7 @@
                         <thead>
                             <tr>
                                 <th style="text-align:center;">No</th>
-                                <th style="text-align:center;">Judul Penelitian</th>
+                                <th style="text-align:center;">Judul Kegiatan</th>
                                 <th style="text-align:center;">Anggota Kelompok</th>
                                 <th style="text-align:center;">Biaya Diusulkan</th>
                                 <th style="text-align:center;">Status Usulan</th>
@@ -88,7 +88,7 @@
                                         <a onclick="detail({{ $usulan->id }})" id="selengkapnya">selengkapnya</a>
                                         <br>
                                         <hr style="margin-bottom:5px !important; margin-top:5px !important;">
-                                        <span style="font-size:10px !important;" for="" class="badge badge-info">{{ $usulan->jenis_kegiatan }}</span>
+                                        <span style="font-size:10px !important; text-transform:capitalize;" for="" class="badge badge-info">{{ $usulan->jenis_kegiatan }}</span>
                                         <span style="font-size:10px !important;" for="" class="badge badge-danger">{{ $usulan->nm_ketua_peneliti }}</span>
                                         <span style="font-size:10px !important;" for="" class="badge badge-secondary">{{ $usulan->tahun_usulan }}</span>
                                         <hr style="margin-bottom:5px !important; margin-top:5px !important;">
@@ -156,7 +156,7 @@
                                     <div class="col-md-12">
                                         <table class="table table-bordered table-striped" style="width:100%">
                                             <tr>
-                                                <td style="width:20%;">Judul Penelitian</td>
+                                                <td style="width:20%;">Judul Kegiatan</td>
                                                 <td> : </td>
                                                 <td>
                                                     <p id="judul_kegiatan_detail"></p>
@@ -189,7 +189,7 @@
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td>Anggota Penelitian</td>
+                                                <td>Anggota Kegiatan</td>
                                                 <td> : </td>
                                                 <td>
                                                     <p id="anggota_penelitian_detail"></p>
@@ -226,7 +226,7 @@
                 <div class="modal-dialog modal-lg" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <p style="font-size:15px;" class="modal-title" id="exampleModalLabel"><i class="fa fa-user"></i>&nbsp;Form Tambah Anggota Penelitian</p>
+                            <p style="font-size:15px;" class="modal-title" id="exampleModalLabel"><i class="fa fa-user"></i>&nbsp;Form Tambah Anggota Kegiatan</p>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
@@ -270,7 +270,7 @@
                                         <div class="col-md-12 table-responsive">
                                             <div class="alert alert-success alert-block" id="berhasil">
                                                 <button type="button" class="close" data-dismiss="alert">×</button>
-                                                <strong><i class="fa fa-info-circle"></i>&nbsp;Perhatian: </strong> Berikut adalah reviewer penelitian dengan judul : <a style="font-weight:bold; font-size:12px; text-decoration:underline;" id="judul"></a>
+                                                <strong><i class="fa fa-info-circle"></i>&nbsp;Perhatian: </strong> Berikut adalah Reviewer Kegiatan dengan judul : <a style="font-weight:bold; font-size:12px; text-decoration:underline;" id="judul"></a>
                                             </div>
                                             <table class="table table-bordered table-striped" id="anggota" style="width:100%;">
                                                 <thead>

@@ -17,7 +17,7 @@ class LaporanKemajuanController extends Controller
             if($sesi == 1){
                 $usulans = Usulan::leftJoin('anggota_usulans','anggota_usulans.usulan_id','usulans.id')
                                     ->leftJoin('laporan_kemajuans','laporan_kemajuans.usulan_id','usulans.id')
-                                    ->select('usulans.id','judul_kegiatan','file_kemajuan')
+                                    ->select('usulans.id','judul_kegiatan','file_kemajuan','jenis_kegiatan','ketua_peneliti_nama','tahun_usulan')
                                     ->where('usulans.ketua_peneliti_nip',Session::get('nip'))
                                     ->where('status_usulan','3')
                                     ->orWhere('status_usulan','6')
@@ -59,5 +59,10 @@ class LaporanKemajuanController extends Controller
         else{
             return redirect()->route('panda.login.form')->with(['error' => 'Masukan Username dan Password Terlebih Dahulu !!']);
         }
+    }
+
+    public function detailJudul($id){
+        $judul = Usulan::find($id);
+        return $judul;
     }
 }

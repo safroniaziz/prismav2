@@ -64,7 +64,7 @@
                         <thead>
                             <tr>
                                 <th style="text-align:center;">No</th>
-                                <th style="text-align:center;">Judul Penelitian</th>
+                                <th style="text-align:center;">Judul Kegiatan</th>
                                 <th style="text-align:center;">Anggota Kelompok</th>
                                 <th style="text-align:center;">Biaya Diusulkan</th>
                                 <th style="text-align:center;">Rancangan Anggaran</th>
@@ -83,7 +83,7 @@
                                         <a onclick="detail({{ $usulan->id }})" id="selengkapnya">selengkapnya</a>
                                         <br>
                                         <hr style="margin-bottom:5px !important; margin-top:5px !important;">
-                                        <span style="font-size:10px !important;" for="" class="badge badge-info">{{ $usulan->jenis_kegiatan }}</span>
+                                        <span style="font-size:10px !important; text-transform:capitalize;" for="" class="badge badge-info">{{ $usulan->jenis_kegiatan }}</span>
                                         <span style="font-size:10px !important;" for="" class="badge badge-danger">{{ $usulan->nm_ketua_peneliti }}</span>
                                         <span style="font-size:10px !important;" for="" class="badge badge-secondary">{{ $usulan->tahun_usulan }}</span>
                                         <hr style="margin-bottom:5px !important; margin-top:5px !important;">
@@ -135,7 +135,7 @@
                                     <div class="col-md-12">
                                         <table class="table table-bordered table-striped" style="width:100%">
                                             <tr>
-                                                <td style="width:20%;">Judul Penelitian</td>
+                                                <td style="width:20%;">Judul Kegiatan</td>
                                                 <td> : </td>
                                                 <td>
                                                     <p id="judul_kegiatan_detail"></p>
@@ -168,14 +168,14 @@
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td>Anggota Penelitian</td>
+                                                <td>Anggota Kegiatan</td>
                                                 <td> : </td>
                                                 <td>
                                                     <p id="anggota_penelitian_detail"></p>
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td>Reviewer Penelitian</td>
+                                                <td>Reviewer Kegiatan</td>
                                                 <td> : </td>
                                                 <td>
                                                     <p id="reviewer_penelitian_detail"></p>

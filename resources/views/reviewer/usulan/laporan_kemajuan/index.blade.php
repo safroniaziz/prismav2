@@ -21,6 +21,14 @@
             cursor: pointer !important;
             color:teal;
         }
+        #selengkapnya{
+            color:#5A738E;
+            text-decoration:none;
+            cursor:pointer;
+        }
+        #selengkapnya:hover{
+            color:#007bff;
+        }
     </style>
 @endpush
 @section('content')
@@ -55,12 +63,11 @@
                     <table class="table table-striped table-bordered" id="table" style="width:100%;">
                         <thead>
                             <tr>
-                                <th>No</th>
-                                <th>Judul Penelitian</th>
-                                <th>Ketua Peneliti</th>
-                                <th>Anggota Kelompok</th>
-                                <th>Laporan Kemajuan</th>
-                                <th>Review</th>
+                                <th style="text-align:center;">No</th>
+                                <th style="text-align:center;">Judul Kegiatan</th>
+                                <th style="text-align:center;">Ketua Peneliti</th>
+                                <th style="text-align:center;">Anggota Kelompok</th>
+                                <th style="text-align:center;">Review</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -70,21 +77,26 @@
                             @foreach ($usulans as $usulan)
                                 <tr>
                                     <td> {{ $no++ }} </td>
-                                    <td> <a onclick="detail( {{ $usulan->id }} )" id="detail">{{ $usulan->judul_kegiatan }}</a> </td>
-                                    <td> {{ $usulan->nm_ketua_peneliti }} </td>
-                                    <td>
+                                    <td style="width:40% !important;">
+                                        {!! $usulan->shortJudul !!}
+                                        <a onclick="detail({{ $usulan->id }})" id="selengkapnya">selengkapnya</a>
+                                        <br>
+                                        <hr style="margin-bottom:5px !important; margin-top:5px !important;">
+                                        <span style="font-size:10px !important; text-transform:capitalize;" for="" class="badge badge-info">{{ $usulan->jenis_kegiatan }}</span>
+                                        <span style="font-size:10px !important;" for="" class="badge badge-danger">{{ $usulan->nm_ketua_peneliti }}</span>
+                                        <span style="font-size:10px !important;" for="" class="badge badge-secondary">{{ $usulan->tahun_usulan }}</span>
+                                        <hr style="margin-bottom:5px !important; margin-top:5px !important;">
+                                        <a href="{{ asset('upload/laporan_kemajuan/'.$usulan->file_kemajuan) }}" download="{{ $usulan->file_kemajuan }}"><i class="fa fa-download"></i>&nbsp; download file laporan kemajuan</a>
+                                   </td>
+                                    <td style="text-align:center;"> {{ $usulan->nm_ketua_peneliti }} </td>
+                                    <td style="text-align:center;">
                                         @if ($usulan->nm_anggota == null)
                                             <label class="badge badge-danger"><i class="fa fa-close" style="padding:5px;"></i>&nbsp;Belum ditambahkan</label>
                                             @else
                                             <label class="badge" style="font-size:12px;">&nbsp;{!! $usulan->nm_anggota !!}</label>
                                         @endif
                                     </td>
-                                    <td>
-                                        <a href="{{ asset('upload/laporan_kemajuan/'.$usulan->file_kemajuan) }}" download="{{ $usulan->file_kemajuan }}">
-                                            <button type="button" class="btn btn-primary" style="padding:5px;font-size:13px;color:white;cursor:pointer; padding:7px;"><i class="fa fa-download"></i></button>
-                                        </a>
-                                    </td>
-                                    <td>
+                                    <td style="text-align:center;">
                                         @if ($usulan->reviewer_id == null)
                                             <a href=" {{ route('reviewer.laporan_kemajuan.review',[$usulan->id, $usulan->skim_id]) }} " class="btn btn-primary btn-sm" style="color:white;"><i class="fa fa-star"></i></a>
                                             @else
@@ -116,7 +128,7 @@
                                     <div class="col-md-12">
                                         <table class="table table-bordered table-striped" style="width:100%">
                                             <tr>
-                                                <td style="width:20%;">Judul Penelitian</td>
+                                                <td style="width:20%;">Judul Kegiatan</td>
                                                 <td> : </td>
                                                 <td>
                                                     <p id="judul_kegiatan_detail"></p>
@@ -130,10 +142,10 @@
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td>Bidang Penelitian</td>
+                                                <td>Jenis Kegiatan</td>
                                                 <td> : </td>
                                                 <td>
-                                                    <p id="bidang_penelitian_detail"></p>
+                                                    <p style="text-transform:capitalize;" id="jenis_kegiatan_detail"></p>
                                                 </td>
                                             </tr>
                                             <tr>
@@ -149,14 +161,14 @@
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td>Anggota Penelitian</td>
+                                                <td>Anggota Kegiatan</td>
                                                 <td> : </td>
                                                 <td>
                                                     <p id="anggota_penelitian_detail"></p>
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td>Reviewer Penelitian</td>
+                                                <td>Reviewer Kegiatan</td>
                                                 <td> : </td>
                                                 <td>
                                                     <p id="reviewer_penelitian_detail"></p>
@@ -229,7 +241,7 @@
                     $('#modaldetail').modal('show');
                     $('#judul_kegiatan_detail').text(data['usulan'].judul_kegiatan);
                     $('#skim_penelitian_detail').text(data['usulan'].nm_skim);
-                    $('#bidang_penelitian_detail').text(data['usulan'].bidang_penelitian);
+                    $('#jenis_kegiatan_detail').text(data['usulan'].jenis_kegiatan);
                     $('#ketua_peneliti_detail').text(data['usulan'].nm_ketua_peneliti);
                     $('#ketua_nip').text(data['usulan'].ketua_peneliti_nip);
                     $('#ketua_prodi').text(data['usulan'].ketua_peneliti_prodi_nama);

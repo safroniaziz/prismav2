@@ -21,6 +21,14 @@
             cursor: pointer !important;
             color:teal;
         }
+        #selengkapnya{
+            color:#5A738E;
+            text-decoration:none;
+            cursor:pointer;
+        }
+        #selengkapnya:hover{
+            color:#007bff;
+        }
     </style>
 @endpush
 @section('content')
@@ -67,9 +75,9 @@
                                         <input type="checkbox" class="form-control selectall">
                                     </th>
                                     <th>No</th>
-                                    <th>Judul Penelitian</th>
-                                    <th>Total Skor</th>
-                                    <th>Detail Skor</th>
+                                    <th>Judul Kegiatan</th>
+                                    <th style="text-align:center;">Total Skor</th>
+                                    <th style="text-align:center;">Detail Skor</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -85,9 +93,19 @@
                                             @endif
                                         </td>
                                         <td> {{ $no++ }} </td>
-                                        <td> {{ $usulan->judul_kegiatan }} </td>
-                                        <td style="padding:15px 27px;"> {{ number_format($usulan->totalskor, 2) }} </td>
-                                        <td style="padding:15px 30px;">
+                                        <td style="width:40% !important;">
+                                            {!! $usulan->shortJudul !!}
+                                            <a onclick="selengkapnya({{ $usulan->id }})" id="selengkapnya">selengkapnya</a>
+                                            <br>
+                                            <hr style="margin-bottom:5px !important; margin-top:5px !important;">
+                                            <span style="font-size:10px !important; text-transform:capitalize;" for="" class="badge badge-info">{{ $usulan->jenis_kegiatan }}</span>
+                                            <span style="font-size:10px !important;" for="" class="badge badge-danger">{{ $usulan->ketua_peneliti_nama }}</span>
+                                            <span style="font-size:10px !important;" for="" class="badge badge-secondary">{{ $usulan->tahun_usulan }}</span>
+                                            <hr style="margin-bottom:5px !important; margin-top:5px !important;">
+                                            <a href="{{ asset('upload/laporan_kemajuan/'.$usulan->file_kemajuan) }}" download="{{ $usulan->file_kemajuan }}"><i class="fa fa-download"></i>&nbsp; download file usulan</a>
+
+                                        <td style="padding:15px 27px; text-align:center;"> {{ number_format($usulan->totalskor, 2) }} </td>
+                                        <td style="padding:15px 30px; text-align:center;">
                                             <a onclick="detail({{ $usulan->id }})" class="btn btn-primary btn-sm" style="color:white; cursor:pointer;"><i class="fa fa-info-circle"></i></a>
                                         </td>
                                     </tr>
@@ -97,41 +115,41 @@
                         <!-- Modal Detail-->
                         <div class="modal fade" id="modaldetail" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                             <div class="modal-dialog modal-lg" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                <p style="font-size:15px; color:black;" class="modal-title" id="exampleModalLabel"><i class="fa fa-info-circle"></i>&nbsp;Detail Skor Usulan Penelitian</p>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                                </div>
-                                <div class="modal-body">
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <div class="alert alert-success alert-block" id="berhasil">
-                                                <button type="button" class="close" data-dismiss="alert">×</button>
-                                                <strong><i class="fa fa-info-circle"></i>&nbsp;Data Detail Skor Per Kriteria Penilaian</strong>
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                    <p style="font-size:15px; color:black;" class="modal-title" id="exampleModalLabel"><i class="fa fa-info-circle"></i>&nbsp;Detail Skor Usulan Penelitian</p>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="alert alert-success alert-block" id="berhasil">
+                                                    <button type="button" class="close" data-dismiss="alert">×</button>
+                                                    <strong><i class="fa fa-info-circle"></i>&nbsp;Data Detail Skor Per Kriteria Penilaian</strong>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12">
+                                                <table class="table table-bordered table-striped" style="width:100%">
+                                                    <thead>
+                                                        <tr>
+                                                            <td>No</td>
+                                                            <td>Kriteria Penlitian</td>
+                                                            <td>Skor</td>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id="detail-skor">
+
+                                                    </tbody>
+                                                </table>
                                             </div>
                                         </div>
-                                        <div class="col-md-12">
-                                            <table class="table table-bordered table-striped" style="width:100%">
-                                                <thead>
-                                                    <tr>
-                                                        <td>No</td>
-                                                        <td>Kriteria Penlitian</td>
-                                                        <td>Skor</td>
-                                                    </tr>
-                                                </thead>
-                                                <tbody id="detail-skor">
-
-                                                </tbody>
-                                            </table>
-                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-danger" data-dismiss="modal" style="font-size:13px;"><i class="fa fa-arrow-left"></i>&nbsp;Kembali</button>
                                     </div>
                                 </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-danger" data-dismiss="modal" style="font-size:13px;"><i class="fa fa-arrow-left"></i>&nbsp;Kembali</button>
-                                </div>
-                            </div>
                             </div>
                         </div>
                     </div>
@@ -177,7 +195,29 @@
                     </div>
                 </div>
             </form>
+            <!-- Modal Detail -->
+            <div class="modal fade" id="modaldetailjudul" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Informasi Detail Judul Kegiatan</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    </div>
+                    <div class="modal-body">
+                        <h6 style="font-weight:bold;">Judul Kegiatan:</h6>
+                        <hr>
+                        <div id="detail-text" style="text-align:justify; font-weight:bold; ">
 
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal" style="font-size:12px;"><i class="fa fa-close"></i>&nbsp;Keluar</button>
+                    </div>
+                </div>
+                </div>
+            </div>
         </div>
     </section>
 @endsection
@@ -234,5 +274,21 @@
                 $('.selectall').prop('checked', false);
             }
         });
+
+        function selengkapnya(id){
+            $.ajax({
+                url: "{{ url('operator/usulan_dosen/laporan_kemajuan/menunggu_verifikasi') }}"+'/'+ id + "/detail_judul",
+                type: "GET",
+                dataType: "JSON",
+                success: function(data){
+                $('#modaldetailjudul').modal('show');
+                    $('#id').val(data.id);
+                    $('#detail-text').text(data.judul_kegiatan);
+                },
+                error:function(){
+                    alert("Nothing Data");
+                }
+            });
+        }
     </script>
 @endpush

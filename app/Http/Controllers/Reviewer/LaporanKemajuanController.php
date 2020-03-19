@@ -24,7 +24,7 @@ class LaporanKemajuanController extends Controller
                                     ->leftJoin('skims','skims.id','usulans.skim_id')
                                     ->leftJoin('reviewer2s','reviewer2s.usulan_id','usulans.id')
                                     ->leftJoin('nilai_formulir2s','nilai_formulir2s.reviewer_id','reviewer2s.reviewer_nip')
-                                    ->select('usulans.id','judul_kegiatan','file_kemajuan','skims.id as skim_id',
+                                    ->select('usulans.id','judul_kegiatan','file_kemajuan','jenis_kegiatan','tahun_usulan','skims.id as skim_id',
                                             'ketua_peneliti_nama as nm_ketua_peneliti',
                                             DB::raw('group_concat(distinct concat(anggota_nama) SEPARATOR "<br>") as "nm_anggota" '),
                                             DB::raw('group_concat(distinct concat(reviewer_nama) SEPARATOR "<br>") as "nm_reviewer" '),

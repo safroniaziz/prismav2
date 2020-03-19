@@ -25,7 +25,8 @@ class VerifikasiLaporanKemajuanController extends Controller
     public function index(){
         $usulans = Usulan::leftJoin('nilai_formulir2s','nilai_formulir2s.usulan_id','usulans.id')
                             ->leftJoin('formulirs','formulirs.id','nilai_formulir2s.formulir_id')
-                            ->select('usulans.id','judul_kegiatan',DB::raw('SUM(skor * (bobot/100)/2) as totalskor'))
+                            ->join('laporan_kemajuans','laporan_kemajuans.usulan_id','usulans.id')
+                            ->select('usulans.id','jenis_kegiatan','file_kemajuan','ketua_peneliti_nama','tahun_usulan','judul_kegiatan',DB::raw('SUM(skor * (bobot/100)/2) as totalskor'))
                             ->groupBy('usulans.id')
                             ->where('status_usulan','5')
                             ->get();
@@ -67,6 +68,10 @@ class VerifikasiLaporanKemajuanController extends Controller
         else{
             return redirect()->route('operator.laporan_kemajuan.verifikasi')->with(['error'    =>  'Harap pilih usulan penelitian terlebih dahulu !!']);
         }
+    }
 
+    public function detailJudul($id){
+        $judul = Usulan::find($id);
+        return $judul;
     }
 }

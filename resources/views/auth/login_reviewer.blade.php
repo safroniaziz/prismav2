@@ -18,7 +18,7 @@
                         <strong>Perhatian:</strong> <i>{{ $message }}</i>
                     </div>
                     @else
-                    <h6>Login Reviewer Penelitian</h6>
+                    <h6>Login Reviewer Kegiatan</h6>
                     <p style="text-align:center; margin-bottom:20px;">Sistem Informasi Publikasi, Riset dan Pengabdian Kepada Masyarakat</p>
                 @endif
                 <form method="post" action="{{ route('panda.login.reviewer') }}">

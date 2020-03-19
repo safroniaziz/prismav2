@@ -25,7 +25,7 @@
 
                     <div class="alert alert-danger alert-block" id="keterangan">
                         <button type="button" class="close" data-dismiss="alert">×</button>
-                        <strong><i class="fa fa-info-circle"></i>&nbsp;Perhatian: </strong> Berikut adalah rancangan anggaran detail untuk judul penelitian : {{ $judul_kegiatan->judul_kegiatan }}
+                        <strong><i class="fa fa-info-circle"></i>&nbsp;Perhatian: </strong> Berikut adalah rancangan anggaran detail untuk Judul Kegiatan : {{ $judul_kegiatan->judul_kegiatan }}
                         <p>Harap memasukan anggaran yang sesuai, sehingga tidak terjadi kesalahan saat proses review oleh tim reviewer</p>
                     </div>
                     @if ($message = Session::get('error'))

@@ -21,6 +21,14 @@
             cursor: pointer !important;
             color:teal;
         }
+        #selengkapnya{
+            color:#5A738E;
+            text-decoration:none;
+            cursor:pointer;
+        }
+        #selengkapnya:hover{
+            color:#007bff;
+        }
     </style>
 @endpush
 @section('content')
@@ -41,8 +49,7 @@
                         <thead>
                             <tr>
                                 <th>No</th>
-                                <th>Judul Penelitian</th>
-                                <th>Ketua Peneliti</th>
+                                <th>Judul Kegiatan</th>
                                 <th>Anggota Kelompok</th>
                                 <th>Reviewer</th>
                             </tr>
@@ -58,8 +65,17 @@
                                 @if ($jumlah == 2)
                                 <tr>
                                     <td> {{ $no++ }} </td>
-                                    <td>{{ $usulan->judul_kegiatan }}</td>
-                                    <td> {{ $usulan->nm_ketua_peneliti }} </td>
+                                    <td style="width:40% !important;">
+                                        {!! $usulan->shortJudul !!}
+                                        <a onclick="selengkapnya({{ $usulan->id }})" id="selengkapnya">selengkapnya</a>
+                                        <br>
+                                        <hr style="margin-bottom:5px !important; margin-top:5px !important;">
+                                        <span style="font-size:10px !important; text-transform:capitalize;" for="" class="badge badge-info">{{ $usulan->jenis_kegiatan }}</span>
+                                        <span style="font-size:10px !important;" for="" class="badge badge-danger">{{ $usulan->nm_ketua_peneliti }}</span>
+                                        <span style="font-size:10px !important;" for="" class="badge badge-secondary">{{ $usulan->tahun_usulan }}</span>
+                                        <hr style="margin-bottom:5px !important; margin-top:5px !important;">
+                                        <a href="{{ asset('upload/laporan_kemajuan/'.$usulan->file_kemajuan) }}" download="{{ $usulan->file_kemajuan }}"><i class="fa fa-download"></i>&nbsp; download file laporan kemajuan</a>
+                                   </td>
                                     <td>
                                         @if ($usulan->nm_anggota == null)
                                             <label class="badge badge-danger"><i class="fa fa-close" style="padding:5px;"></i>&nbsp;Belum ditambahkan</label>
