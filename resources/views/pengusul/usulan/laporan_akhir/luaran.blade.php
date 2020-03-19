@@ -57,6 +57,7 @@
                     @endif
                 </div>
                 <div class="col-md-12" style="margin-bottom:5px;">
+                    <a href=" {{ route('pengusul.laporan_akhir') }} " class="btn btn-warning btn-sm" style="color:white; cursor:pointer;"><i class="fa fa-arrow-left"></i>&nbsp; Kembali</a>
                     <a onclick="tambahLuaran({{ $kegiatan_id }})" class="btn btn-primary btn-sm" style="color:white; cursor:pointer;"><i class="fa fa-plus"></i>&nbsp; Tambah Luaran</a>
                 </div>
                 <div class="col-md-12" style="display:none;" id="form-luaran">
@@ -64,9 +65,10 @@
                         {{ csrf_field() }} {{ method_field('POST') }}
                         <div class="row">
                             <input type="hidden" name="usulan_id" id="usulan_id" value="{{ $kegiatan_id }}">
+                            <input type="hidden" name="luaran_id" id="luaran_id">
                             <div class="form-group col-md-12">
                                 <label for="exampleInputEmail1">Judul Luaran</label>
-                                <textarea name="judul_luaran" class="form-control" id="" cols="30" rows="3" required></textarea>
+                                <textarea name="judul_luaran" class="form-control" id="judul_luaran" cols="30" rows="3" required></textarea>
                             </div>
 
                             <div class="form-group col-md-6">
@@ -87,10 +89,30 @@
                         </div>
                         <div class="row">
                             <div class="col-md-12" style="text-align:center;">
-                                <a href=" {{ route('pengusul.laporan_akhir') }} " class="btn btn-warning btn-sm" style="color:white; cursor:pointer;"><i class="fa fa-arrow-left"></i>&nbsp; Kembali</a>
                                 <a onclick="batalkan()" class="btn btn-danger btn-sm" style="color:white; cursor:pointer;"><i class="fa fa-close"></i>&nbsp; Tutup</a>
                                 <button type="reset" class="btn btn-info btn-sm"><i class="fa fa-refresh"></i>&nbsp; Ulangi</button>
                                 <button type="submit" class="btn btn-primary btn-sm"><i class="fa fa-check-circle"></i>&nbsp; Simpan Luaran</button>
+                            </div>
+                        </div>
+                        <hr style="width:50%;">
+                    </form>
+                </div>
+                <div class="col-md-12" style="display:none;" id="form-luaran-edit">
+                    <form action=" {{ route('pengusul.usulan.update_luaran') }} " method="POST">
+                        {{ csrf_field() }} {{ method_field('PATCH') }}
+                        <div class="row">
+                            <input type="hidden" name="usulan_id_edit" id="usulan_id_edit" value="{{ $kegiatan_id }}">
+                            <input type="hidden" name="luaran_id_edit" id="luaran_id_edit">
+                            <div class="form-group col-md-12">
+                                <label for="exampleInputEmail1">Judul Luaran</label>
+                                <textarea name="judul_luaran_edit" id="judul_luaran_edit" class="form-control" id="judul_luaran" cols="30" rows="3" required></textarea>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12" style="text-align:center;">
+                                <a onclick="batalkan()" class="btn btn-danger btn-sm" style="color:white; cursor:pointer;"><i class="fa fa-close"></i>&nbsp; Tutup</a>
+                                <button type="reset" class="btn btn-info btn-sm"><i class="fa fa-refresh"></i>&nbsp; Ulangi</button>
+                                <button type="submit" class="btn btn-primary btn-sm"><i class="fa fa-check-circle"></i>&nbsp; Simpan Perubahan</button>
                             </div>
                         </div>
                         <hr style="width:50%;">
@@ -116,7 +138,7 @@
                                     <td> {{ $no++ }} </td>
                                     <td style="width:30% !important;">
                                         {!! $luaran->shortJudul !!}
-                                        <a onclick="selengkapnya({{ $luaran->id }})" id="selengkapnya">selengkapnya</a>
+                                        <a onclick="selengkapnya({{ $luaran->usulan_id }})" id="selengkapnya">selengkapnya</a>
                                         <br>
                                         <hr style="margin-bottom:5px !important; margin-top:5px !important;">
                                         <span style="font-size:10px !important; text-transform:capitalize;" for="" class="badge badge-info">{{ $luaran->jenis_kegiatan }}</span>
@@ -136,66 +158,36 @@
                                 </tr>
                             @endforeach
                         </tbody>
-                        <!-- Modal Konfirmasi -->
-                        <div class="modal modal-danger fade" id="modalkonfirmasi" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                            <div class="modal-dialog" role="document">
-                            <div class="modal-content">
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <form action=" {{ route('pengusul.laporan_akhir.konfirmasi') }} " method="POST">
-                                            {{ csrf_field() }} {{ method_field('PATCH') }}
-                                            <input type="hidden" name="id_luaran" id="id_luaran">
-                                            <div class="modal-header modal-header-danger">
-                                                <p style="font-size:15px;" class="modal-title" id="exampleModalLabel"><i class="fa fa-user"></i>&nbsp;Form Konfirmasi Laporan Akhir dan Luaran Kegiatan</p>
-                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                    <span aria-hidden="true">&times;</span>
-                                                </button>
-                                            </div>
-                                            <div class="modal-body">
-                                            Apakah anda yakin sudah menambahkan laporan akhir dan luaran dengan benar? Jika iya silahkan konfirmasi !!
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-outline-light btn-sm " style="color:white; background:white; background:transparent;" data-dismiss="modal"><i class="fa fa-close"></i>&nbsp;Batalkan</button>
-                                                <button type="submit" class="btn btn-outline-light btn-sm " style="color:white; background:white; background:transparent;"><i class="fa fa-check-circle"></i>&nbsp;Konfirmasi</button>
-                                            </div>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
-                            </div>
-                        </div>
                     </table>
-                    <!-- Modal -->
-                    <div class="modal fade" id="modalupload" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                        <div class="modal-dialog" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <p style="font-size:15px;" class="modal-title" id="exampleModalLabel"><i class="fa fa-user"></i>&nbsp;Form Upload Laporan akhir</p>
+                </div>
+            </div>
+            <!-- Modal Konfirmasi -->
+            <div class="modal modal-danger fade" id="modalhapus" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <form action=" {{ route('pengusul.usulan.hapus_laran') }} " method="POST">
+                                {{ csrf_field() }} {{ method_field('DELETE') }}
+                                <input type="hidden" name="usulan_id_hapus" id="usulan_id_hapus" value="{{ $kegiatan_id }}">
+                                <input type="hidden" name="luaran_id_hapus" id="luaran_id_hapus">
+                                <div class="modal-header modal-header-danger">
+                                    <p style="font-size:15px;" class="modal-title" id="exampleModalLabel"><i class="fa fa-user"></i>&nbsp;Form Konfirmasi Hapus Data Luaran</p>
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
                                     </button>
                                 </div>
-                                <form action=" {{ route('pengusul.upload_laporan_akhir') }} " method="POST" enctype="multipart/form-data">
-                                    {{ csrf_field() }} {{ method_field('POST') }}
-                                    <div class="modal-body">
-                                        <div class="alert alert-primary alert-block" id="berhasil">
-                                            <button type="button" class="close" data-dismiss="alert">×</button>
-                                            <strong><i class="fa fa-info-circle"></i>&nbsp;Perhatian: </strong> Silahkan Upload Laporan akhir luaran Penelitian Anda !!
-                                        </div>
-                                        <input type="hidden" name="id_luaran" id="id_luaran">
-                                        <div class="form-group col-md-12">
-                                            <label for="exampleInputEmail1">File Peta Jalan : <a style="color:red; font-style:italic; font-size:12px;">Harap masukan file pdf</a></label>
-                                            <input type="file" name="laporan_akhir" id="laporan_akhir" accept="application/pdf" class="form-control" style="padding-bottom:30px;" required>
-                                        </div>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal"><i class="fa fa-close"></i>&nbsp;Batalkan</button>
-                                        <button type="submit" class="btn btn-primary btn-sm"><i class="fa fa-check-circle"></i>&nbsp;Simpan Perubahan</button>
-                                    </div>
-                                </form>
-                            </div>
+                                <div class="modal-body">
+                                Apakah anda yakin ingin menghapus data luaran kegiatan? Jika iya, klik hapus luaran !!
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-outline-light btn-sm " style="color:white; background:white; background:transparent;" data-dismiss="modal"><i class="fa fa-close"></i>&nbsp;Batalkan</button>
+                                    <button type="submit" class="btn btn-outline-light btn-sm " style="color:white; background:white; background:transparent;"><i class="fa fa-check-circle"></i>&nbsp;Hapus Luaran</button>
+                                </div>
+                            </form>
                         </div>
                     </div>
+                </div>
                 </div>
             </div>
         </div>
@@ -272,6 +264,29 @@
 
         function tambahLuaran(){
             $('#form-luaran').show(300);
+            $('#form-luaran-edit').hide(300);
+        }
+
+        function ubahLuaran(id){
+            $.ajax({
+                url: "{{ url('pengusul/upload_laporan_akhir/luaran') }}"+'/'+ id + "/edit",
+                type: "GET",
+                dataType: "JSON",
+                success: function(data){
+                    $('#luaran_id_edit').val(id);
+                    $('#form-luaran').hide(300);
+                    $('#form-luaran-edit').show(300);
+                    $('#judul_luaran_edit').val(data.judul_luaran);
+                },
+                error:function(){
+                    alert("Nothing Data");
+                }
+            });
+        }
+
+        function hapusLuaran(id){
+            $('#modalhapus').modal('show');
+            $('#luaran_id_hapus').val(id);
         }
 
         function batalkan(){

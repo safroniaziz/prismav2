@@ -2,19 +2,20 @@
     <a href=" {{ route('operator.dashboard') }} "><i class="fa fa-home"></i>Dashboard</a>
 </li>
 
-<li><a><i class="fa fa-building-o"></i>Divisi Universitas <span class="fa fa-chevron-down"></span></a>
+{{-- <li><a><i class="fa fa-building-o"></i>Divisi Universitas <span class="fa fa-chevron-down"></span></a>
     <ul class="nav child_menu">
         <li><a href=" {{ route('operator.fakultas') }} ">Fakultas</a></li>
         <li><a href=" {{ route('operator.prodi') }} ">Program Study</a></li>
     </ul>
-</li>
+</li> --}}
 
-<li>
+{{-- <li>
     <a href=" {{ route('operator.skim') }} "><i class="fa fa-info-circle"></i>Skim Penelitian</a>
-</li>
+</li> --}}
 
-<li><a><i class="fa fa-check-square"></i>Formulir Penilaian <span class="fa fa-chevron-down"></span></a>
+<li><a><i class="fa fa-check-square"></i>Komponen Penilaian <span class="fa fa-chevron-down"></span></a>
     <ul class="nav child_menu">
+        <li><a href=" {{ route('operator.skim') }} ">Skim Penelitian</a></li>
         <li><a href=" {{ route('operator.kriteria_penilaian') }} ">Kriteria Penilaian</a></li>
     </ul>
 </li>
@@ -51,11 +52,11 @@
 </li>
 
 <li>
-    <a href=" {{ route('operator.laporan_akhir') }} "><i class="fa fa-list"></i>Laporan Akhir</a>
+    <a href=" {{ route('operator.operator') }} "><i class="fa fa-user"></i>Manajemen Operator</a>
 </li>
 
 <li>
-    <a href=" {{ route('operator.operator') }} "><i class="fa fa-user"></i>Manajemen Operator</a>
+    <a href=" {{ route('operator.laporan_akhir') }} "><i class="fa fa-list"></i>Laporan Akhir</a>
 </li>
 
 <li style="padding-left:2px;">

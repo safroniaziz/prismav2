@@ -77,7 +77,7 @@
                                     <td> {{ $no++ }} </td>
                                     <td style="width:30% !important;">
                                         {!! $usulan->shortJudul !!}
-                                        <a onclick="selengkapnya({{ $usulan->usulan_id }})" id="selengkapnya">selengkapnya</a>
+                                        <a onclick="selengkapnya({{ $usulan->id }})" id="selengkapnya">selengkapnya</a>
                                         <br>
                                         <hr style="margin-bottom:5px !important; margin-top:5px !important;">
                                         <span style="font-size:10px !important; text-transform:capitalize;" for="" class="badge badge-info">{{ $usulan->jenis_kegiatan }}</span>
@@ -102,11 +102,15 @@
                                         <a href=" {{ route('pengusul.laporan_akhir.luaran',[$usulan->id]) }} " class="btn btn-danger btn-sm" style="color:white; cursor:pointer;"><i class="fa fa-plus"></i></a>
                                     </td>
                                     <td style="text-align:center;">
-                                        @if ($usulan->file_akhir != null && $usulan->status ==  "0")
+                                        @if ($usulan->file_akhir != null && $usulan->judul_luaran != "0")
                                             <a onclick="konfirmasi({{ $usulan->id }})" class="btn btn-info btn-sm" style="color:white; cursor:pointer;"><i class="fa fa-arrow-right"></i></a>
-                                                @elseif($usulan->file_akhir == null)
-                                                <button class="btn btn-info btn-sm" style="color:white; cursor:pointer;" disabled><i class="fa fa-arrow-right"></i></button>
-                                                    @else
+                                                @elseif($usulan->file_akhir == null && $usulan->judul_luaran == "0")
+                                                    <a style="color:red"><i>luaran kegiatan & laporan akhir belum ditambahkan</i></a>
+                                                    @elsezif($usulan->file_akhir != null && $usulan->judul_luaran == "0")
+                                                        <a style="color:red"><i>luaran kegiatan belum ditambahkan</i></a>
+                                                        @elseif($usulan->file_akhir == null && $usulan->judul_luaran != "0")
+                                                        <a style="color:red"><i>laporan akhir belum ditambahkan</i></a>
+                                                @else
                                                     <button class="btn btn-info btn-sm" style="color:white; cursor:pointer;" disabled><i class="fa fa-arrow-right"></i></button>
                                         @endif
                                     </td>
@@ -142,7 +146,7 @@
                             </div>
                         </div>
                     </table>
-                    <!-- Modal -->
+                    <!-- Modal Upload-->
                     <div class="modal fade" id="modalupload" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                         <div class="modal-dialog" role="document">
                             <div class="modal-content">
@@ -154,14 +158,14 @@
                                 </div>
                                 <form action=" {{ route('pengusul.upload_laporan_akhir') }} " method="POST" enctype="multipart/form-data">
                                     {{ csrf_field() }} {{ method_field('POST') }}
+                                    <input type="hidden" name="id_usulan" id="id_usulan_upload">
                                     <div class="modal-body">
                                         <div class="alert alert-primary alert-block" id="berhasil">
                                             <button type="button" class="close" data-dismiss="alert">×</button>
                                             <strong><i class="fa fa-info-circle"></i>&nbsp;Perhatian: </strong> Silahkan Upload Laporan akhir Usulan Penelitian Anda !!
                                         </div>
-                                        <input type="hidden" name="id_usulan" id="id_usulan">
                                         <div class="form-group col-md-12">
-                                            <label for="exampleInputEmail1">File Peta Jalan : <a style="color:red; font-style:italic; font-size:12px;">Harap masukan file pdf</a></label>
+                                            <label for="exampleInputEmail1">File Laporan Akhir : <a style="color:red; font-style:italic; font-size:12px;">Harap masukan file pdf</a></label>
                                             <input type="file" name="laporan_akhir" id="laporan_akhir" accept="application/pdf" class="form-control" style="padding-bottom:30px;" required>
                                         </div>
                                     </div>
@@ -212,7 +216,7 @@
 
         function uploadLaporan(id){
             $('#modalupload').modal('show');
-            $('#id_usulan').val(id);
+            $('#id_usulan_upload').val(id);
         }
 
         function selengkapnya(id){

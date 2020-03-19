@@ -182,6 +182,9 @@ Route::group(['prefix'  => 'pengusul/upload_laporan_akhir'],function(){
     Route::post('/{id}/luaran','Pengusul\LaporanAkhirController@luaranPost')->name('pengusul.laporan_akhir.luaran_post');
     Route::get('/cari_publikasi','Pengusul\LaporanAkhirController@cariPublikasi')->name('pengusul.usulan.cari_publikasi');
     Route::get('/usulan/{id}/detail_judul','Pengusul\LaporanAkhirController@detailJudul')->name('pengusul.usulan.detail_judul');
+    Route::get('/luaran/{id}/edit','Pengusul\LaporanAkhirController@editLuaran')->name('pengusul.usulan.edit_luaran');
+    Route::patch('/luaran','Pengusul\LaporanAkhirController@updateLuaran')->name('pengusul.usulan.update_luaran');
+    Route::delete('/luaran','Pengusul\LaporanAkhirController@hapusLuaran')->name('pengusul.usulan.hapus_laran');
 });
 
 

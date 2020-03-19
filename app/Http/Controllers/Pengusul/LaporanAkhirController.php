@@ -18,8 +18,11 @@ class LaporanAkhirController extends Controller
         if(Session::get('login') && Session::get('login',1) && Session::get('akses',1)){
             if($sesi == 1){
                 $usulans = Usulan::leftJoin('anggota_usulans','anggota_usulans.usulan_id','usulans.id')
+                                    ->leftJoin('luaran_kegiatans','luaran_kegiatans.usulan_id','usulans.id')
                                     ->leftJoin('laporan_akhirs','laporan_akhirs.usulan_id','usulans.id')
-                                    ->select('usulans.id','judul_kegiatan','file_akhir','jenis_kegiatan','ketua_peneliti_nama','tahun_usulan','status')
+                                    ->select('usulans.id','judul_kegiatan','file_akhir','usulans.jenis_kegiatan','ketua_peneliti_nama','tahun_usulan','status',
+                                            DB::raw('COUNT(luaran_kegiatans.judul_luaran) as judul_luaran')
+                                    )
                                     ->where('usulans.ketua_peneliti_nip',Session::get('nip'))
                                     ->where('status_usulan','6')
                                     ->groupBy('usulans.id')
@@ -75,13 +78,15 @@ class LaporanAkhirController extends Controller
     }
 
     public function luaran($id){
-        $luarans = Usulan::leftJoin('luaran_kegiatans','luaran_kegiatans.usulan_id','usulans.id')
+        $luarans = Usulan::rightJoin('luaran_kegiatans','luaran_kegiatans.usulan_id','usulans.id')
                                     ->select('luaran_kegiatans.id','usulans.id as usulan_id','judul_kegiatan','ketua_peneliti_nama','tahun_usulan','usulans.jenis_kegiatan','jenis_publikasi','judul_luaran')
+                                    ->where('usulans.id',$id)
                                     ->get();
 
         $kegiatan_id = $id;
         $jenis_kegiatan = Usulan::select('jenis_kegiatan')->where('id',$kegiatan_id)->get();
-        return view('pengusul/usulan/laporan_akhir.luaran',compact('luarans','kegiatan_id','jenis_kegiatan'));
+        $jenis_kegiatan2 = Usulan::select('jenis_kegiatan')->where('id',$kegiatan_id)->get();
+        return view('pengusul/usulan/laporan_akhir.luaran',compact('luarans','kegiatan_id','jenis_kegiatan','jenis_kegiatan2'));
     }
 
     public function luaranPost(Request $request){
@@ -107,4 +112,29 @@ class LaporanAkhirController extends Controller
 
         return $data;
     }
+
+    public function editLuaran($id){
+        $luaran = LuaranKegiatan::find($id);
+        $data = [
+            'jenis_kegiatan'    =>  ucwords($luaran->jenis_kegiatan),
+            'judul_luaran'      =>  $luaran->judul_luaran,
+        ];
+        return $data;
+    }
+
+    public function updateLuaran(Request $request){
+        $luaran = LuaranKegiatan::where('id',$request->luaran_id_edit)->update([
+            'judul_luaran'  =>  $request->judul_luaran_edit
+        ]);
+
+        return redirect()->route('pengusul.laporan_akhir.luaran',[$request->usulan_id_edit])->with(['success'  =>  'Berhasil, Luaran Kegiatan Berhasil Diubah !!']);
+    }
+
+    public function hapusLuaran(Request $request){
+        $luaran = LuaranKegiatan::find($request->luaran_id_hapus);
+        $luaran->delete();
+
+        return redirect()->route('pengusul.laporan_akhir.luaran',[$request->usulan_id_hapus])->with(['success'  =>  'Berhasil, Luaran Kegiatan Berhasil Dihapus !!']);
+    }
+
 }
