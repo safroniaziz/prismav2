@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Operator;
 
+use App\AnggotaUsulan;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\UserLoginController;
@@ -12,6 +13,9 @@ use App\Usulan;
 use App\Reviewer2;
 use App\Prodi;
 
+if(version_compare(PHP_VERSION, '7.2.0', '>=')) {
+    error_reporting(E_ALL ^ E_NOTICE ^ E_WARNING);
+}
 class LaporanKemajuanController extends Controller
 {
     public function __construct()
@@ -30,97 +34,95 @@ class LaporanKemajuanController extends Controller
                                     )
                                     ->groupBy('usulans.id')
                                     ->get();
-        $fakultas = Fakultas::select('fakultas_kode','nm_fakultas')->get();
-        $dosen = '
-            {dosen(limit:1500) {
-                    dsnPegNip
-                    pegawai {
-                        pegNama
-                        pegGelarDepan
-                        pegGelarBelakang
-                        pegIsAktif
-                    }
-                }}
-            ';
-        $dosens = $panda->panda($dosen);
         return view('operator/laporan_kemajuan/reviewer.index',compact('usulans','fakultas','dosens'));
-    }
-
-    public function getReviewer($id){
-        $reviewer = Reviewer2::select('reviewer_nip as nip','reviewer_nama as nm_lengkap','reviewer_prodi_nama as prodi','reviewer_fakultas_nama as fakultas')
-                                ->where('usulan_id',$id)
-                                ->groupBy('reviewer_nip')
-                                ->get();
-        $usulan = Usulan::select('judul_kegiatan')->where('id',$id)->first();
-        $data = [
-            'reviewers'    =>  $reviewer,
-            'usulan'    =>  $usulan,
-        ];
-        Session::put('usulan_id',$id);
-        return $data;
-    }
-
-    public function cariProdi(Request $request){
-        $fakultas_id = $request->fakultas_id;
-        $prodi  =   Prodi::select('prodi_kode','nm_prodi')
-                            ->where('fakultas_kode',$fakultas_id)
-                            ->get();
-        return $prodi;
-    }
-
-    public function cariReviewer(Request $request){
-        $panda = new UserLoginController();
-        $prodi_id = $request->prodi_id;
-        $reviewers  =   '
-            {prodi(prodiKode:'.$prodi_id.') {
-                prodiKode
-                dosen {
-                dsnPegNip
-                pegawai {
-                    pegNama
-                    pegIsAktif
-                }
-                }
-            }}
-        ';
-        $reviewer = $panda->panda($reviewers);
-        return $reviewer['prodi'][0]['dosen'];
-    }
-
-    public function reviewerPost(Request $request){
-        $panda = new UserLoginController();
-        $reviewers = '
-            {dosen(dsnPegNip:"'.$request->reviewer_id.'"){
-                dsnPegNip
-                prodi {
-                    prodiKode
-                    prodiNamaResmi
-                    fakultas {
-                    fakKode
-                    fakNamaResmi
-                    }
-                }
-                pegawai {
-                pegNama
-                }
-            }}
-        ';
-        $reviewer = $panda->panda($reviewers);
-        $anggota = new Reviewer2;
-        $anggota->usulan_id = $request->usulan_id;
-        $anggota->reviewer_nip = $request->reviewer_id;
-        $anggota->reviewer_nama = $reviewer['dosen'][0]['pegawai']['pegNama'];
-        $anggota->reviewer_prodi_id = $reviewer['dosen'][0]['prodi']['prodiKode'];
-        $anggota->reviewer_prodi_nama = $reviewer['dosen'][0]['prodi']['prodiNamaResmi'];
-        $anggota->reviewer_fakultas_id = $reviewer['dosen'][0]['prodi']['fakultas']['fakKode'];
-        $anggota->reviewer_fakultas_nama = $reviewer['dosen'][0]['prodi']['fakultas']['fakNamaResmi'];
-        $anggota->save();
-
-        return redirect()->route('operator.laporan_kemajuan')->with(['success' =>  'Reviewer berhasil ditambahkan !']);
     }
 
     public function detailJudul($id){
         $judul = Usulan::find($id);
         return $judul;
+    }
+
+    public function reviewerPost(Request $request){
+        $sudah = AnggotaUsulan::select('anggota_nip')->where('anggota_nip',$request->nip_reviewer)->first();
+        $sudah2 = Reviewer2::select('reviewer_nip')->where('reviewer_nip',$request->nip_reviewer)->first();
+        $ketua = Usulan::select('ketua_peneliti_nip')->where('ketua_peneliti_nip',$request->nip_reviewer)->first();
+        if (count($sudah) != 0) {
+            return redirect()->route('operator.laporan_kemajuan.detail_reviewer',[$request->usulan_id_reviewer])->with(['error' =>  'reviewer yang dipilih adalah anggota kegiatan, tidak dapat ditambahkan !']);
+        }
+        else{
+            if(count($sudah2) != 0){
+                return redirect()->route('operator.laporan_kemajuan.detail_reviewer',[$request->usulan_id_reviewer])->with(['error' =>  'reviewer yang dipilih sudah ditambahkan !']);
+            }
+            if(count($ketua) != 0){
+                return redirect()->route('operator.laporan_kemajuan.detail_reviewer',[$request->usulan_id_reviewer])->with(['error' =>  'reviewer yang dipilih adalah ketua usulan kegiatan, tidak dapat ditambahkan !']);
+            }
+            else{
+                $reviewer = new Reviewer2;
+                $reviewer->usulan_id = $request->usulan_id_reviewer;
+                $reviewer->reviewer_nip = $request->nip_reviewer;
+                $reviewer->reviewer_nama = $request->nm_reviewer;
+                $reviewer->reviewer_prodi_id = $request->prodi_kode_reviewer;
+                $reviewer->reviewer_prodi_nama = $request->prodi_reviewer;
+                $reviewer->reviewer_fakultas_id = $request->fakultas_kode_reviewer;
+                $reviewer->reviewer_fakultas_nama = $request->fakultas_reviewer;
+                $reviewer->reviewer_jabatan_fungsional = $request->jabatan_reviewer;
+                $reviewer->reviewer_jk = $request->jk_reviewer;
+                $reviewer->reviewer_universitas = "Universitas Bengkulu";
+                $reviewer->save();
+                return redirect()->route('operator.laporan_kemajuan.detail_reviewer',[$request->usulan_id_reviewer])->with(['success' =>  'Reviewer berhasil ditambahkan !']);
+            }
+        }
+    }
+
+    public function hapusReviewer(Request $request){
+        $anggota = Reviewer2::find($request->id);
+        $anggota->delete();
+
+        return redirect()->route('operator.laporan_kemajuan.detail_reviewer',[$request->id_usulan])->with(['success' =>  'Reviewer usulan kegiatan berhasil dihapus !']);
+    }
+
+    public function detailReviewer($id){
+        $reviewers = Reviewer2::join('usulans','usulans.id','reviewer2s.usulan_id')
+                                    ->select('reviewer2s.id','reviewer_nip','reviewer_nama','reviewer_prodi_nama','reviewer_fakultas_nama','judul_kegiatan')
+                                    ->get();
+        $id_usulan = $id;
+        $jumlah = count($reviewers);
+        $judul_kegiatan = Usulan::select('judul_kegiatan')->where('id',$id)->first();
+        return view('operator/laporan_kemajuan/reviewer.reviewer',compact('reviewers','id_usulan','judul_kegiatan','jumlah'));
+    }
+
+    public function cariReviewer(Request $request){
+        $panda = new UserLoginController();
+        $dosen = '
+        {pegawai(pegNama:"'.$request->nm_reviewer.'") {
+            pegNip
+            pegIsAktif
+            pegNama
+            pegawai_simpeg {
+                pegJenkel
+                pegNmJabatan
+            }
+            dosen {
+              prodi {
+                prodiKode
+                prodiNamaResmi
+                fakultas {
+                  fakKode
+                  fakKodeUniv
+                  fakNamaResmi
+                }
+              }
+            }
+          }}
+        ';
+        $dosens = $panda->panda($dosen);
+        $datas = count($dosens['pegawai']);
+        $data = [
+            'jumlah'    =>  $datas,
+            'detail'    =>  $dosens,
+        ];
+        if($data['jumlah'] == 1){
+            return response()->json($data);
+        }
     }
 }

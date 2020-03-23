@@ -47,12 +47,12 @@
                         @elseif(count($usulans)<1)
                         <div class="alert alert-danger alert-block" id="keterangan">
                             <button type="button" class="close" data-dismiss="alert">×</button>
-                            <strong><i class="fa fa-info-circle"></i>&nbsp;Perhatian: </strong> Belum Ada Usulan Penelitian Yang Disetujui!!
+                            <strong><i class="fa fa-info-circle"></i>&nbsp;Perhatian: </strong> Belum Ada Usulan Yang Sampai Tahap Laporan Akhir Yang Disetujui!!
                         </div>
                         @else
-                        <div class="alert alert-success alert-block" id="keterangan">
+                        <div class="alert alert-danger alert-block" id="keterangan">
                             <button type="button" class="close" data-dismiss="alert">×</button>
-                            <strong><i class="fa fa-info-circle"></i>&nbsp;Perhatian: </strong> Silahkan Upload Laporan akhir Usulan Penelitian Anda !!
+                            <strong><i class="fa fa-info-circle"></i>&nbsp;Perhatian: </strong> Silahkan Upload Laporan Akhir & Luaran Kegiatan Anda !!
                         </div>
                     @endif
                 </div>
@@ -102,14 +102,16 @@
                                         <a href=" {{ route('pengusul.laporan_akhir.luaran',[$usulan->id]) }} " class="btn btn-danger btn-sm" style="color:white; cursor:pointer;"><i class="fa fa-plus"></i></a>
                                     </td>
                                     <td style="text-align:center;">
-                                        @if ($usulan->file_akhir != null && $usulan->judul_luaran != "0")
+                                        @if ($usulan->file_akhir != null && $usulan->judul_luaran != "0" && $usulan->status_usulan != "6")
                                             <a onclick="konfirmasi({{ $usulan->id }})" class="btn btn-info btn-sm" style="color:white; cursor:pointer;"><i class="fa fa-arrow-right"></i></a>
                                                 @elseif($usulan->file_akhir == null && $usulan->judul_luaran == "0")
                                                     <a style="color:red"><i>luaran kegiatan & laporan akhir belum ditambahkan</i></a>
-                                                    @elsezif($usulan->file_akhir != null && $usulan->judul_luaran == "0")
+                                                    @elseif($usulan->file_akhir != null && $usulan->judul_luaran == "0")
                                                         <a style="color:red"><i>luaran kegiatan belum ditambahkan</i></a>
                                                         @elseif($usulan->file_akhir == null && $usulan->judul_luaran != "0")
                                                         <a style="color:red"><i>laporan akhir belum ditambahkan</i></a>
+                                                            @elseif($usulan->file_akhir != null && $usulan->judul_luaran != "0" && $usulan->status_usulan == "6")
+                                                            <button disabled class="btn btn-info btn-sm" style="color:white; cursor:pointer;"><i class="fa fa-arrow-right"></i></button>
                                                 @else
                                                     <button class="btn btn-info btn-sm" style="color:white; cursor:pointer;" disabled><i class="fa fa-arrow-right"></i></button>
                                         @endif

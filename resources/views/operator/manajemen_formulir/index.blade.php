@@ -1,5 +1,5 @@
 @extends('layouts.layout')
-@section('title', 'Dashboard')
+@section('title', 'Kriteria Penilaian')
 @section('login_as', 'Administrator')
 @section('user-login')
     @if (Auth::check())
@@ -28,9 +28,9 @@
                             <strong><i class="fa fa-info-circle"></i>&nbsp;Berhasil: </strong> {{ $message }}
                         </div>
                         @else
-                        <div class="alert alert-success alert-block" id="keterangan">
+                        <div class="alert alert-danger alert-block" id="keterangan">
                             <button type="button" class="close" data-dismiss="alert">×</button>
-                            <strong><i class="fa fa-info-circle"></i>&nbsp;Perhatian: </strong> Berikut adalah semua kriteria penilaian yang tersedia, silahkan tambahkan kriteria penilaian baru jika diperlukan !!
+                            <strong><i class="fa fa-info-circle"></i>&nbsp;Perhatian: </strong> Kriteria Penilaian dibagi per skim penilaian, silahkan klik tambah kriteria penilaian lalu pilih skim penilaian dan tambahkan kriteria penilaian !!
                         </div>
                     @endif
                 </div>

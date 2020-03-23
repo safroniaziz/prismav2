@@ -1,5 +1,5 @@
 @extends('layouts.layout')
-@section('title', 'Dashboard')
+@section('title', 'Dalam Proses Review')
 @section('login_as', 'Administrator')
 @section('user-login')
     @if (Auth::check())
@@ -34,14 +34,14 @@
 @section('content')
     <section class="panel" style="margin-bottom:20px;">
         <header class="panel-heading" style="color: #ffffff;background-color: #074071;border-color: #fff000;border-image: none;border-style: solid solid none;border-width: 4px 0px 0;border-radius: 0;font-size: 14px;font-weight: 700;padding: 15px;">
-            <i class="fa fa-home"></i>&nbsp;Usulan Publikasi, Riset dan Pengabdian Kepada Masyarakat
+            <i class="fa fa-home"></i>&nbsp;Usulan Publikasi, Riset dan Pengabdian Kepada Masyarakat Dalam Proses Review
         </header>
         <div class="panel-body" style="border-top: 1px solid #eee; padding:15px; background:white;">
             <div class="row" style="margin-right:-15px; margin-left:-15px;">
                 <div class="col-md-12">
-                    <div class="alert alert-success alert-block" id="keterangan">
+                    <div class="alert alert-danger alert-block" id="keterangan">
                         <button type="button" class="close" data-dismiss="alert">×</button>
-                        <strong><i class="fa fa-info-circle"></i>&nbsp;Perhatian: </strong> Berikut adalah semua usulan anda yang tersedia, silahkan tambahkan usulan baru jika diperlukan !!
+                        <strong><i class="fa fa-info-circle"></i>&nbsp;Perhatian: </strong> Berikut adalah semua usulan yang sedang dalam proses review, usulan akan pindah ke menu <b>Menunggu Verifikasi</b> jika kedua reviewer sudah memberikan reviewe masing-masing !!
                     </div>
                 </div>
                 <div class="col-md-12">
@@ -52,7 +52,6 @@
                                 <th style="text-align:center;">Judul Kegiatan</th>
                                 <th style="text-align:center;">Anggota Kelompok</th>
                                 <th style="text-align:center;">Biaya Diusulkan</th>
-                                <th style="text-align:center;">Rancangan Anggaran</th>
                                 <th style="text-align:center;">Peta Jalan Penelitian</th>
                                 <th style="text-align:center;">Reviewer</th>
                             </tr>
@@ -93,9 +92,6 @@
                                         <br>
                                         <hr style="margin-bottom:5px !important; margin-top:5px !important;">
                                         <a href="{{ route('operator.usulan.anggaran.cetak',[$usulan->id]) }}" class="btn btn-primary btn-sm" style="color:white; cursor:pointer;"><i class="fa fa-print"></i>&nbsp; Cetak</a>
-                                    </td>
-                                    <td style="text-align:center;">
-                                        <a href="{{ route('operator.usulan.anggaran.cetak',[$usulan->id]) }}" class="btn btn-primary btn-sm" style="color:white; cursor:pointer;"><i class="fa fa-print"></i></a>
                                     </td>
                                     <td style="text-align:center;">
                                         <a href="{{ asset('upload/peta_jalan/'.$usulan->peta_jalan) }}" download="{{ $usulan->peta_jalan }}">

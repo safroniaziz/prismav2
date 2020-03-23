@@ -50,7 +50,7 @@
                             <strong><i class="fa fa-info-circle"></i>&nbsp;Perhatian: </strong> Belum Ada Usulan Penelitian Yang Disetujui!!
                         </div>
                         @else
-                        <div class="alert alert-success alert-block" id="keterangan">
+                        <div class="alert alert-danger alert-block" id="keterangan">
                             <button type="button" class="close" data-dismiss="alert">×</button>
                             <strong><i class="fa fa-info-circle"></i>&nbsp;Perhatian: </strong> Berikut adalah semua usulan yang didanai, usulan yang sudah diverifikasi tidak bisa dibatalkan !!
                         </div>

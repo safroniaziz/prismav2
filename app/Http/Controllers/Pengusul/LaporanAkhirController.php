@@ -20,7 +20,7 @@ class LaporanAkhirController extends Controller
                 $usulans = Usulan::leftJoin('anggota_usulans','anggota_usulans.usulan_id','usulans.id')
                                     ->leftJoin('luaran_kegiatans','luaran_kegiatans.usulan_id','usulans.id')
                                     ->leftJoin('laporan_akhirs','laporan_akhirs.usulan_id','usulans.id')
-                                    ->select('usulans.id','judul_kegiatan','file_akhir','usulans.jenis_kegiatan','ketua_peneliti_nama','tahun_usulan','status',
+                                    ->select('usulans.id','judul_kegiatan','file_akhir','usulans.jenis_kegiatan','ketua_peneliti_nama','tahun_usulan','status','status_usulan',
                                             DB::raw('COUNT(luaran_kegiatans.judul_luaran) as judul_luaran')
                                     )
                                     ->where('usulans.ketua_peneliti_nip',Session::get('nip'))

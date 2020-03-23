@@ -51,11 +51,17 @@
                                     <button type="button" class="close" data-dismiss="alert">×</button>
                                     <strong><i class="fa fa-info-circle"></i>&nbsp;Gagal: </strong> {{ $message2 }}
                                 </div>
-                                @else
-                                <div class="alert alert-success alert-block" id="keterangan">
-                                    <button type="button" class="close" data-dismiss="alert">×</button>
-                                    <strong><i class="fa fa-info-circle"></i>&nbsp;Perhatian: </strong> Berikut adalah semua usulan yang siap di verifikasi anda yang tersedia, silahkan verifikasi usulan yang anda disetujui !!
-                                </div>
+                        @endif
+                        @if (count($usulans)>0)
+                            <div class="alert alert-danger alert-block" id="keterangan">
+                                <button type="button" class="close" data-dismiss="alert">×</button>
+                                <strong><i class="fa fa-info-circle"></i>&nbsp;Perhatian: </strong> Berikut adalah semua usulan yang siap di verifikasi anda yang tersedia, silahkan verifikasi usulan yang anda disetujui !!
+                            </div>
+                        @else
+                            <div class="alert alert-danger alert-block" id="keterangan">
+                                <button type="button" class="close" data-dismiss="alert">×</button>
+                                <strong><i class="fa fa-info-circle"></i>&nbsp;Perhatian: </strong> Belum ada laporan kemajuan yang siap di verifikasi !!
+                            </div>
                         @endif
                     </div>
                     {{ csrf_field() }} {{ method_field('PATCH') }}
@@ -102,7 +108,7 @@
                                             <span style="font-size:10px !important;" for="" class="badge badge-danger">{{ $usulan->ketua_peneliti_nama }}</span>
                                             <span style="font-size:10px !important;" for="" class="badge badge-secondary">{{ $usulan->tahun_usulan }}</span>
                                             <hr style="margin-bottom:5px !important; margin-top:5px !important;">
-                                            <a href="{{ asset('upload/laporan_kemajuan/'.$usulan->file_kemajuan) }}" download="{{ $usulan->file_kemajuan }}"><i class="fa fa-download"></i>&nbsp; download file usulan</a>
+                                            <a href="{{ asset('upload/laporan_kemajuan/'.$usulan->file_kemajuan) }}" download="{{ $usulan->file_kemajuan }}"><i class="fa fa-download"></i>&nbsp; download file laporan kemajuan</a>
 
                                         <td style="padding:15px 27px; text-align:center;"> {{ number_format($usulan->totalskor, 2) }} </td>
                                         <td style="padding:15px 30px; text-align:center;">

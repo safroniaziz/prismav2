@@ -52,7 +52,7 @@
                                     <strong><i class="fa fa-info-circle"></i>&nbsp;Gagal: </strong> {{ $message2 }}
                                 </div>
                                 @else
-                                <div class="alert alert-success alert-block" id="keterangan">
+                                <div class="alert alert-danger alert-block" id="keterangan">
                                     <button type="button" class="close" data-dismiss="alert">×</button>
                                     <strong><i class="fa fa-info-circle"></i>&nbsp;Perhatian: </strong> Berikut adalah semua usulan yang siap di verifikasi anda yang tersedia, silahkan verifikasi usulan yang anda disetujui !!
                                 </div>

@@ -1,5 +1,5 @@
 @extends('layouts.layout')
-@section('title', 'Dashboard')
+@section('title', 'Review Usulan Kegiatan')
 @section('user-login')
     @if(Session::get('login') && Session::get('login',1))
         {{ Session::get('nm_dosen') }}
@@ -44,20 +44,18 @@
                             <button type="button" class="close" data-dismiss="alert">×</button>
                             <strong><i class="fa fa-info-circle"></i>&nbsp;Berhasil: </strong> {{ $message }}
                         </div>
-                        @else
-                        <div class="alert alert-success alert-block" id="keterangan">
-                            <button type="button" class="close" data-dismiss="alert">×</button>
-                            <strong><i class="fa fa-info-circle"></i>&nbsp;Perhatian: </strong> Silakan Review Semua Usulan Penelitian Dibawah Ini
-                        </div>
                     @endif
-                    <div class="alert alert-success alert-block" style="display:none;" id="usulan-berhasil">
-                        <button type="button" class="close" data-dismiss="alert">×</button>
-                        <i class="fa fa-success-circle"></i><strong>Berhasil :</strong> Penelitian anda sudah diusulkan !!
-                    </div>
-                    <div class="alert alert-danger alert-block" style="display:none;" id="gagal">
-                        <button type="button" class="close" data-dismiss="alert">×</button>
-                        <i class="fa fa-close"></i><strong>&nbsp;Gagal :</strong> Proses pengusulan gagal !!
-                    </div>
+                    @if (count($usulans)>0)
+                        <div class="alert alert-danger alert-block" id="keterangan">
+                            <button type="button" class="close" data-dismiss="alert">×</button>
+                            <strong><i class="fa fa-info-circle"></i>&nbsp;Perhatian: </strong> Berikut adalah usulan kegiatan yang akan anda review, silakan review semua usulan penelitian !!
+                        </div>
+                        @else
+                            <div class="alert alert-danger alert-block" id="keterangan">
+                                <button type="button" class="close" data-dismiss="alert">×</button>
+                                <strong><i class="fa fa-info-circle"></i>&nbsp;Perhatian: </strong> Anda tidak memiliki usulan kegiatan untuk di review !!
+                            </div>
+                    @endif
                 </div>
                 <div class="col-md-12">
                     <table class="table table-striped table-bordered" id="table" style="width:100%;">

@@ -253,6 +253,7 @@
                         @php
                             $sub4 += $total;
                         @endphp
+                    @endforeach
                     <tr>
                         <th></th>
                         <th></th>
@@ -263,7 +264,6 @@
                             Rp. {{ number_format($sub4, 2) }}
                         </th>
                     </tr>
-                    @endforeach
                 @endif
                 @else
                 <tr>

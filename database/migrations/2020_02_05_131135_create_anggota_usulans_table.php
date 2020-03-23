@@ -23,8 +23,8 @@ class CreateAnggotaUsulansTable extends Migration
             $table->string('anggota_fakultas_id');
             $table->string('anggota_fakultas_nama');
             $table->string('ketua_peneliti_nidn');
-            $table->string('anggota_jabatan_fungsional');
-            $table->string('anggota_jk');
+            $table->string('anggota_jabatan_fungsional')->nullable();
+            $table->string('anggota_jk')->nullable();
             $table->string('anggota_universitas');
             $table->timestamps();
         });

@@ -23,8 +23,8 @@ class CreateReviewer2sTable extends Migration
             $table->string('reviewer_fakultas_id');
             $table->string('reviewer_fakultas_nama');
             $table->string('ketua_peneliti_nidn');
-            $table->string('reviewer_jabatan_fungsional');
-            $table->string('reviewer_jk');
+            $table->string('reviewer_jabatan_fungsional')->nullable();
+            $table->string('reviewer_jk')->nullable();
             $table->string('reviewer_universitas');
             $table->timestamps();
         });

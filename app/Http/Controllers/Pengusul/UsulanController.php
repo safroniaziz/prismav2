@@ -22,13 +22,15 @@ use App\Fakultas;
 use App\Prodi;
 use App\RancanganAnggaran;
 
+if(version_compare(PHP_VERSION, '7.2.0', '>=')) {
+    error_reporting(E_ALL ^ E_NOTICE ^ E_WARNING);
+}
 class UsulanController extends Controller
 {
     public function index(){
         $sesi = Session::get('akses');
         if(Session::get('login') && Session::get('login',1) && Session::get('akses',1)){
             if($sesi == 1){
-                $panda = new UserLoginController();
                 $usulans = Usulan::leftJoin('anggota_usulans','anggota_usulans.usulan_id','usulans.id')
                                     ->leftJoin('skims','skims.id','usulans.skim_id')
                                     ->leftJoin('rancangan_anggarans','rancangan_anggarans.usulan_id','usulans.id')
@@ -40,19 +42,7 @@ class UsulanController extends Controller
                                     ->get();
                 $skims  =   Skim::select('id','nm_skim')->where('tahun',date('Y'))->get();
                 $bidangs  =   BidangPenelitian::select('id','nm_bidang')->get();
-                $dosen = '
-                    {dosen(limit:1500) {
-                        dsnPegNip
-                        pegawai {
-                            pegNama
-                            pegGelarDepan
-                            pegGelarBelakang
-                            pegIsAktif
-                        }
-                    }}
-                ';
-                $dosens = $panda->panda($dosen);
-                return view('pengusul/usulan.index',compact('usulans','skims','bidangs','fakultas','dosens'));
+                return view('pengusul/usulan.index',compact('usulans','skims','bidangs','fakultas'));
             }
             else{
                 Session::flush();
@@ -227,61 +217,29 @@ class UsulanController extends Controller
     }
 
     public function anggotaPost(Request $request){
-        $panda = new UserLoginController();
         $sesi = Session::get('akses');
         if(Session::get('login') && Session::get('login',1) && Session::get('akses',1)){
             if($sesi == 1){
-                $detail = '
-                {dosen(dsnPegNip:'.$request->anggota_id.') {
-                    dsnPegNip
-                    prodi {
-                        prodiKode
-                        prodiNamaResmi
-                        fakultas {
-                          fakKode
-                          fakNamaResmi
-                        }
-                      }
-                      pegawai{
-                        pegNama
-                        pegIsAktif
-                        pegawai_simpeg {
-                            pegJenkel
-                            pegNmJabatan
-                        }
-                      }
 
-                  }}
-                ';
-                $details = $panda->panda($detail);
-                // return $details['dosen'][0]['pegawai']['pegNama'];
-                if ($details['dosen'][0]['pegawai']['pegawai_simpeg'] != null) {
-                    $anggota = new AnggotaUsulan;
-                    $anggota->usulan_id = $request->usulan_id;
-                    $anggota->anggota_nip = $request->anggota_id;
-                    $anggota->anggota_nama = $details['dosen'][0]['pegawai']['pegNama'];
-                    $anggota->anggota_prodi_id = $details['dosen'][0]['prodi']['prodiKode'];
-                    $anggota->anggota_prodi_nama = $details['dosen'][0]['prodi']['prodiNamaResmi'];
-                    $anggota->anggota_fakultas_id = $details['dosen'][0]['prodi']['fakultas']['fakKode'];
-                    $anggota->anggota_fakultas_nama = $details['dosen'][0]['prodi']['fakultas']['fakNamaResmi'];
-                    $anggota->anggota_jabatan_fungsional = $details['dosen'][0]['pegawai']['pegawai_simpeg']['pegNmJabatan'];
-                    $anggota->anggota_jk = $details['dosen'][0]['pegawai']['pegawai_simpeg']['pegJenkel'];
-                    $anggota->anggota_universitas = "Universitas Bengkulu";
-                    $anggota->save();
+                $sudah = AnggotaUsulan::select('anggota_nip')->where('anggota_nip',$request->nip_anggota)->first();
+                if (count($sudah) != 0) {
+                    return redirect()->route('pengusul.usulan.detail_anggota',[$request->usulan_id_anggaran])->with(['error' =>  'Anggota yang dipilih sudah ditambahkan !']);
                 }
                 else{
                     $anggota = new AnggotaUsulan;
-                    $anggota->usulan_id = $request->usulan_id;
-                    $anggota->anggota_nip = $request->anggota_id;
-                    $anggota->anggota_nama = $details['dosen'][0]['pegawai']['pegNama'];
-                    $anggota->anggota_prodi_id = $details['dosen'][0]['prodi']['prodiKode'];
-                    $anggota->anggota_prodi_nama = $details['dosen'][0]['prodi']['prodiNamaResmi'];
-                    $anggota->anggota_fakultas_id = $details['dosen'][0]['prodi']['fakultas']['fakKode'];
-                    $anggota->anggota_fakultas_nama = $details['dosen'][0]['prodi']['fakultas']['fakNamaResmi'];
+                    $anggota->usulan_id = $request->usulan_id_anggaran;
+                    $anggota->anggota_nip = $request->nip_anggota;
+                    $anggota->anggota_nama = $request->nm_anggota;
+                    $anggota->anggota_prodi_id = $request->prodi_kode_anggota;
+                    $anggota->anggota_prodi_nama = $request->prodi_anggota;
+                    $anggota->anggota_fakultas_id = $request->fakultas_kode_anggota;
+                    $anggota->anggota_fakultas_nama = $request->fakultas_anggota;
+                    $anggota->anggota_jabatan_fungsional = $request->jabatan_anggota;
+                    $anggota->anggota_jk = $request->jk_anggota;
+                    $anggota->anggota_universitas = "Universitas Bengkulu";
                     $anggota->save();
+                    return redirect()->route('pengusul.usulan.detail_anggota',[$request->usulan_id_anggaran])->with(['success' =>  'Anggota berhasil ditambahkan !']);
                 }
-
-                return redirect()->route('pengusul.usulan')->with(['success' =>  'Anggota berhasil ditambahkan !']);
             }
             else{
                 Session::flush();
@@ -293,82 +251,11 @@ class UsulanController extends Controller
         }
     }
 
-    public function getAnggota($id){
-        $sesi = Session::get('akses');
-        if(Session::get('login') && Session::get('login',1) && Session::get('akses',1)){
-            if($sesi == 1){
-                $anggotas = AnggotaUsulan::select('anggota_nip','anggota_nama','anggota_prodi_nama','anggota_fakultas_nama')
-                                            ->where('usulan_id',$id)
-                                            ->groupBy('id')
-                                            ->get();
-                $usulan = Usulan::select('judul_kegiatan')->where('id',$id)->first();
-                $data = [
-                    'anggotas'    =>  $anggotas,
-                    'usulan'    =>  $usulan,
-                ];
-                Session::put('usulan_id',$id);
-                return $data;
-            }
-            else{
-                Session::flush();
-                return redirect()->route('panda.login.form')->with(['error' => 'Anda Tidak Memiliki Akses Login']);
-            }
-        }
-        else{
-            return redirect()->route('panda.login.form')->with(['error' => 'Masukan Username dan Password Terlebih Dahulu !!']);
-        }
-    }
+    public function hapusAnggota(Request $request){
+        $anggota = AnggotaUsulan::find($request->id);
+        $anggota->delete();
 
-    public function cariProdi(Request $request){
-        $sesi = Session::get('akses');
-        if(Session::get('login') && Session::get('login',1) && Session::get('akses',1)){
-            if($sesi == 1){
-                $fakultas_id = $request->fakultas_id;
-                $prodi  =   Prodi::select('prodi_kode','nm_prodi')
-                                    ->where('fakultas_kode',$fakultas_id)
-                                    ->get();
-                return $prodi;
-            }
-            else{
-                Session::flush();
-                return redirect()->route('panda.login.form')->with(['error' => 'Anda Tidak Memiliki Akses Login']);
-            }
-        }
-        else{
-            return redirect()->route('panda.login.form')->with(['error' => 'Masukan Username dan Password Terlebih Dahulu !!']);
-        }
-    }
-
-    public function cariAnggota(Request $request){
-        $panda = new UserLoginController();
-        $sesi = Session::get('akses');
-        if(Session::get('login') && Session::get('login',1) && Session::get('akses',1)){
-            if($sesi == 1){
-                $sudah = AnggotaUsulan::select('anggota_nip')->where('usulan_id',Session::get('usulan_id'))->get();
-                $prodi_id = $request->prodi_id;
-                $anggotas  =   '
-                    {prodi(prodiKode:'.$prodi_id.') {
-                        prodiKode
-                        dosen {
-                        dsnPegNip
-                        pegawai {
-                            pegNama
-                            pegIsAktif
-                        }
-                        }
-                    }}
-                ';
-                $anggota = $panda->panda($anggotas);
-                return $anggota['prodi'][0]['dosen'];
-            }
-            else{
-                Session::flush();
-                return redirect()->route('panda.login.form')->with(['error' => 'Anda Tidak Memiliki Akses Login']);
-            }
-        }
-        else{
-            return redirect()->route('panda.login.form')->with(['error' => 'Masukan Username dan Password Terlebih Dahulu !!']);
-        }
+        return redirect()->route('pengusul.usulan.detail_anggota',[$request->id_usulan])->with(['success' =>  'Anggota kegiatan berhasil dihapus !']);
     }
 
     public function usulkan(Request $request){
@@ -424,6 +311,34 @@ class UsulanController extends Controller
         else{
             return redirect()->route('panda.login.form')->with(['error' => 'Masukan Username dan Password Terlebih Dahulu !!']);
         }
+    }
+
+    public function hapusHonor(Request $request){
+        $anggota = AnggaranHonorOutput::find($request->id_anggaran);
+        $anggota->delete();
+
+        return redirect()->route('pengusul.usulan.detail_anggaran',[$request->id_usulan])->with(['success' =>  'Anggaran Honor Output kegiatan berhasil dihapus !']);
+    }
+
+    public function hapusHabis(Request $request){
+        $anggota = AnggaranBahanHabisPakai::find($request->id_anggaran_habis);
+        $anggota->delete();
+
+        return redirect()->route('pengusul.usulan.detail_anggaran',[$request->id_usulan])->with(['success' =>  'Anggaran Belanja Bahan Habis Pakai berhasil dihapus !']);
+    }
+
+    public function hapusPenunjang(Request $request){
+        $anggota = AnggaranPeralatanPenunjang::find($request->id_anggaran_penunjang);
+        $anggota->delete();
+
+        return redirect()->route('pengusul.usulan.detail_anggaran',[$request->id_usulan])->with(['success' =>  'Anggaran Peralatan Penunjang berhasil dihapus !']);
+    }
+
+    public function hapusLainnya(Request $request){
+        $anggota = AnggaranPerjalananLainnya::find($request->id_anggaran_lainnya);
+        $anggota->delete();
+
+        return redirect()->route('pengusul.usulan.detail_anggaran',[$request->id_usulan])->with(['success' =>  'Anggaran Perjalanan Lainnya berhasil dihapus !']);
     }
 
     public function anggaranHabisPost(Request $request){
@@ -631,6 +546,51 @@ class UsulanController extends Controller
         }
         else{
             return redirect()->route('panda.login.form')->with(['error' => 'Masukan Username dan Password Terlebih Dahulu !!']);
+        }
+    }
+
+    public function detailAnggota($id){
+        $anggotas = AnggotaUsulan::join('usulans','usulans.id','anggota_usulans.usulan_id')
+                                    ->select('anggota_usulans.id','anggota_nip','anggota_nama','anggota_prodi_nama','anggota_fakultas_nama','judul_kegiatan')
+                                    ->get();
+        $id_usulan = $id;
+        $jumlah = count($anggotas);
+        $judul_kegiatan = Usulan::select('judul_kegiatan')->where('id',$id)->first();
+        return view('pengusul/usulan.anggota',compact('anggotas','id_usulan','judul_kegiatan','jumlah'));
+    }
+
+    public function cariAnggota(Request $request){
+        $panda = new UserLoginController();
+        $dosen = '
+        {pegawai(pegNama:"'.$request->nm_anggota.'") {
+            pegNip
+            pegIsAktif
+            pegNama
+            pegawai_simpeg {
+                pegJenkel
+                pegNmJabatan
+            }
+            dosen {
+              prodi {
+                prodiKode
+                prodiNamaResmi
+                fakultas {
+                  fakKode
+                  fakKodeUniv
+                  fakNamaResmi
+                }
+              }
+            }
+          }}
+        ';
+        $dosens = $panda->panda($dosen);
+        $datas = count($dosens['pegawai']);
+        $data = [
+            'jumlah'    =>  $datas,
+            'detail'    =>  $dosens,
+        ];
+        if($data['jumlah'] == 1){
+            return response()->json($data);
         }
     }
 }

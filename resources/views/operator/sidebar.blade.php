@@ -21,8 +21,16 @@
 </li>
 
 <li><a><i class="fa fa-reply"></i>Usulan Penelitian <span class="fa fa-chevron-down" ></span></a>
-    <ul class="nav child_menu">
-        <li><a href=" {{ route('operator.menunggu') }} ">Tambah Reviewer</a></li>
+    <ul class="nav child_menu"
+        @if (Route::current()->getName() == "operator.menunggu.detail_reviewer")
+            style="display:block !important;"
+        @endif
+    >
+        <li
+            @if (Route::current()->getName() == "operator.menunggu.detail_reviewer")
+                class="current-page"
+            @endif
+        ><a href=" {{ route('operator.menunggu') }} ">Tambah Reviewer</a></li>
         <li><a href=" {{ route('operator.proses_review') }} ">Dalam Proses Review</a></li>
         <li><a href=" {{ route('operator.verifikasi') }} ">Menunggu Verifikasi</a></li>
     </ul>
@@ -37,8 +45,16 @@
 
 
 <li><a><i class="fa fa-upload"></i>Laporan Kemajuan <span class="fa fa-chevron-down" ></span></a>
-    <ul class="nav child_menu">
-        <li><a href=" {{ route('operator.laporan_kemajuan') }} ">Tambah Reviewer</a></li>
+    <ul class="nav child_menu"
+        @if (Route::current()->getName() == "operator.laporan_kemajuan.detail_reviewer")
+            style="display:block !important;"
+        @endif
+    >
+        <li
+            @if (Route::current()->getName() == "operator.laporan_kemajuan.detail_reviewer")
+                class="current-page"
+            @endif
+        ><a href=" {{ route('operator.laporan_kemajuan') }} ">Tambah Reviewer</a></li>
         <li><a href=" {{ route('operator.laporan_kemajuan.proses_review') }} ">Dalam Proses Review</a></li>
         <li><a href=" {{ route('operator.laporan_kemajuan.verifikasi') }} ">Menunggu Verifikasi</a></li>
     </ul>
@@ -52,11 +68,11 @@
 </li>
 
 <li>
-    <a href=" {{ route('operator.operator') }} "><i class="fa fa-user"></i>Manajemen Operator</a>
+    <a href=" {{ route('operator.laporan_akhir') }} "><i class="fa fa-list"></i>Laporan Akhir</a>
 </li>
 
 <li>
-    <a href=" {{ route('operator.laporan_akhir') }} "><i class="fa fa-list"></i>Laporan Akhir</a>
+    <a href=" {{ route('operator.operator') }} "><i class="fa fa-user"></i>Manajemen Operator</a>
 </li>
 
 <li style="padding-left:2px;">

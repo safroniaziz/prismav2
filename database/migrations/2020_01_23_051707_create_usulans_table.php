@@ -25,8 +25,8 @@ class CreateUsulansTable extends Migration
             $table->string('ketua_peneliti_fakultas_id');
             $table->string('ketua_peneliti_fakultas_nama');
             $table->string('ketua_peneliti_nidn');
-            $table->string('ketua_peneliti_jabatan_fungsional');
-            $table->string('ketua_peneliti_jk');
+            $table->string('ketua_peneliti_jabatan_fungsional')->nullable();
+            $table->string('ketua_peneliti_jk')->nullable();
             $table->string('ketua_peneliti_universitas');
             $table->text('abstrak');
             $table->string('kata_kunci');

@@ -1,5 +1,5 @@
 @extends('layouts.layout')
-@section('title', 'Dashboard')
+@section('title', 'Skim Penelitian')
 @section('login_as', 'Administrator')
 @section('user-login')
     @if (Auth::check())
@@ -28,9 +28,9 @@
                             <strong><i class="fa fa-info-circle"></i>&nbsp;Berhasil: </strong> {{ $message }}
                         </div>
                         @else
-                        <div class="alert alert-success alert-block" id="keterangan">
+                        <div class="alert alert-danger alert-block" id="keterangan">
                             <button type="button" class="close" data-dismiss="alert">×</button>
-                            <strong><i class="fa fa-info-circle"></i>&nbsp;Perhatian: </strong> Berikut adalah semua skim anda yang tersedia, silahkan tambahkan skim baru jika diperlukan !!
+                            <strong><i class="fa fa-info-circle"></i>&nbsp;Perhatian: </strong> Berikut adalah semua skim anda yang tersedia, skim digenerate langsung dari prisma v1, pengaturan tahun skim penelitian dapat diatur di prisma v1, dan jika ada perubahan data skim di prisma v1, silahkan klik generate data untuk memperbarui data skim !!
                         </div>
                     @endif
                     <div class="alert alert-warning alert-block" id="proses" style="display:none;">

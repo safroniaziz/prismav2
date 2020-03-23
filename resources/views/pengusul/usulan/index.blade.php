@@ -1,5 +1,5 @@
 @extends('layouts.layout')
-@section('title', 'Dashboard')
+@section('title', 'Usulan Baru')
 @section('user-login')
     @if(Session::get('login') && Session::get('login',1))
         {{ Session::get('nm_dosen') }}
@@ -40,9 +40,9 @@
                             <strong><i class="fa fa-info-circle"></i>&nbsp;Berhasil: </strong> {{ $message }}
                         </div>
                         @else
-                        <div class="alert alert-success alert-block" id="keterangan">
+                        <div class="alert alert-danger alert-block" id="keterangan">
                             <button type="button" class="close" data-dismiss="alert">×</button>
-                            <strong><i class="fa fa-info-circle"></i>&nbsp;Perhatian: </strong> Berikut adalah semua usulan anda yang tersedia, silahkan tambahkan usulan baru jika diperlukan !!
+                            <strong><i class="fa fa-info-circle"></i>&nbsp;Perhatian: </strong> Silahkan tambahkan usulan kegiatan anda, harap melengkapi data terlebih dahulu sebelum anda mengusulkan kegiatan !!
                         </div>
                     @endif
                     @if ($message = Session::get('error'))
@@ -104,7 +104,7 @@
                                         @endif
                                         <br>
                                         <hr style="margin-bottom:5px !important; margin-top:5px !important;">
-                                        <a onclick="tambahAnggota({{ $usulan->id }})" class="btn btn-primary btn-sm" style="color:white; cursor:pointer;"><i class="fa fa-user-plus"></i>&nbsp; tambah anggota</a>
+                                        <a href="{{ route('pengusul.usulan.detail_anggota',[$usulan->id]) }}" class="btn btn-primary btn-sm" style="color:white; cursor:pointer;"><i class="fa fa-user-plus"></i>&nbsp; tambah anggota</a>
 
                                     </td>
                                     <td style="width:25%; text-align:center;">
@@ -133,9 +133,17 @@
                                             @elseif($usulan->status_usulan == "1")
                                             <label class="badge badge-info" style="color:white;"><i class="fa fa-clock-o" style="padding:5px;"></i>&nbsp;menunggu verifikasi</label>
                                             @elseif($usulan->status_usulan == "2")
-                                            <label class="badge badge-success" style="color:white;"><i class="fa fa-clock-o" style="padding:5px;"></i>&nbsp;disetujui</label>
+                                            <label class="badge badge-success" style="color:white;"><i class="fa fa-clock-o" style="padding:5px;"></i>&nbsp;sudah di review</label>
                                             @elseif($usulan->status_usulan == "3")
-                                            <label class="badge badge-danger" style="color:white;"><i class="fa fa-close" style="padding:5px;"></i>&nbsp;ditolak</label>
+                                            <label class="badge badge-success" style="color:white;"><i class="fa fa-check-circle" style="padding:5px;"></i>&nbsp;usulan diterima</label>
+                                            @elseif($usulan->status_usulan == "4")
+                                            <label class="badge badge-danger" style="color:white;"><i class="fa fa-close" style="padding:5px;"></i>&nbsp;usulan ditolak</label>
+                                            @elseif($usulan->status_usulan == "5")
+                                            <label class="badge badge-info" style="color:white;"><i class="fa fa-info-circle" style="padding:5px;"></i>&nbsp;laporan kemajuan</label>
+                                            @elseif($usulan->status_usulan == "6")
+                                            <label class="badge badge-success" style="color:white;"><i class="fa fa-check-circle" style="padding:5px;"></i>&nbsp;laporan kemajuan diterima</label>
+                                            @elseif($usulan->status_usulan == "7")
+                                            <label class="badge badge-danger" style="color:white;"><i class="fa fa-close" style="padding:5px;"></i>&nbsp;laporan kemajuan ditolak</label>
                                         @endif
                                     </td>
                                     <td style="text-align:center">
@@ -203,6 +211,11 @@
                                                                     <textarea name="abstrak" id="abstrak_edit" cols="30" rows="10" required></textarea>
                                                                 </div>
                                                                 <div class="form-group col-md-12">
+                                                                    <label for="exampleInputEmail1">Kata Kunci</label>
+                                                                    <input id="tags_2" type="text" name="kata_kunci[]" id="kata_kunci" class="tags form-control" />
+                                                                    <div id="suggestions-container" style="position: relative; float: left; width: 250px;"></div>
+                                                                </div>
+                                                                <div class="form-group col-md-12">
                                                                     <label for="exampleInputEmail1">Tujuan Kegiatan</label>
                                                                     <textarea name="tujuan" id="tujuan_edit" cols="30" rows="10" required></textarea>
                                                                 </div>
@@ -219,8 +232,8 @@
                                                                     <input type="number" name="biaya_diusulkan" id="biaya_diusulkan" class="form-control" required>
                                                                 </div>
                                                                 <div class="form-group col-md-6">
-                                                                    <label for="exampleInputEmail1">File Peta Jalan : <a style="color:red; font-style:italic; font-size:12px;">Harap masukan file pdf</a></label>
-                                                                    <input type="file" name="peta_jalan" id="peta_jalan" accept="application/pdf" class="form-control" style="padding-bottom:30px;" required>
+                                                                    <label for="exampleInputEmail1">File Peta Jalan : <a style="color:red; font-style:italic; font-size:12px;">Harap masukan hanya file pdf/jpg/png/jpeg</a></label>
+                                                                    <input type="file" name="peta_jalan" id="peta_jalan" accept="application/pdf, image/jpg, image/jpeg, image/png" class="form-control" style="padding-bottom:30px;" required>
                                                                     <div style="color:red;" style="margin-bottom:10px;">
                                                                         File Lama :<a id="peta_name"></a>
                                                                     </div>
@@ -234,12 +247,6 @@
                                                                     </div>
                                                                 </div>
 
-
-                                                                <div class="form-group col-md-12">
-                                                                    <label for="exampleInputEmail1">Kata Kunci</label>
-                                                                    <input id="tags_2" type="text" name="kata_kunci[]" id="kata_kunci" class="tags form-control" />
-                                                                    <div id="suggestions-container" style="position: relative; float: left; width: 250px;"></div>
-                                                                </div>
                                                             </div>
                                                     <div class="modal-footer">
                                                         <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-close"></i>&nbsp;Batalkan</button>
@@ -290,6 +297,11 @@
                                                             <textarea name="abstrak" id="abstrak" class="form-control" cols="30" rows="10" required></textarea>
                                                         </div>
                                                         <div class="form-group col-md-12">
+                                                            <label for="exampleInputEmail1">Kata Kunci <a style="color:red"><i>klik tombol tab untuk setiap kata kunci</i></a></label>
+                                                            <input id="tags_1" type="text" name="kata_kunci[]" class="tags form-control" required />
+                                                            <div id="suggestions-container" style="position: relative; float: left; width: 250px;"></div>
+                                                        </div>
+                                                        <div class="form-group col-md-12">
                                                             <label for="exampleInputEmail1">Tujuan Kegiatan</label>
                                                             <textarea name="tujuan" id="tujuan" class="form-control" cols="30" rows="10" required></textarea>
                                                         </div>
@@ -306,20 +318,13 @@
                                                             <input type="number" name="biaya_diusulkan" class="form-control" required>
                                                         </div>
                                                         <div class="form-group col-md-6">
-                                                            <label for="exampleInputEmail1">File Peta Jalan : <a style="color:red; font-style:italic; font-size:12px;">Harap masukan file pdf</a></label>
-                                                            <input type="file" name="peta_jalan" id="peta_jalan1" accept="application/pdf" class="form-control" style="padding-bottom:30px;" required>
+                                                            <label for="exampleInputEmail1">File Peta Jalan : <a style="color:red; font-style:italic; font-size:12px;">Harap masukan hanya file pdf/jpg/png/jpeg</a></label>
+                                                            <input type="file" name="peta_jalan" id="peta_jalan1" accept="application/pdf, image/jpg, image/jpeg, image/png" class="form-control" style="padding-bottom:30px;" required>
                                                         </div>
 
                                                         <div class="form-group col-md-6">
                                                             <label for="exampleInputEmail1">File Usulan : <a style="color:red; font-style:italic; font-size:12px;">Harap masukan file microsoft word</a></label>
                                                             <input type="file" name="file_usulan" id="file_usulan1" accept=".doc, .docx" class="form-control" style="padding-bottom:30px;" required>
-                                                        </div>
-
-
-                                                        <div class="form-group col-md-12">
-                                                            <label for="exampleInputEmail1">Kata Kunci <a style="color:red"><i>harap diisi</i></a></label>
-                                                            <input id="tags_1" type="text" name="kata_kunci[]" class="tags form-control" required />
-                                                            <div id="suggestions-container" style="position: relative; float: left; width: 250px;"></div>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -338,13 +343,13 @@
                         <div class="modal-dialog" role="document">
                           <div class="modal-content">
                             <div class="modal-header modal-header-danger">
-                                <p style="font-size:15px;" class="modal-title" id="exampleModalLabel"><i class="fa fa-user"></i>&nbsp;Form Konfirmasi Hapus Data Operator</p>
+                                <p style="font-size:15px;" class="modal-title" id="exampleModalLabel"><i class="fa fa-user"></i>&nbsp;Form Konfirmasi Hapus Data Anggota</p>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
                             </div>
                             <div class="modal-body">
-                              Apakah anda yakin akan menghapus data usulan ?
+                              Apakah anda yakin akan menghapus data anggota ?
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-outline-light btn-sm " style="color:white;" data-dismiss="modal"><i class="fa fa-close"></i>&nbsp;Close</button>
@@ -378,7 +383,7 @@
                                                 <label for="exampleInputEmail1">Pilih Anggota Kelompok</label>
                                                 <select name="anggota_id" id="anggota_id" class="form-control" required style="font-size:13px; width:100%;">
                                                     <option value="" disabled selected>-- pilih anggota kelompok --</option>
-                                                    @foreach ($dosens as $dosen)
+                                                    {{-- @foreach ($dosens as $dosen)
                                                         @for ($i = 0; $i <sizeof($dosen) ; $i++)
                                                             @if ($dosen[$i]['pegawai']['pegIsAktif'] == 1)
                                                                 @if ($dosen[$i]['pegawai']['pegNama'] != "0" || $dosen[$i]['pegawai']['pegNama'] != "000000000")
@@ -394,7 +399,7 @@
                                                                 @endif
                                                             @endif
                                                         @endfor
-                                                    @endforeach
+                                                    @endforeach --}}
                                                 </select>
                                             </div>
 
@@ -500,7 +505,7 @@
     </section>
 @endsection
 @push('scripts')
-    <script src="https://cdn.ckeditor.com/4.13.1/standard/ckeditor.js"></script>
+<script src="https://cdn.ckeditor.com/4.13.1/standard/ckeditor.js"></script>
     <script>
             CKEDITOR.replace( 'abstrak_edit', {height:150});
             CKEDITOR.replace( 'abstrak', {height:150});
@@ -550,35 +555,6 @@
             $('#id_hapus').val(id);
         }
 
-        function tambahAnggota(id){
-            $.ajax({
-                url: "{{ url('pengusul/manajemen_usulan') }}"+'/'+ id + "/get_anggota",
-                type: "GET",
-                dataType: "JSON",
-                success: function(data){
-                    $('#modalanggota').modal('show');
-                    $('#usulan_id').val(id);
-                    $('#judul').text(data['usulan'].judul_kegiatan);
-                    var res='';
-                    var no = 1;
-                    $.each (data['anggotas'], function (key, value) {
-                        res +=
-                        '<tr>'+
-                            '<td>'+no+++'</td>'+
-                            '<td>'+value.anggota_nama+'</td>'+
-                            '<td>'+value.anggota_nip+'</td>'+
-                            '<td>'+value.anggota_prodi_nama+'</td>'+
-                            '<td>'+value.anggota_fakultas_nama+'</td>'+
-                        '</tr>';
-                    });
-                    $('#tbody').html(res);
-                },
-                error:function(){
-                    alert("Nothing Data");
-                }
-            });
-        }
-
         function selengkapnya(id){
             $.ajax({
                 url: "{{ url('pengusul/manajemen_usulan') }}"+'/'+ id + "/detail_judul",
@@ -594,58 +570,6 @@
                 }
             });
         }
-
-        $(document).ready(function(){
-            $(document).on('change','#fakultas_id',function(){
-                // alert('berhasil');
-                var fakultas_id = $(this).val();
-                var div = $(this).parent().parent();
-                var op=" ";
-                $.ajax({
-                type :'get',
-                url: "{{ url('pengusul/manajemen_usulan/cari_prodi') }}",
-                data:{'fakultas_id':fakultas_id},
-                success:function(data){
-                    op+='<option value="0" selected disabled>-- pilih prodi --</option>';
-                    for(var i=0; i<data.length;i++){
-                        op+='<option value="'+data[i].prodi_kode+'">'+data[i].nm_prodi+'</option>';
-                    }
-                    div.find('#prodi_id').html(" ");
-                    div.find('#prodi_id').append(op);
-                },
-                error:function(){
-                }
-                });
-            })
-        });
-
-        $(document).ready(function(){
-            $(document).on('change','#prodi_id',function(){
-                // alert('berhasil');
-                var prodi_id = $(this).val();
-                var div = $(this).parent().parent();
-                var op=" ";
-                $.ajax({
-                type :'get',
-                url: "{{ url('pengusul/manajemen_usulan/cari_anggota') }}",
-                data:{'prodi_id':prodi_id},
-                success:function(data){
-                    // alert(data['prodi'][0]['dosen'][0]['pegawai'].pegNama);
-                    op+='<option value="0" selected disabled>-- pilih anggota --</option>';
-                    for(var i=0; i<data.length;i++){
-                        if (data[i]['pegawai']['pegIsAktif'] == 1) {
-                            op+='<option value="'+data[i].dsnPegNip+'">'+data[i]['pegawai'].pegNama+'</option>';
-                        }
-                    }
-                    div.find('#anggota_id').html(" ");
-                    div.find('#anggota_id').append(op);
-                },
-                error:function(){
-                }
-                });
-            })
-        });
-
         function usulkan(id){
             $.ajax({
                 url: "{{ url('pengusul/manajemen_usulan') }}"+'/'+ id + "/get_anggaran",
