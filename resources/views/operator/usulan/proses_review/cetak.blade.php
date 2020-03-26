@@ -34,7 +34,7 @@
     <table class="table table-bordered" style="width:100%" id="table">
         <thead>
             <tr>
-                <th colspan="6">1. Honor Output Kegiatan</th>
+                <th colspan="6">1. Honorarium</th>
             </tr>
             <tr>
                 <th>No</th>
@@ -49,7 +49,7 @@
             @if (count($outputs) > 0)
                 @if ($outputs[0]->id == null)
                     <tr>
-                        <td style="color:red; text-align:center;" colspan="6"><a><i>tabel honor output kegiatan masih kosong</i></a></td>
+                        <td style="color:red; text-align:center;" colspan="6"><a><i>tabel Honorarium masih kosong</i></a></td>
                     </tr>
                     @else
                     @php
@@ -85,7 +85,7 @@
                 @endif
                 @else
                 <tr>
-                    <td style="color:red; text-align:center;" colspan="6"><a><i>tabel honor output kegiatan masih kosong</i></a></td>
+                    <td style="color:red; text-align:center;" colspan="6"><a><i>tabel Honorarium masih kosong</i></a></td>
                 </tr>
             @endif
         </tbody>
@@ -155,7 +155,7 @@
     <table class="table table-bordered" style="width:100%" id="table">
         <thead>
             <tr>
-                <th colspan="6">3. Peralatan Penunjang</th>
+                <th colspan="6">3. Perjalanan</th>
             </tr>
             <tr>
                 <th>No</th>
@@ -170,7 +170,7 @@
             @if (count($penunjangs) >0)
                 @if ($penunjangs[0]->id == null)
                     <tr>
-                        <td style="color:red; text-align:center;" colspan="6"><a><i>tabel peralatan penunjang masih kosong</i></a></td>
+                        <td style="color:red; text-align:center;" colspan="6"><a><i>tabel Perjalanan masih kosong</i></a></td>
                     </tr>
                     @else
                     @php
@@ -206,7 +206,7 @@
                 @endif
                 @else
                 <tr>
-                    <td style="color:red; text-align:center;" colspan="6"><a><i>tabel peralatan penunjang masih kosong</i></a></td>
+                    <td style="color:red; text-align:center;" colspan="6"><a><i>tabel Perjalanan masih kosong</i></a></td>
                 </tr>
             @endif
         </tbody>
@@ -216,7 +216,7 @@
     <table class="table table-bordered" style="width:100%" id="table">
         <thead>
             <tr>
-                <th colspan="6">4. Belanja / Perjalanan Lainnya</th>
+                <th colspan="6">4. Lain-lain</th>
             </tr>
             <tr>
                 <th>No</th>
@@ -231,7 +231,7 @@
             @if (count($lainnya) > 0)
                 @if ($lainnya[0]->id == null)
                     <tr>
-                        <td style="color:red; text-align:center;" colspan="6"><a><i>tabel belanja / perjalanan lainnya masih kosong</i></a></td>
+                        <td style="color:red; text-align:center;" colspan="6"><a><i>tabel Lain-lain masih kosong</i></a></td>
                     </tr>
                     @else
                     @php
@@ -267,7 +267,7 @@
                 @endif
                 @else
                 <tr>
-                    <td style="color:red; text-align:center;" colspan="6"><a><i>tabel belanja / perjalanan lainnya masih kosong</i></a></td>
+                    <td style="color:red; text-align:center;" colspan="6"><a><i>tabel Lain-lain masih kosong</i></a></td>
                 </tr>
             @endif
             <tr>

@@ -70,6 +70,14 @@
                                 </tr>
                             @endforeach
                             <tr>
+                                <td colspan="4">
+                                    <div class="form-group">
+                                        <label for="exampleInputPassword1">Tambahkan Komentar :</label>
+                                        <textarea name="komentar" id="komentar" class="form-control" cols="30" rows="5"></textarea>
+                                      </div>
+                                </td>
+                            </tr>
+                            <tr>
                                 <td colspan="4" style="text-align:center;">
                                     <a href="{{ route('reviewer.menunggu') }}" class="btn btn-info btn-sm"><i class="fa fa-arrow-left" style="font-size:12px; color:white;"></i>&nbsp; Kembali</a>
                                     <button type="reset" class="btn btn-danger btn-sm"><i class="fa fa-refresh"></i>&nbsp; Reset</button>
@@ -85,6 +93,10 @@
     </section>
 @endsection
 @push('scripts')
+    <script src="https://cdn.ckeditor.com/4.13.1/standard/ckeditor.js"></script>
+    <script>
+            CKEDITOR.replace( 'komentar', {height:100});
+    </script>
     <script>
         $(function () {
             $("input").keydown(function () {
@@ -99,6 +111,6 @@
                 else
                 $(this).val($(this).data("old"));
             });
-            });
+        });
     </script>
 @endpush

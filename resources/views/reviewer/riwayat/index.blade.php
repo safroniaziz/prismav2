@@ -85,6 +85,8 @@
                                         <a href="{{ asset('upload/file_usulan/'.$riwayat->file_usulan) }}" download="{{ $riwayat->file_usulan }}"><i class="fa fa-download"></i>&nbsp; download file usulan</a>
                                         <br>
                                         <a href="{{ asset('upload/peta_jalan/'.$riwayat->peta_jalan) }}" download="{{ $riwayat->peta_jalan }}"><i class="fa fa-download"></i>&nbsp; download file peta jalan</a>
+                                        <br>
+                                        <a href="{{ asset('upload/lembar_pengesahan/'.$riwayat->lembar_pengesahan) }}" download="{{ $riwayat->lembar_pengesahan }}"><i class="fa fa-download"></i>&nbsp; download file lembar pengesahan</a>
                                    </td>
                                     <td>
                                         @if ($riwayat->nm_anggota == null)
@@ -148,6 +150,20 @@
                                                 <td> : </td>
                                                 <td>
                                                     <p id="judul_kegiatan_detail"></p>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="width:20%;">Tujuan Kegiatan</td>
+                                                <td> : </td>
+                                                <td>
+                                                    <p id="tujuan_kegiatan_detail"></p>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="width:20%;">Luaran Kegiatan</td>
+                                                <td> : </td>
+                                                <td>
+                                                    <p id="luaran_kegiatan_detail"></p>
                                                 </td>
                                             </tr>
                                             <tr>
@@ -229,6 +245,9 @@
                 success: function(data){
                     $('#modaldetail').modal('show');
                     $('#judul_kegiatan_detail').text(data['usulan'].judul_kegiatan);
+                    $('#abstrak_kegiatan_detail').append(data['usulan'].abstrak);
+                    $('#tujuan_kegiatan_detail').append(data['usulan'].tujuan);
+                    $('#luaran_kegiatan_detail').text(data['usulan'].luaran);
                     $('#skim_penelitian_detail').text(data['usulan'].nm_skim);
                     $('#jenis_kegiatan_detail').text(data['usulan'].jenis_kegiatan);
                     $('#ketua_peneliti_detail').text(data['usulan'].nm_ketua_peneliti);

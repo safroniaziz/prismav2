@@ -10,6 +10,7 @@ use App\Http\Controllers\UserLoginController;
 use DB;
 use Session;
 use App\Reviewer1;
+use App\Reviewer2;
 use App\Usulan;
 use App\Fakultas;
 use App\Prodi;
@@ -31,7 +32,7 @@ class UsulanMenungguController extends Controller
                             ->leftJoin('skims','skims.id','usulans.skim_id')
                             ->leftJoin('reviewer1s','reviewer1s.usulan_id','usulans.id')
                             ->select('usulans.id','judul_kegiatan','jenis_kegiatan',
-                                    'abstrak','kata_kunci','peta_jalan','file_usulan','biaya_diusulkan','status_usulan','tahun_usulan','ketua_peneliti_prodi_nama','ketua_peneliti_nama as nm_ketua_peneliti',
+                                    'abstrak','kata_kunci','peta_jalan','file_usulan','lembar_pengesahan','biaya_diusulkan','status_usulan','tahun_usulan','ketua_peneliti_prodi_nama','ketua_peneliti_nama as nm_ketua_peneliti',
                                     DB::raw('group_concat(distinct concat(anggota_usulans.anggota_nama) SEPARATOR "<br>") as "nm_anggota" '),
                                     DB::raw('group_concat(distinct concat(reviewer1s.reviewer_nama) SEPARATOR "&nbsp;|&nbsp;") as "nm_reviewer" '),
                                     DB::raw('SUM(reviewer_nip) as jumlah')
@@ -45,7 +46,7 @@ class UsulanMenungguController extends Controller
     public function detail($id){
         $usulan = Usulan::leftJoin('anggota_usulans','anggota_usulans.usulan_id','usulans.id')
                         ->leftJoin('skims','skims.id','usulans.skim_id')
-                        ->select('usulans.id','judul_kegiatan','jenis_kegiatan','ketua_peneliti_fakultas_nama as fakultas','ketua_peneliti_prodi_nama as prodi',
+                        ->select('usulans.id','judul_kegiatan','tujuan','luaran','abstrak','jenis_kegiatan','ketua_peneliti_fakultas_nama as fakultas','ketua_peneliti_prodi_nama as prodi',
                                 'ketua_peneliti_nama as nm_ketua_peneliti','ketua_peneliti_nip as nip','kata_kunci','nm_skim','abstrak','kata_kunci')
                         ->where('usulans.id',$id)
                         ->first();
@@ -60,21 +61,34 @@ class UsulanMenungguController extends Controller
     }
 
     public function reviewerPost(Request $request){
-        $sudah = AnggotaUsulan::select('anggota_nip')->where('anggota_nip',$request->nip_reviewer)->first();
-        $sudah2 = Reviewer1::select('reviewer_nip')->where('reviewer_nip',$request->nip_reviewer)->first();
-        $ketua = Usulan::select('ketua_peneliti_nip')->where('ketua_peneliti_nip',$request->nip_reviewer)->first();
+        $sudah = AnggotaUsulan::select('anggota_nip')->where('usulan_id',$request->usulan_id_reviewer)->where('anggota_nip',$request->nip_reviewer)->first();
+        $sudah2 = Reviewer1::select('reviewer_nip')->where('usulan_id',$request->usulan_id_reviewer)->where('reviewer_nip',$request->nip_reviewer)->first();
+        $ketua = Usulan::select('ketua_peneliti_nip')->where('id',$request->usulan_id_reviewer)->where('ketua_peneliti_nip',$request->nip_reviewer)->first();
         if (count($sudah) != 0) {
             return redirect()->route('operator.menunggu.detail_reviewer',[$request->usulan_id_reviewer])->with(['error' =>  'reviewer yang dipilih adalah anggota kegiatan, tidak dapat ditambahkan !']);
         }
         else{
             if(count($sudah2) != 0){
-                return redirect()->route('operator.menunggu.detail_reviewer',[$request->usulan_id_reviewer])->with(['error' =>  'reviewer yang dipilih sudah ditambahkan !']);
+                return redirect()->route('operator.menunggu.detail_reviewer',[$request->usulan_id_reviewer])->with(['error' =>  'reviewer yang dipilih gagal ditambahkan !']);
             }
             if(count($ketua) != 0){
                 return redirect()->route('operator.menunggu.detail_reviewer',[$request->usulan_id_reviewer])->with(['error' =>  'reviewer yang dipilih adalah ketua usulan kegiatan, tidak dapat ditambahkan !']);
             }
             else{
                 $reviewer = new Reviewer1;
+                $reviewer->usulan_id = $request->usulan_id_reviewer;
+                $reviewer->reviewer_nip = $request->nip_reviewer;
+                $reviewer->reviewer_nama = $request->nm_reviewer;
+                $reviewer->reviewer_prodi_id = $request->prodi_kode_reviewer;
+                $reviewer->reviewer_prodi_nama = $request->prodi_reviewer;
+                $reviewer->reviewer_fakultas_id = $request->fakultas_kode_reviewer;
+                $reviewer->reviewer_fakultas_nama = $request->fakultas_reviewer;
+                $reviewer->reviewer_jabatan_fungsional = $request->jabatan_reviewer;
+                $reviewer->reviewer_jk = $request->jk_reviewer;
+                $reviewer->reviewer_universitas = "Universitas Bengkulu";
+                $reviewer->save();
+
+                $reviewer = new Reviewer2;
                 $reviewer->usulan_id = $request->usulan_id_reviewer;
                 $reviewer->reviewer_nip = $request->nip_reviewer;
                 $reviewer->reviewer_nama = $request->nm_reviewer;
@@ -119,6 +133,7 @@ class UsulanMenungguController extends Controller
     public function detailReviewer($id){
         $reviewers = Reviewer1::join('usulans','usulans.id','reviewer1s.usulan_id')
                                     ->select('reviewer1s.id','reviewer_nip','reviewer_nama','reviewer_prodi_nama','reviewer_fakultas_nama','judul_kegiatan')
+                                    ->where('usulans.id',$id)
                                     ->get();
         $id_usulan = $id;
         $jumlah = count($reviewers);

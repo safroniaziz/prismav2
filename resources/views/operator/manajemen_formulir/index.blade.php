@@ -59,7 +59,7 @@
                                     <td> {{ $no++ }} </td>
                                     <td> {{ $formulir->nm_skim }} </td>
                                     <td> {{ $formulir->kriteria_penilaian }} </td>
-                                    <td> {{ $formulir->bobot }} </td>
+                                    <td> {{ $formulir->bobot }}% </td>
                                     <td>
                                         <a onclick="ubahFormulir({{ $formulir->id }})" class="btn btn-primary btn-sm" style="color:white; cursor:pointer;"><i class="fa fa-edit"></i></a>
                                         <a onclick="hapusFormulir({{ $formulir->id }})" class="btn btn-danger btn-sm" style="color:white; cursor:pointer;"><i class="fa fa-trash"></i></a>

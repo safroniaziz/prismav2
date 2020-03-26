@@ -12,6 +12,7 @@ use App\Fakultas;
 use App\Prodi;
 use App\RancanganAnggaran;
 use App\AnggotaUsulan;
+use App\Komentar1;
 use App\UsulanDisetujui;
 use PDF;
 
@@ -104,5 +105,14 @@ class VerifikasiUsulanController extends Controller
     public function detailJudul($id){
         $judul = Usulan::find($id);
         return $judul;
+    }
+
+    public function komentar($id){
+        $komentar = Komentar1::leftJoin('usulans','usulans.id','komentar1s.usulan_id')
+                                ->leftJoin('reviewer1s','reviewer1s.reviewer_nip','komentar1s.reviewer_id')
+                                ->select('komentar1s.komentar','reviewer_nama','reviewer_nip')
+                                ->where('komentar1s.usulan_id',$id)
+                                ->get();
+        return $komentar;
     }
 }

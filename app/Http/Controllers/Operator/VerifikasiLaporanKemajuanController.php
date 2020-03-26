@@ -9,6 +9,7 @@ use Session;
 use App\Reviewer2;
 use App\Usulan;
 use App\Fakultas;
+use App\Komentar2;
 use App\Prodi;
 use App\RancanganAnggaran;
 use App\AnggotaUsulan;
@@ -26,7 +27,7 @@ class VerifikasiLaporanKemajuanController extends Controller
         $usulans = Usulan::leftJoin('nilai_formulir2s','nilai_formulir2s.usulan_id','usulans.id')
                             ->leftJoin('formulirs','formulirs.id','nilai_formulir2s.formulir_id')
                             ->join('laporan_kemajuans','laporan_kemajuans.usulan_id','usulans.id')
-                            ->select('usulans.id','jenis_kegiatan','file_kemajuan','ketua_peneliti_nama','tahun_usulan','judul_kegiatan',DB::raw('SUM(skor * (bobot/100)/2) as totalskor'))
+                            ->select('usulans.id','jenis_kegiatan','file_kemajuan','file_perbaikan','ketua_peneliti_nama','tahun_usulan','judul_kegiatan',DB::raw('SUM(skor * (bobot/100)/2) as totalskor'))
                             ->groupBy('usulans.id')
                             ->where('status_usulan','5')
                             ->get();
@@ -73,5 +74,14 @@ class VerifikasiLaporanKemajuanController extends Controller
     public function detailJudul($id){
         $judul = Usulan::find($id);
         return $judul;
+    }
+
+    public function komentar($id){
+        $komentar = Komentar2::leftJoin('usulans','usulans.id','komentar2s.usulan_id')
+                                ->leftJoin('reviewer2s','reviewer2s.reviewer_nip','komentar2s.reviewer_id')
+                                ->select('komentar2s.komentar','reviewer_nama','reviewer_nip')
+                                ->where('komentar2s.usulan_id',$id)
+                                ->get();
+        return $komentar;
     }
 }

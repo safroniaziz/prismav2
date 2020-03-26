@@ -88,6 +88,8 @@
                                         <a href="{{ asset('upload/file_usulan/'.$usulan->file_usulan) }}" download="{{ $usulan->file_usulan }}"><i class="fa fa-download"></i>&nbsp; download file usulan</a>
                                         <br>
                                         <a href="{{ asset('upload/peta_jalan/'.$usulan->peta_jalan) }}" download="{{ $usulan->peta_jalan }}"><i class="fa fa-download"></i>&nbsp; download file peta jalan</a>
+                                        <br>
+                                        <a href="{{ asset('upload/lembar_pengesahan/'.$usulan->lembar_pengesahan) }}" download="{{ $usulan->lembar_pengesahan }}"><i class="fa fa-download"></i>&nbsp; download file lembar pengesahan</a>
                                     </td>
                                     <td style="text-align:center;">
                                         @if ($usulan->nm_anggota == null)
@@ -137,6 +139,27 @@
                                                 <td> : </td>
                                                 <td>
                                                     <p id="judul_kegiatan_detail"></p>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="width:20%;">Abstrak Kegiatan</td>
+                                                <td> : </td>
+                                                <td>
+                                                    <p id="abstrak_kegiatan_detail"></p>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="width:20%;">Tujuan Kegiatan</td>
+                                                <td> : </td>
+                                                <td>
+                                                    <p id="tujuan_kegiatan_detail"></p>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="width:20%;">Luaran Kegiatan</td>
+                                                <td> : </td>
+                                                <td>
+                                                    <p id="luaran_kegiatan_detail"></p>
                                                 </td>
                                             </tr>
                                             <tr>
@@ -224,6 +247,9 @@
                 success: function(data){
                     $('#modaldetail').modal('show');
                     $('#judul_kegiatan_detail').text(data['usulan'].judul_kegiatan);
+                    $('#abstrak_kegiatan_detail').append(data['usulan'].abstrak);
+                    $('#tujuan_kegiatan_detail').append(data['usulan'].tujuan);
+                    $('#luaran_kegiatan_detail').text(data['usulan'].luaran);
                     $('#skim_penelitian_detail').text(data['usulan'].nm_skim);
                     $('#jenis_kegiatan_detail').text(data['usulan'].jenis_kegiatan);
                     $('#ketua_peneliti_detail').text(data['usulan'].nm_ketua_peneliti);

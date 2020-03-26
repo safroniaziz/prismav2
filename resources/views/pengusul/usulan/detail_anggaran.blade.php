@@ -48,10 +48,10 @@
                     <p style="text-align:center;font-size:17px !important; font-weight:bold;"> RANCANGAN ANGGARAN BIAYA DAN JUSTIFIKASI ANGGARAN</p>
                     <div>
                         <ul class="nav nav-tabs" id="myTab">
-                            <li class="active"><a class="nav-item nav-link" data-toggle="tab" href="#nav-honor"><i class="fa fa-tasks"></i>&nbsp;Honor Output Kegiatan</a></li>
+                            <li class="active"><a class="nav-item nav-link" data-toggle="tab" href="#nav-honor"><i class="fa fa-tasks"></i>&nbsp;Honorarium</a></li>
                             <li><a class="nav-item nav-link" data-toggle="tab" href="#nav-habis"><i class="fa fa-list-alt"></i>&nbsp;Belanja Bahan Habis Pakai</a></li>
-                            <li><a class="nav-item nav-link" data-toggle="tab" href="#nav-penunjang"><i class="fa fa-th-list"></i>&nbsp;Peralatan Penunjang</a></li>
-                            <li><a class="nav-item nav-link" data-toggle="tab" href="#nav-lainnya"><i class="fa fa-th-large"></i>&nbsp;Belanja/Perjalan Lainnya</a></li>
+                            <li><a class="nav-item nav-link" data-toggle="tab" href="#nav-penunjang"><i class="fa fa-th-list"></i>&nbsp;Perjalanan</a></li>
+                            <li><a class="nav-item nav-link" data-toggle="tab" href="#nav-lainnya"><i class="fa fa-th-large"></i>&nbsp;Lain-Lain</a></li>
                             <li><a class="nav-item nav-link" data-toggle="tab" href="#nav-cetak"><i class="fa fa-print"></i>&nbsp;Cetak Anggaran</a></li>
                         </ul>
                     </div>
@@ -114,12 +114,13 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="col-md-12" style="margin-bottom:10px; margin-top:10px; text-align:center;">
+                                        <a href="{{ route('pengusul.usulan') }}" class="btn btn-danger btn-sm"><i class="fa fa-arrow-left" style="font-size:12px;"></i>&nbsp; Halaman Usulan</a>
                                         <a href=" {{ route('pengusul.usulan.anggaran.cetak',[$id_usulan]) }} " class="btn btn-info btn-sm" style="color:white;cursor:pointer;"><i class="fa fa-print" style="font-size:12px;"></i>&nbsp; Cetak Anggaran</a>
                                     </div>
                                     <table class="table table-bordered" style="width:100%" id="table">
                                         <thead>
                                             <tr>
-                                                <th colspan="6">1. Rancangan Anggaran Honor Output Kegiatan</th>
+                                                <th colspan="6">1. Rancangan Anggaran Honorarium</th>
                                             </tr>
                                             <tr>
                                                 <th>No</th>
@@ -134,7 +135,7 @@
                                             @if (count($outputs) > 0)
                                                 @if ($outputs[0]->id == null)
                                                     <tr>
-                                                        <td style="color:red; text-align:center;" colspan="6"><a><i>tabel honor output kegiatan masih kosong</i></a></td>
+                                                        <td style="color:red; text-align:center;" colspan="6"><a><i>tabel Honorarium masih kosong</i></a></td>
                                                     </tr>
                                                     @else
                                                     @php
@@ -170,7 +171,7 @@
                                                 @endif
                                                 @else
                                                 <tr>
-                                                    <td style="color:red; text-align:center;" colspan="6"><a><i>tabel honor output kegiatan masih kosong</i></a></td>
+                                                    <td style="color:red; text-align:center;" colspan="6"><a><i>tabel Honorarium masih kosong</i></a></td>
                                                 </tr>
                                             @endif
                                         </tbody>
@@ -240,7 +241,7 @@
                                     <table class="table table-bordered" style="width:100%" id="table">
                                         <thead>
                                             <tr>
-                                                <th colspan="6">3. Rancangan Anggaran Peralatan Penunjang</th>
+                                                <th colspan="6">3. Rancangan Anggaran Perjalanan</th>
                                             </tr>
                                             <tr>
                                                 <th>No</th>
@@ -255,7 +256,7 @@
                                             @if (count($penunjangs) >0)
                                                 @if ($penunjangs[0]->id == null)
                                                     <tr>
-                                                        <td style="color:red; text-align:center;" colspan="6"><a><i>tabel peralatan penunjang masih kosong</i></a></td>
+                                                        <td style="color:red; text-align:center;" colspan="6"><a><i>tabel Perjalanan masih kosong</i></a></td>
                                                     </tr>
                                                     @else
                                                     @php
@@ -291,7 +292,7 @@
                                                 @endif
                                                 @else
                                                 <tr>
-                                                    <td style="color:red; text-align:center;" colspan="6"><a><i>tabel peralatan penunjang masih kosong</i></a></td>
+                                                    <td style="color:red; text-align:center;" colspan="6"><a><i>tabel Perjalanan masih kosong</i></a></td>
                                                 </tr>
                                             @endif
                                         </tbody>
@@ -301,7 +302,7 @@
                                     <table class="table table-bordered" style="width:100%" id="table">
                                         <thead>
                                             <tr>
-                                                <th colspan="6">4. Rancangan Anggaran Belanja / Perjalanan Lainnya</th>
+                                                <th colspan="6">4. Rancangan Anggaran Lain-lain</th>
                                             </tr>
                                             <tr>
                                                 <th>No</th>
@@ -316,7 +317,7 @@
                                             @if (count($lainnyas) > 0)
                                                 @if ($lainnyas[0]->id == null)
                                                     <tr>
-                                                        <td style="color:red; text-align:center;" colspan="6"><a><i>tabel belanja / perjalanan lainnya masih kosong</i></a></td>
+                                                        <td style="color:red; text-align:center;" colspan="6"><a><i>tabel Lain-lain masih kosong</i></a></td>
                                                     </tr>
                                                     @else
                                                     @php
@@ -352,7 +353,7 @@
                                                 @endif
                                                 @else
                                                 <tr>
-                                                    <td style="color:red; text-align:center;" colspan="6"><a><i>tabel belanja / perjalanan lainnya masih kosong</i></a></td>
+                                                    <td style="color:red; text-align:center;" colspan="6"><a><i>tabel Lain-lain masih kosong</i></a></td>
                                                 </tr>
                                             @endif
                                             <tr>

@@ -40,7 +40,7 @@
             <table class="table table-bordered" style="width:100%" id="table">
                 <thead>
                     <tr>
-                        <th colspan="7">Rancangan Anggaran Belanja/Perjalan Lainnya</th>
+                        <th colspan="7">Rancangan Anggaran Lain-Lain</th>
                     </tr>
                     <tr>
                         <th>No</th>
@@ -56,7 +56,7 @@
                     @if (count($lainnyas) >0)
                         @if ($lainnyas[0]->id == null)
                             <tr>
-                                <td style="color:red; text-align:center;" colspan="6"><a><i>tabel belanja/perjalanan lainnya masih kosong</i></a></td>
+                                <td style="color:red; text-align:center;" colspan="6"><a><i>tabel Lain-lain masih kosong</i></a></td>
                             </tr>
                             @else
                             @php
@@ -91,7 +91,7 @@
                         @endif
                         @else
                         <tr>
-                            <td style="color:red; text-align:center;" colspan="6"><a><i>tabel belanja/perjalanan lainnya masih kosong</i></a></td>
+                            <td style="color:red; text-align:center;" colspan="6"><a><i>tabel Lain-lain masih kosong</i></a></td>
                         </tr>
                     @endif
                 </tbody>

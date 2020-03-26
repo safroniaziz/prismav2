@@ -31,6 +31,7 @@
     <!-- Custom Theme Style -->
     <link href="{{ asset('assets/build/css/custom.min.css') }}" rel="stylesheet">
         <style>
+
           body{
             font-family: "open sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
             background-color: #fff;
@@ -59,13 +60,13 @@
         </style>
     </head>
 
-  <body class="nav-md">
+  <body class="nav-md sidebar_fixed" >
     <div class="container body">
       <div class="main_container" style="background:#013C62;">
         @if (Auth::check())
-            <div class="col-md-3 left_col menu_fixed" style="background: #013C62 !important; overflow:auto !important; scrollbar-width: none !important;">
+            <div class="col-md-3 left_col " style="background: #013C62 !important; ">
             @else
-            <div class="col-md-3 left_col menu_fixed" style="background: #013C62 !important;">
+            <div class="col-md-3 left_col " style="background: #013C62 !important;">
         @endif
         <div class="left_col scroll-view" style="background: #013C62 !important;">
             <div class="navbar nav_title" style="border-bottom: 1px white solid;; margin:0; padding-bottom:5px 0px !important; background:#013C62;">
@@ -141,7 +142,7 @@
 
         <!-- page content -->
         <div class="right_col" role="main">
-          <div class="">
+          <div class="" >
             <div class="page-title">
 
             </div>
@@ -158,9 +159,9 @@
         <!-- /page content -->
 
         <!-- footer content -->
-        <footer>
+        <footer style="overflow:hidden;">
           <div class="pull-right">
-            Gentelella - Bootstrap Admin Template by <a href="https://colorlib.com">Colorlib</a>
+            Lembaga Pengembangan Teknologi Informasi dan Kominikasi <a href="https://colorlib.com">Universitas Bengkulu</a>
           </div>
           <div class="clearfix"></div>
         </footer>

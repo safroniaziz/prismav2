@@ -11,6 +11,7 @@ use Carbon;
 use App\Usulan;
 use App\AnggotaUsulan;
 use App\Formulir;
+use App\Komentar1;
 use App\NilaiFormulir;
 use App\Reviewer1;
 use App\RancanganAnggaran;
@@ -26,7 +27,7 @@ class UsulanMenungguController extends Controller
                                     ->leftJoin('reviewer1s','reviewer1s.usulan_id','usulans.id')
                                     ->leftJoin('nilai_formulirs','nilai_formulirs.reviewer_id','reviewer1s.reviewer_nip')
                                     ->select('usulans.id','judul_kegiatan','jenis_kegiatan','ketua_peneliti_universitas','skims.id as skim_id','ketua_peneliti_prodi_nama',
-                                            'ketua_peneliti_nama as nm_ketua_peneliti','abstrak','tahun_usulan','kata_kunci','peta_jalan','file_usulan','biaya_diusulkan','status_usulan',
+                                            'ketua_peneliti_nama as nm_ketua_peneliti','abstrak','tahun_usulan','kata_kunci','peta_jalan','file_usulan','lembar_pengesahan','biaya_diusulkan','status_usulan',
                                             DB::raw('group_concat(distinct concat(anggota_nama) SEPARATOR "<br>") as "nm_anggota" '),
                                             DB::raw('group_concat(distinct concat(reviewer_nama) SEPARATOR "<br>") as "nm_reviewer" '),
                                             'nilai_formulirs.reviewer_id'
@@ -54,7 +55,7 @@ class UsulanMenungguController extends Controller
             if($sesi == 2){
                 $usulan = Usulan::leftJoin('anggota_usulans','anggota_usulans.usulan_id','usulans.id')
                                 ->leftJoin('skims','skims.id','usulans.skim_id')
-                                ->select('usulans.id','judul_kegiatan','jenis_kegiatan','ketua_peneliti_fakultas_nama','ketua_peneliti_prodi_nama',
+                                ->select('usulans.id','judul_kegiatan','jenis_kegiatan','tujuan','luaran','ketua_peneliti_fakultas_nama','ketua_peneliti_prodi_nama',
                                         'ketua_peneliti_nama as nm_ketua_peneliti','ketua_peneliti_nip','kata_kunci','nm_skim','abstrak','kata_kunci','peta_jalan','biaya_diusulkan','tahun_usulan')
                                 ->where('usulans.id',$id)
                                 ->first();
@@ -148,6 +149,14 @@ class UsulanMenungguController extends Controller
             );
         }
         NilaiFormulir::insert($formulir);
+
+        if ($request->komentar != null || $request->komentar != "") {
+            $komentar = new Komentar1;
+            $komentar->usulan_id = $request->usulan_id;
+            $komentar->reviewer_id = Session::get('nip');
+            $komentar->komentar = $request->komentar;
+            $komentar->save();
+        }
 
         $sudah = Usulan::leftJoin('reviewer1s','reviewer1s.usulan_id','usulans.id')
                                 ->rightJoin('nilai_formulirs','nilai_formulirs.reviewer_id','reviewer1s.reviewer_nip')

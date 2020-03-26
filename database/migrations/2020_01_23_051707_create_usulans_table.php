@@ -31,12 +31,14 @@ class CreateUsulansTable extends Migration
             $table->text('abstrak');
             $table->string('kata_kunci');
             $table->string('peta_jalan')->nullable();
+            $table->string('lembar_pengesahan')->nullable();
             $table->string('file_usulan')->nullable();
             $table->text('tujuan')->nullable();
             $table->text('luaran')->nullable();
             $table->string('biaya_diusulkan');
             $table->string('tahun_usulan');
             $table->enum('status_usulan',['0','1','2','3','4','5','6','7'])->default('0');
+            $table->text('komentar')->nullable();
             $table->timestamps();
         });
     }

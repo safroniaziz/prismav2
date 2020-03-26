@@ -71,6 +71,11 @@ class UsulanController extends Controller
                     $request->file_usulan->move(public_path('/upload/file_usulan'), $model['file_usulan']);
                 }
 
+                if ($request->hasFile('lembar_pengesahan')) {
+                    $model['lembar_pengesahan'] = Session::get('nip').'-'.date('now').$request->skim_id.'-'.$request->tahun_usulan.uniqid().'.'.$request->lembar_pengesahan->getClientOriginalExtension();
+                    $request->lembar_pengesahan->move(public_path('/upload/lembar_pengesahan'), $model['lembar_pengesahan']);
+                }
+
                 $usulan = new Usulan;
                 $usulan->judul_kegiatan = $request->judul_kegiatan;
                 $usulan->skim_id = $request->skim_id;
@@ -89,6 +94,7 @@ class UsulanController extends Controller
                 $usulan->kata_kunci =   implode(',',$request->kata_kunci);
                 $usulan->peta_jalan    =   $model['peta_jalan'];
                 $usulan->file_usulan    =   $model['file_usulan'];
+                $usulan->lembar_pengesahan    =   $model['lembar_pengesahan'];
                 $usulan->tujuan    =   $model['tujuan'];
                 $usulan->luaran    =   $model['luaran'];
                 $usulan->biaya_diusulkan    =   $request->biaya_diusulkan;
@@ -111,7 +117,7 @@ class UsulanController extends Controller
         $sesi = Session::get('akses');
         if(Session::get('login') && Session::get('login',1) && Session::get('akses',1)){
             if($sesi == 1){
-                $usulan = Usulan::select('id','judul_kegiatan','jenis_kegiatan','skim_id','ketua_peneliti_nip as ketua_peneliti_id','abstrak','peta_jalan','file_usulan','biaya_diusulkan','tujuan','luaran','tahun_usulan')
+                $usulan = Usulan::select('id','judul_kegiatan','jenis_kegiatan','skim_id','ketua_peneliti_nip as ketua_peneliti_id','abstrak','peta_jalan','file_usulan','lembar_pengesahan','biaya_diusulkan','tujuan','luaran','tahun_usulan')
                             ->where('id',$id)
                             ->first();
                 return $usulan;
@@ -137,55 +143,221 @@ class UsulanController extends Controller
             $input['peta_jalan'] = Session::get('nip').'-'.date('now').$request->skim_id.'-'.$request->tahun_usulan.uniqid().'.'.$request->peta_jalan->getClientOriginalExtension();
         	$request->peta_jalan->move(public_path('/upload/peta_jalan'), $input['peta_jalan']);
         }
+
+        $input['file_usulan'] = $usulan->file_usulan;
+
+        if ($request->hasFile('file_usulan')) {
+        	if ($usulan->file_usulan != null) {
+        		unlink(public_path('/upload/file_usulan/'.$usulan->file_usulan));
+        	}
+            $input['file_usulan'] = Session::get('nip').'-'.date('now').$request->skim_id.'-'.$request->tahun_usulan.uniqid().'.'.$request->file_usulan->getClientOriginalExtension();
+        	$request->file_usulan->move(public_path('/upload/file_usulan'), $input['file_usulan']);
+        }
+
+        $input['lembar_pengesahan'] = $usulan->lembar_pengesahan;
+
+        if ($request->hasFile('lembar_pengesahan')) {
+        	if ($usulan->lembar_pengesahan != null) {
+        		unlink(public_path('/upload/lembar_pengesahan/'.$usulan->lembar_pengesahan));
+        	}
+            $input['lembar_pengesahan'] = Session::get('nip').'-'.date('now').$request->skim_id.'-'.$request->tahun_usulan.uniqid().'.'.$request->lembar_pengesahan->getClientOriginalExtension();
+        	$request->lembar_pengesahan->move(public_path('/upload/lembar_pengesahan'), $input['lembar_pengesahan']);
+        }
+
         $kata_kunci = Usulan::select('kata_kunci')->where('id',$request->id)->first();
         $model = $request->all();
         if ($request->kata_kunci[0] == null || $request->kata_kunci[0] == "") {
-            $usulan->judul_kegiatan = $request->judul_kegiatan;
-            $usulan->skim_id = $request->skim_id;
-            $usulan->jenis_kegiatan = $request->jenis_kegiatan;
-            $usulan->ketua_peneliti_nip = Session::get('nip');
-            $usulan->ketua_peneliti_nama = Session::get('nm_dosen');
-            $usulan->ketua_peneliti_prodi_id = Session::get('prodi_kode');
-            $usulan->ketua_peneliti_prodi_nama = Session::get('prodi_nama');
-            $usulan->ketua_peneliti_nidn = Session::get('nidn');
-            $usulan->ketua_peneliti_fakultas_id = Session::get('fakultas_kode');
-            $usulan->ketua_peneliti_fakultas_nama = Session::get('fakultas_nama');
-            $usulan->ketua_peneliti_jabatan_fungsional = Session::get('jabatan');
-            $usulan->ketua_peneliti_jk = Session::get('jk');
-            $usulan->ketua_peneliti_universitas = "Universitas Bengkulu";
-            $usulan->abstrak    =   $request->abstrak_edit;
-            $usulan->kata_kunci = $kata_kunci->kata_kunci;
-            $usulan->peta_jalan    =   $input['peta_jalan'];
-            $usulan->file_usulan    =   $input['file_usulan'];
-            $usulan->tujuan    =   $input['tujuan'];
-            $usulan->luaran    =   $input['luaran'];
-            $usulan->biaya_diusulkan    =   $request->biaya_diusulkan;
-            $usulan->tahun_usulan    =   date('Y');
-            $usulan->update();
+            if ($request->abstract == null || $request->abstract == "") {
+                $usulan->judul_kegiatan = $request->judul_kegiatan;
+                $usulan->skim_id = $request->skim_id;
+                $usulan->jenis_kegiatan = $request->jenis_kegiatan;
+                $usulan->ketua_peneliti_nip = Session::get('nip');
+                $usulan->ketua_peneliti_nama = Session::get('nm_dosen');
+                $usulan->ketua_peneliti_prodi_id = Session::get('prodi_kode');
+                $usulan->ketua_peneliti_prodi_nama = Session::get('prodi_nama');
+                $usulan->ketua_peneliti_nidn = Session::get('nidn');
+                $usulan->ketua_peneliti_fakultas_id = Session::get('fakultas_kode');
+                $usulan->ketua_peneliti_fakultas_nama = Session::get('fakultas_nama');
+                $usulan->ketua_peneliti_jabatan_fungsional = Session::get('jabatan');
+                $usulan->ketua_peneliti_jk = Session::get('jk');
+                $usulan->ketua_peneliti_universitas = "Universitas Bengkulu";
+                $usulan->kata_kunci = $kata_kunci->kata_kunci;
+                $usulan->peta_jalan    =   $input['peta_jalan'];
+                $usulan->file_usulan    =   $input['file_usulan'];
+                $usulan->lembar_pengesahan    =   $input['lembar_pengesahan'];
+                $usulan->tujuan    =   $request->tujuan;
+                $usulan->luaran    =   $request->luaran;
+                $usulan->biaya_diusulkan    =   $request->biaya_diusulkan;
+                $usulan->tahun_usulan    =   date('Y');
+                $usulan->update();
+            }
+            elseif ($request->tujuan == null || $request->tujuan == "") {
+                $usulan->judul_kegiatan = $request->judul_kegiatan;
+                $usulan->skim_id = $request->skim_id;
+                $usulan->jenis_kegiatan = $request->jenis_kegiatan;
+                $usulan->ketua_peneliti_nip = Session::get('nip');
+                $usulan->ketua_peneliti_nama = Session::get('nm_dosen');
+                $usulan->ketua_peneliti_prodi_id = Session::get('prodi_kode');
+                $usulan->ketua_peneliti_prodi_nama = Session::get('prodi_nama');
+                $usulan->ketua_peneliti_nidn = Session::get('nidn');
+                $usulan->ketua_peneliti_fakultas_id = Session::get('fakultas_kode');
+                $usulan->ketua_peneliti_fakultas_nama = Session::get('fakultas_nama');
+                $usulan->ketua_peneliti_jabatan_fungsional = Session::get('jabatan');
+                $usulan->ketua_peneliti_jk = Session::get('jk');
+                $usulan->ketua_peneliti_universitas = "Universitas Bengkulu";
+                $usulan->abstrak    =   $request->abstrak;
+                $usulan->kata_kunci = $kata_kunci->kata_kunci;
+                $usulan->peta_jalan    =   $input['peta_jalan'];
+                $usulan->file_usulan    =   $input['file_usulan'];
+                $usulan->lembar_pengesahan    =   $input['lembar_pengesahan'];
+                $usulan->luaran    =   $request->luaran;
+                $usulan->biaya_diusulkan    =   $request->biaya_diusulkan;
+                $usulan->tahun_usulan    =   date('Y');
+                $usulan->update();
+            }
+            elseif ($request->luaran == null || $request->luaran == "") {
+                $usulan->judul_kegiatan = $request->judul_kegiatan;
+                $usulan->skim_id = $request->skim_id;
+                $usulan->jenis_kegiatan = $request->jenis_kegiatan;
+                $usulan->ketua_peneliti_nip = Session::get('nip');
+                $usulan->ketua_peneliti_nama = Session::get('nm_dosen');
+                $usulan->ketua_peneliti_prodi_id = Session::get('prodi_kode');
+                $usulan->ketua_peneliti_prodi_nama = Session::get('prodi_nama');
+                $usulan->ketua_peneliti_nidn = Session::get('nidn');
+                $usulan->ketua_peneliti_fakultas_id = Session::get('fakultas_kode');
+                $usulan->ketua_peneliti_fakultas_nama = Session::get('fakultas_nama');
+                $usulan->ketua_peneliti_jabatan_fungsional = Session::get('jabatan');
+                $usulan->ketua_peneliti_jk = Session::get('jk');
+                $usulan->ketua_peneliti_universitas = "Universitas Bengkulu";
+                $usulan->abstrak    =   $request->abstrak;
+                $usulan->kata_kunci = $kata_kunci->kata_kunci;
+                $usulan->peta_jalan    =   $input['peta_jalan'];
+                $usulan->file_usulan    =   $input['file_usulan'];
+                $usulan->lembar_pengesahan    =   $input['lembar_pengesahan'];
+                $usulan->tujuan    =   $request->tujuan;
+                $usulan->biaya_diusulkan    =   $request->biaya_diusulkan;
+                $usulan->tahun_usulan    =   date('Y');
+                $usulan->update();
+            }
+            else{
+                $usulan->judul_kegiatan = $request->judul_kegiatan;
+                $usulan->skim_id = $request->skim_id;
+                $usulan->jenis_kegiatan = $request->jenis_kegiatan;
+                $usulan->ketua_peneliti_nip = Session::get('nip');
+                $usulan->ketua_peneliti_nama = Session::get('nm_dosen');
+                $usulan->ketua_peneliti_prodi_id = Session::get('prodi_kode');
+                $usulan->ketua_peneliti_prodi_nama = Session::get('prodi_nama');
+                $usulan->ketua_peneliti_nidn = Session::get('nidn');
+                $usulan->ketua_peneliti_fakultas_id = Session::get('fakultas_kode');
+                $usulan->ketua_peneliti_fakultas_nama = Session::get('fakultas_nama');
+                $usulan->ketua_peneliti_jabatan_fungsional = Session::get('jabatan');
+                $usulan->ketua_peneliti_jk = Session::get('jk');
+                $usulan->ketua_peneliti_universitas = "Universitas Bengkulu";
+                $usulan->abstrak    =   $request->abstrak;
+                $usulan->kata_kunci = $kata_kunci->kata_kunci;
+                $usulan->peta_jalan    =   $input['peta_jalan'];
+                $usulan->file_usulan    =   $input['file_usulan'];
+                $usulan->lembar_pengesahan    =   $input['lembar_pengesahan'];
+                $usulan->tujuan    =   $request->tujuan;
+                $usulan->luaran    =   $request->luaran;
+                $usulan->biaya_diusulkan    =   $request->biaya_diusulkan;
+                $usulan->tahun_usulan    =   date('Y');
+                $usulan->update();
+            }
         }
         else{
-            $usulan->judul_kegiatan = $request->judul_kegiatan;
-            $usulan->skim_id = $request->skim_id;
-            $usulan->jenis_kegiatan = $request->jenis_kegiatan;
-            $usulan->ketua_peneliti_nip = Session::get('nip');
-            $usulan->ketua_peneliti_nama = Session::get('nm_dosen');
-            $usulan->ketua_peneliti_prodi_id = Session::get('prodi_kode');
-            $usulan->ketua_peneliti_prodi_nama = Session::get('prodi_nama');
-            $usulan->ketua_peneliti_nidn = Session::get('nidn');
-            $usulan->ketua_peneliti_fakultas_id = Session::get('fakultas_kode');
-            $usulan->ketua_peneliti_fakultas_nama = Session::get('fakultas_nama');
-            $usulan->ketua_peneliti_jabatan_fungsional = Session::get('jabatan');
-            $usulan->ketua_peneliti_jk = Session::get('jk');
-            $usulan->ketua_peneliti_universitas = "Universitas Bengkulu";
-            $usulan->abstrak    =   $request->abstrak_edit;
-            $usulan->kata_kunci =   implode(',',$request->kata_kunci);
-            $usulan->peta_jalan    =   $input['peta_jalan'];
-            $usulan->file_usulan    =   $input['file_usulan'];
-            $usulan->tujuan    =   $input['tujuan'];
-            $usulan->luaran    =   $input['luaran'];
-            $usulan->biaya_diusulkan    =   $request->biaya_diusulkan;
-            $usulan->tahun_usulan    =   date('Y');
-            $usulan->update();
+            if ($request->abstract == null || $request->abstract == "") {
+                $usulan->judul_kegiatan = $request->judul_kegiatan;
+                $usulan->skim_id = $request->skim_id;
+                $usulan->jenis_kegiatan = $request->jenis_kegiatan;
+                $usulan->ketua_peneliti_nip = Session::get('nip');
+                $usulan->ketua_peneliti_nama = Session::get('nm_dosen');
+                $usulan->ketua_peneliti_prodi_id = Session::get('prodi_kode');
+                $usulan->ketua_peneliti_prodi_nama = Session::get('prodi_nama');
+                $usulan->ketua_peneliti_nidn = Session::get('nidn');
+                $usulan->ketua_peneliti_fakultas_id = Session::get('fakultas_kode');
+                $usulan->ketua_peneliti_fakultas_nama = Session::get('fakultas_nama');
+                $usulan->ketua_peneliti_jabatan_fungsional = Session::get('jabatan');
+                $usulan->ketua_peneliti_jk = Session::get('jk');
+                $usulan->ketua_peneliti_universitas = "Universitas Bengkulu";
+                $usulan->kata_kunci =   implode(',',$request->kata_kunci);
+                $usulan->peta_jalan    =   $input['peta_jalan'];
+                $usulan->file_usulan    =   $input['file_usulan'];
+                $usulan->tujuan    =   $request->tujuan;
+                $usulan->luaran    =   $request->luaran;
+                $usulan->biaya_diusulkan    =   $request->biaya_diusulkan;
+                $usulan->tahun_usulan    =   date('Y');
+                $usulan->update();
+            } elseif ($request->tujuan == null || $request->tujuan == "") {
+                $usulan->judul_kegiatan = $request->judul_kegiatan;
+                $usulan->skim_id = $request->skim_id;
+                $usulan->jenis_kegiatan = $request->jenis_kegiatan;
+                $usulan->ketua_peneliti_nip = Session::get('nip');
+                $usulan->ketua_peneliti_nama = Session::get('nm_dosen');
+                $usulan->ketua_peneliti_prodi_id = Session::get('prodi_kode');
+                $usulan->ketua_peneliti_prodi_nama = Session::get('prodi_nama');
+                $usulan->ketua_peneliti_nidn = Session::get('nidn');
+                $usulan->ketua_peneliti_fakultas_id = Session::get('fakultas_kode');
+                $usulan->ketua_peneliti_fakultas_nama = Session::get('fakultas_nama');
+                $usulan->ketua_peneliti_jabatan_fungsional = Session::get('jabatan');
+                $usulan->ketua_peneliti_jk = Session::get('jk');
+                $usulan->ketua_peneliti_universitas = "Universitas Bengkulu";
+                $usulan->abstrak    =   $request->abstrak;
+                $usulan->kata_kunci =   implode(',',$request->kata_kunci);
+                $usulan->peta_jalan    =   $input['peta_jalan'];
+                $usulan->file_usulan    =   $input['file_usulan'];
+                $usulan->luaran    =   $request->luaran;
+                $usulan->biaya_diusulkan    =   $request->biaya_diusulkan;
+                $usulan->tahun_usulan    =   date('Y');
+                $usulan->update();
+            } elseif ($request->luaran == null || $request->luaran == ""){
+                $usulan->judul_kegiatan = $request->judul_kegiatan;
+                $usulan->skim_id = $request->skim_id;
+                $usulan->jenis_kegiatan = $request->jenis_kegiatan;
+                $usulan->ketua_peneliti_nip = Session::get('nip');
+                $usulan->ketua_peneliti_nama = Session::get('nm_dosen');
+                $usulan->ketua_peneliti_prodi_id = Session::get('prodi_kode');
+                $usulan->ketua_peneliti_prodi_nama = Session::get('prodi_nama');
+                $usulan->ketua_peneliti_nidn = Session::get('nidn');
+                $usulan->ketua_peneliti_fakultas_id = Session::get('fakultas_kode');
+                $usulan->ketua_peneliti_fakultas_nama = Session::get('fakultas_nama');
+                $usulan->ketua_peneliti_jabatan_fungsional = Session::get('jabatan');
+                $usulan->ketua_peneliti_jk = Session::get('jk');
+                $usulan->ketua_peneliti_universitas = "Universitas Bengkulu";
+                $usulan->abstrak    =   $request->abstrak;
+                $usulan->kata_kunci =   implode(',',$request->kata_kunci);
+                $usulan->peta_jalan    =   $input['peta_jalan'];
+                $usulan->file_usulan    =   $input['file_usulan'];
+                $usulan->tujuan    =   $request->tujuan;
+                $usulan->biaya_diusulkan    =   $request->biaya_diusulkan;
+                $usulan->tahun_usulan    =   date('Y');
+                $usulan->update();
+            }
+            else{
+                $usulan->judul_kegiatan = $request->judul_kegiatan;
+                $usulan->skim_id = $request->skim_id;
+                $usulan->jenis_kegiatan = $request->jenis_kegiatan;
+                $usulan->ketua_peneliti_nip = Session::get('nip');
+                $usulan->ketua_peneliti_nama = Session::get('nm_dosen');
+                $usulan->ketua_peneliti_prodi_id = Session::get('prodi_kode');
+                $usulan->ketua_peneliti_prodi_nama = Session::get('prodi_nama');
+                $usulan->ketua_peneliti_nidn = Session::get('nidn');
+                $usulan->ketua_peneliti_fakultas_id = Session::get('fakultas_kode');
+                $usulan->ketua_peneliti_fakultas_nama = Session::get('fakultas_nama');
+                $usulan->ketua_peneliti_jabatan_fungsional = Session::get('jabatan');
+                $usulan->ketua_peneliti_jk = Session::get('jk');
+                $usulan->ketua_peneliti_universitas = "Universitas Bengkulu";
+                $usulan->abstrak    =   $request->abstrak;
+                $usulan->kata_kunci =   implode(',',$request->kata_kunci);
+                $usulan->peta_jalan    =   $input['peta_jalan'];
+                $usulan->file_usulan    =   $input['file_usulan'];
+                $usulan->tujuan    =   $request->tujuan;
+                $usulan->luaran    =   $request->luaran;
+                $usulan->biaya_diusulkan    =   $request->biaya_diusulkan;
+                $usulan->tahun_usulan    =   date('Y');
+                $usulan->update();
+            }
+
         }
 
 
@@ -317,7 +489,7 @@ class UsulanController extends Controller
         $anggota = AnggaranHonorOutput::find($request->id_anggaran);
         $anggota->delete();
 
-        return redirect()->route('pengusul.usulan.detail_anggaran',[$request->id_usulan])->with(['success' =>  'Anggaran Honor Output kegiatan berhasil dihapus !']);
+        return redirect()->route('pengusul.usulan.detail_anggaran',[$request->id_usulan])->with(['success' =>  'Anggaran Honorarium berhasil dihapus !']);
     }
 
     public function hapusHabis(Request $request){
@@ -331,7 +503,7 @@ class UsulanController extends Controller
         $anggota = AnggaranPeralatanPenunjang::find($request->id_anggaran_penunjang);
         $anggota->delete();
 
-        return redirect()->route('pengusul.usulan.detail_anggaran',[$request->id_usulan])->with(['success' =>  'Anggaran Peralatan Penunjang berhasil dihapus !']);
+        return redirect()->route('pengusul.usulan.detail_anggaran',[$request->id_usulan])->with(['success' =>  'Anggaran Perjalanan berhasil dihapus !']);
     }
 
     public function hapusLainnya(Request $request){

@@ -12,6 +12,7 @@ use App\AnggotaUsulan;
 use App\Reviewer2;
 use App\Formulir;
 use App\NilaiFormulir2;
+use App\Komentar2;
 
 class LaporanKemajuanController extends Controller
 {
@@ -117,6 +118,14 @@ class LaporanKemajuanController extends Controller
             );
         }
         NilaiFormulir2::insert($formulir);
+
+        if ($request->komentar != null || $request->komentar != "") {
+            $komentar = new Komentar2;
+            $komentar->usulan_id = $request->usulan_id;
+            $komentar->reviewer_id = Session::get('nip');
+            $komentar->komentar = $request->komentar;
+            $komentar->save();
+        }
 
         $sudah = Usulan::leftJoin('reviewer2s','reviewer2s.usulan_id','usulans.id')
                                 ->rightJoin('nilai_formulir2s','nilai_formulir2s.reviewer_id','reviewer2s.reviewer_nip')

@@ -15,26 +15,43 @@ class SkimController extends Controller
     }
 
     public function index(){
-        $skims = Skim::select('id','nm_skim','tahun')->get();
+        $skims = Skim::select('id','nm_skim','nm_unit','tahun')->get();
         return view('operator/manajemen_skim.index',compact('skims'));
     }
 
-    public function generate(){
-        Skim::truncate();
-        $client = new Client();
-        $skims = json_decode($client->get('https://prisma.unib.ac.id/Api/skim')->getBody()->getContents(),true);
-        for ($i=0; $i < count($skims) ; $i++) {
-            $skim = new Skim;
-            if ($skims[$i]['tahun'] != "0000") {
-                $skim->nm_skim = $skims[$i]['skim_ppm'];
-                $skim->tahun = $skims[$i]['tahun'];
-            }
-            else{
-                $skim->nm_skim = $skims[$i]['skim_ppm'];
-            }
-            $skim->save();
-        }
+    // public function generate(){
+    //     Skim::truncate();
+    //     $client = new Client();
+    //     $skims = json_decode($client->get('https://prisma.unib.ac.id/Api/skim')->getBody()->getContents(),true);
+    //     for ($i=0; $i < count($skims) ; $i++) {
+    //         $skim = new Skim;
+    //         if ($skims[$i]['tahun'] != "0000") {
+    //             $skim->nm_skim = $skims[$i]['skim_ppm'];
+    //             $skim->tahun = $skims[$i]['tahun'];
+    //         }
+    //         else{
+    //             $skim->nm_skim = $skims[$i]['skim_ppm'];
+    //         }
+    //         $skim->save();
+    //     }
 
-        return redirect()->route('operator.skim')->with(['success' =>  'Skim berhasil diupdate !']);
+    //     return redirect()->route('operator.skim')->with(['success' =>  'Skim berhasil diupdate !']);
+    // }
+
+    public function post(Request $request){
+        $skim = new Skim;
+        $skim->nm_skim = $request->nm_skim;
+        $skim->nm_unit = $request->nm_unit;
+        $skim->tahun = $request->tahun;
+        $skim->save();
+
+        return redirect()->route('operator.skim')->with(['success'  =>  'Skim Baru Berhasil Ditambahkan !!']);
+    }
+
+    public function delete(Request $request){
+        $skim = SKim::find($request->id);
+        $skim->delete();
+
+        return redirect()->route('operator.skim')->with(['success'  =>  'Skim Baru Berhasil Dihapus !!']);
     }
 }

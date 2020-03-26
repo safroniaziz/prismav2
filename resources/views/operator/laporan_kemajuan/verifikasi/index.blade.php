@@ -84,6 +84,7 @@
                                     <th>Judul Kegiatan</th>
                                     <th style="text-align:center;">Total Skor</th>
                                     <th style="text-align:center;">Detail Skor</th>
+                                    <th style="text-align:center;">Komentar Reviewer</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -108,11 +109,16 @@
                                             <span style="font-size:10px !important;" for="" class="badge badge-danger">{{ $usulan->ketua_peneliti_nama }}</span>
                                             <span style="font-size:10px !important;" for="" class="badge badge-secondary">{{ $usulan->tahun_usulan }}</span>
                                             <hr style="margin-bottom:5px !important; margin-top:5px !important;">
+                                            <a href="{{ asset('upload/laporan_perbaikan/'.$usulan->file_perbaikan) }}" download="{{ $usulan->file_perbaikan }}"><i class="fa fa-download"></i>&nbsp; download file laporan perbaikan</a>
+                                            <br>
                                             <a href="{{ asset('upload/laporan_kemajuan/'.$usulan->file_kemajuan) }}" download="{{ $usulan->file_kemajuan }}"><i class="fa fa-download"></i>&nbsp; download file laporan kemajuan</a>
 
                                         <td style="padding:15px 27px; text-align:center;"> {{ number_format($usulan->totalskor, 2) }} </td>
                                         <td style="padding:15px 30px; text-align:center;">
                                             <a onclick="detail({{ $usulan->id }})" class="btn btn-primary btn-sm" style="color:white; cursor:pointer;"><i class="fa fa-info-circle"></i></a>
+                                        </td>
+                                        <td style="text-align:center;">
+                                            <a onclick="komentar( {{ $usulan->id }} )"  class="btn btn-primary btn-sm" style="color:white; cursor:pointer;"> <i class="fa fa-comments"></i></a>
                                         </td>
                                     </tr>
                                 @endforeach
@@ -225,6 +231,29 @@
                 </div>
             </div>
         </div>
+        <!-- Modal Detail -->
+        <div class="modal fade" id="modalkomentar" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Informasi Detail Komentar Reviewer</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                </div>
+                <div class="modal-body">
+                    <p style="font-weight:bold;">Komentar Reviewer:</p>
+                    <hr>
+                    <div id="detail-komentar" style="text-align:justify; ">
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal" style="font-size:12px;"><i class="fa fa-close"></i>&nbsp;Keluar</button>
+                </div>
+            </div>
+            </div>
+        </div>
     </section>
 @endsection
 @push('scripts')
@@ -290,6 +319,39 @@
                 $('#modaldetailjudul').modal('show');
                     $('#id').val(data.id);
                     $('#detail-text').text(data.judul_kegiatan);
+                },
+                error:function(){
+                    alert("Nothing Data");
+                }
+            });
+        }
+
+        function komentar(id){
+            $.ajax({
+                url: "{{ url('operator/usulan_dosen/laporan_kemajuan/menunggu_verifikasi') }}"+'/'+ id + "/komentar",
+                type: "GET",
+                dataType: "JSON",
+                success: function(data){
+                $('#modalkomentar').modal('show');
+                var no=1;
+                var res='<table class="table table-bordered" id="table">'
+                    res += '<tr>'+
+                        '<td>'+'No'+'</td>'+
+                        '<td>'+'Nama Reviewer'+'</td>'+
+                        '<td>'+'Nip Reviewer'+'</td>'+
+                        '<td>'+'Komentar'+'</td>'+
+                    '</tr>';
+                    $.each (data, function (key, value) {
+                            res +='<tr>'+
+                                '<td>'+ no++ +'</td>'+
+                                '<td>'+value.reviewer_nama+'</td>'+
+                                '<td>'+value.reviewer_nip+'</td>'+
+                                '<td>'+value.komentar+'</td>'+
+                            '</tr>';
+                        });
+                res +='</table>';
+
+                    $('#detail-komentar').html(res);
                 },
                 error:function(){
                     alert("Nothing Data");

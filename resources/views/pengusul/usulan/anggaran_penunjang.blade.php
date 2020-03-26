@@ -40,7 +40,7 @@
             <table class="table table-bordered" style="width:100%" id="table">
                 <thead>
                     <tr>
-                        <th colspan="7">Rancangan Anggaran Peralatan Penunjang</th>
+                        <th colspan="7">Rancangan Anggaran Perjalanan</th>
                     </tr>
                     <tr>
                         <th>No</th>
@@ -56,7 +56,7 @@
                     @if (count($penunjangs) >0)
                         @if ($penunjangs[0]->id == null)
                             <tr>
-                                <td style="color:red; text-align:center;" colspan="6"><a><i>tabel peralatan penunjang masih kosong</i></a></td>
+                                <td style="color:red; text-align:center;" colspan="6"><a><i>tabel Perjalanan masih kosong</i></a></td>
                             </tr>
                             @else
                             @php
@@ -91,7 +91,7 @@
                         @endif
                         @else
                         <tr>
-                            <td style="color:red; text-align:center;" colspan="6"><a><i>tabel peralatan penunjang masih kosong</i></a></td>
+                            <td style="color:red; text-align:center;" colspan="6"><a><i>tabel Perjalanan masih kosong</i></a></td>
                         </tr>
                     @endif
                 </tbody>
@@ -101,7 +101,7 @@
                 <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header modal-header-danger">
-                        <p style="font-size:15px;" class="modal-title" id="exampleModalLabel"><i class="fa fa-user"></i>&nbsp;Form Konfirmasi Hapus Data Anggaran Peralatan Penunjang</p>
+                        <p style="font-size:15px;" class="modal-title" id="exampleModalLabel"><i class="fa fa-user"></i>&nbsp;Form Konfirmasi Hapus Data Anggaran Perjalanan</p>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>

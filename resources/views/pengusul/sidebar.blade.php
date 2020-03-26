@@ -24,6 +24,9 @@
     <a href=" {{ route('pengusul.laporan_akhir') }} "><i class="fa fa-upload"></i>Upload Laporan Akhir</a>
 </li>
 
+<li>
+    <a href=" {{ route('pengusul.anggota') }} "><i class="fa fa-users"></i>Sebagai Anggota Kegiatan</a>
+</li>
 
 <li>
     <a href=" {{ route('logout_user') }} "><i class="fa fa-power-off text-danger"></i>Logout</a>

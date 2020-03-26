@@ -28,7 +28,7 @@ class LaporanKemajuanController extends Controller
         $usulans = Usulan::leftJoin('anggota_usulans','anggota_usulans.usulan_id','usulans.id')
                                     ->leftJoin('reviewer2s','reviewer2s.usulan_id','usulans.id')
                                     ->join('laporan_kemajuans','laporan_kemajuans.usulan_id','usulans.id')
-                                    ->select('usulans.id','judul_kegiatan','ketua_peneliti_nama','file_kemajuan','jenis_kegiatan','tahun_usulan',
+                                    ->select('usulans.id','judul_kegiatan','ketua_peneliti_nama','file_kemajuan','file_perbaikan','status_usulan','jenis_kegiatan','tahun_usulan',
                                     DB::raw('group_concat(distinct concat(anggota_usulans.anggota_nama) SEPARATOR "<br>") as "nm_anggota" '),
                                     DB::raw('group_concat(distinct concat(reviewer2s.reviewer_nama) SEPARATOR "&nbsp;|&nbsp;") as "nm_reviewer" ')
                                     )
@@ -84,6 +84,7 @@ class LaporanKemajuanController extends Controller
     public function detailReviewer($id){
         $reviewers = Reviewer2::join('usulans','usulans.id','reviewer2s.usulan_id')
                                     ->select('reviewer2s.id','reviewer_nip','reviewer_nama','reviewer_prodi_nama','reviewer_fakultas_nama','judul_kegiatan')
+                                    ->where('usulans.id',$id)
                                     ->get();
         $id_usulan = $id;
         $jumlah = count($reviewers);

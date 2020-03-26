@@ -73,7 +73,7 @@
                                 <input type="text" name="nm_anggota" id="nm_anggota" class="form-control" required >
                             </div>
                             <div class="form-group col-md-6">
-                                <label for="exampleInputEmail1">Nip Anggota</label>
+                                <label for="exampleInputEmail1">Nip/Nik Anggota</label>
                                 <input type="text" name="nip_anggota" id="nip_anggota" class="form-control" required readonly>
                             </div>
                             <div class="form-group col-md-6">

@@ -20,7 +20,7 @@ class RiwayatReviewController extends Controller
                             ->leftJoin('reviewer1s','reviewer1s.usulan_id','usulans.id')
                             ->leftJoin('nilai_formulirs','nilai_formulirs.reviewer_id','reviewer1s.reviewer_nip')
                             ->select('usulans.id','judul_kegiatan','jenis_kegiatan',
-                                    'abstrak','peta_jalan','file_usulan','biaya_diusulkan','tahun_usulan','status_usulan','ketua_peneliti_nama as nm_ketua_peneliti',
+                                    'abstrak','peta_jalan','file_usulan','lembar_pengesahan','biaya_diusulkan','tahun_usulan','status_usulan','ketua_peneliti_nama as nm_ketua_peneliti',
                                     DB::raw('group_concat(distinct concat(anggota_usulans.anggota_nama) SEPARATOR "<br>") as "nm_anggota" ')
                                     )
                             ->where('reviewer1s.reviewer_nip',Session::get('nip'))
@@ -45,7 +45,7 @@ class RiwayatReviewController extends Controller
             if($sesi == 2){
                 $usulan = Usulan::leftJoin('anggota_usulans','anggota_usulans.usulan_id','usulans.id')
                                 ->leftJoin('skims','skims.id','usulans.skim_id')
-                                ->select('usulans.id','judul_kegiatan','jenis_kegiatan','ketua_peneliti_fakultas_nama as fakultas','ketua_peneliti_prodi_nama as prodi',
+                                ->select('usulans.id','judul_kegiatan','jenis_kegiatan','tujuan','abstrak','luaran','ketua_peneliti_fakultas_nama as fakultas','ketua_peneliti_prodi_nama as prodi',
                                         'ketua_peneliti_nama as nm_ketua_peneliti','ketua_peneliti_nip as nip','kata_kunci','nm_skim','abstrak','kata_kunci')
                                 ->where('usulans.id',$id)
                                 ->first();

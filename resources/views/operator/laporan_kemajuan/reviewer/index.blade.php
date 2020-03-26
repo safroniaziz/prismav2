@@ -73,10 +73,10 @@
                                 $no=1;
                             @endphp
                             @foreach ($usulans as $usulan)
-                                @php
-                                    $jumlah = count(explode('&nbsp;|&nbsp;',$usulan->nm_reviewer));
-                                @endphp
-                                @if ($jumlah < 2)
+
+                                @if ($usulan->status_usulan == "5")
+
+                                    @else
                                     <tr>
                                         <td> {{ $no++ }} </td>
                                         <td style="width:40% !important;">
@@ -88,8 +88,11 @@
                                             <span style="font-size:10px !important;" for="" class="badge badge-danger">{{ $usulan->ketua_peneliti_nama }}</span>
                                             <span style="font-size:10px !important;" for="" class="badge badge-secondary">{{ $usulan->tahun_usulan }}</span>
                                             <hr style="margin-bottom:5px !important; margin-top:5px !important;">
+                                            <a href="{{ asset('upload/laporan_perbaikan/'.$usulan->file_perbaikan) }}" download="{{ $usulan->file_perbaikan }}"><i class="fa fa-download"></i>&nbsp; download file laporan perbaikan</a>
+                                            <br>
                                             <a href="{{ asset('upload/laporan_kemajuan/'.$usulan->file_kemajuan) }}" download="{{ $usulan->file_kemajuan }}"><i class="fa fa-download"></i>&nbsp; download file laporan kemajuan</a>
-                                       </td>
+
+                                        </td>
                                         <td style="font-weight:bold; text-align:center;">
                                                 {!! $usulan->nm_anggota !!}
                                         </td>
@@ -105,6 +108,7 @@
                                         </td>
                                     </tr>
                                 @endif
+
                             @endforeach
                         </tbody>
                     </table>

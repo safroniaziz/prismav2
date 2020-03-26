@@ -175,7 +175,7 @@
                                         <div class="modal-dialog modal-lg" role="document">
                                         <div class="modal-content">
                                             <div class="modal-header">
-                                                <p style="font-size:15px;" class="modal-title" id="exampleModalLabel"><i class="fa fa-user"></i>&nbsp;Form Ubah Data Usulan</p>
+                                                <p style="font-size:15px;" class="modal-title" id="exampleModalLabel"><i class="fa fa-user"></i>&nbsp;Form Ubah Data Usulan (Ketua Kegiatan : <a> {{ Session::get('nm_dosen') }} </a> )</p>
                                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                     <span aria-hidden="true">&times;</span>
                                                 </button>
@@ -224,24 +224,28 @@
                                                                     <textarea name="luaran" id="luaran" class="form-control" cols="30" rows="3" required></textarea>
                                                                 </div>
                                                                 <div class="form-group col-md-6">
-                                                                    <label for="exampleInputEmail1">Ketua Peneliti : </label>
-                                                                    <input type="text" name="ketua_peneliti" id="ketua_peneliti" value="{{ Session::get('nm_dosen') }}" disabled class="form-control">
-                                                                </div>
-                                                                <div class="form-group col-md-6">
                                                                     <label for="exampleInputEmail1">Biaya Yang Diusulkan :</label>
                                                                     <input type="number" name="biaya_diusulkan" id="biaya_diusulkan" class="form-control" required>
                                                                 </div>
                                                                 <div class="form-group col-md-6">
                                                                     <label for="exampleInputEmail1">File Peta Jalan : <a style="color:red; font-style:italic; font-size:12px;">Harap masukan hanya file pdf/jpg/png/jpeg</a></label>
-                                                                    <input type="file" name="peta_jalan" id="peta_jalan" accept="application/pdf, image/jpg, image/jpeg, image/png" class="form-control" style="padding-bottom:30px;" required>
+                                                                    <input type="file" name="peta_jalan" id="peta_jalan" accept="application/pdf, image/jpg, image/jpeg, image/png" class="form-control" style="padding-bottom:30px;">
                                                                     <div style="color:red;" style="margin-bottom:10px;">
                                                                         File Lama :<a id="peta_name"></a>
                                                                     </div>
                                                                 </div>
 
                                                                 <div class="form-group col-md-6">
-                                                                    <label for="exampleInputEmail1">File Usulan : <a style="color:red; font-style:italic; font-size:12px;">Harap masukan file microsoft word</a></label>
-                                                                    <input type="file" name="file_usulan" id="file_usulan" accept=".doc, .docx" class="form-control" style="padding-bottom:30px;" required>
+                                                                    <label for="exampleInputEmail1">File Lembar Pengesahan : <a style="color:red; font-style:italic; font-size:12px;">File pdf dan wajib  ttd dekan</a></label>
+                                                                    <input type="file" name="lembar_pengesahan" id="lembar_pengesahan" accept="application/pdf" class="form-control" style="padding-bottom:30px;">
+                                                                    <div style="color:red;" style="margin-bottom:10px;">
+                                                                        File Lama :<a id="lembar_name"></a>
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="form-group col-md-6">
+                                                                    <label for="exampleInputEmail1">File Usulan : <a style="color:red; font-style:italic; font-size:12px;">Harap masukan file pdf</a></label>
+                                                                    <input type="file" name="file_usulan" id="file_usulan" accept="application/pdf" class="form-control" style="padding-bottom:30px;">
                                                                     <div style="color:red;" style="margin-bottom:10px;">
                                                                         File Lama :<a id="usulan_name"></a>
                                                                     </div>
@@ -262,7 +266,7 @@
                                 <div class="modal-dialog modal-lg" role="document">
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                            <p style="font-size:15px;" class="modal-title" id="exampleModalLabel"><i class="fa fa-user"></i>&nbsp;Form Tambah Usulan Baru</p>
+                                            <p style="font-size:15px; font-weight:bold;" class="modal-title" id="exampleModalLabel"><i class="fa fa-user"></i>&nbsp;Form Tambah Usulan Baru (Ketua Kegiatan : <a> {{ Session::get('nm_dosen') }} </a> )</p>
                                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                 <span aria-hidden="true">&times;</span>
                                             </button>
@@ -310,10 +314,6 @@
                                                             <textarea name="luaran" class="form-control" cols="30" rows="3" required></textarea>
                                                         </div>
                                                         <div class="form-group col-md-6">
-                                                            <label for="exampleInputEmail1">Ketua Peneliti : </label>
-                                                            <input type="text" name="ketua_peneliti" value="{{ Session::get('nm_dosen') }}" disabled class="form-control">
-                                                        </div>
-                                                        <div class="form-group col-md-6">
                                                             <label for="exampleInputEmail1">Biaya Yang Diusulkan :</label>
                                                             <input type="number" name="biaya_diusulkan" class="form-control" required>
                                                         </div>
@@ -323,8 +323,13 @@
                                                         </div>
 
                                                         <div class="form-group col-md-6">
-                                                            <label for="exampleInputEmail1">File Usulan : <a style="color:red; font-style:italic; font-size:12px;">Harap masukan file microsoft word</a></label>
-                                                            <input type="file" name="file_usulan" id="file_usulan1" accept=".doc, .docx" class="form-control" style="padding-bottom:30px;" required>
+                                                            <label for="exampleInputEmail1">File Lembar Pengesahan : <a style="color:red; font-style:italic; font-size:12px;">File pdf dan wajib  ttd dekan</a></label>
+                                                            <input type="file" name="lembar_pengesahan" id="lembar_pengesahan1" accept="application/pdf" class="form-control" style="padding-bottom:30px;" required>
+                                                        </div>
+
+                                                        <div class="form-group col-md-6">
+                                                            <label for="exampleInputEmail1">File Usulan : <a style="color:red; font-style:italic; font-size:12px;">Harap masukan file pdf</a></label>
+                                                            <input type="file" name="file_usulan" id="file_usulan1" accept="application/pdf" class="form-control" style="padding-bottom:30px;" required>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -361,82 +366,6 @@
                                 </form>
                             </div>
                           </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- Modal Anggota -->
-                <div class="modal fade" id="modalanggota" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div class="modal-dialog modal-lg" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <p style="font-size:15px;" class="modal-title" id="exampleModalLabel"><i class="fa fa-user"></i>&nbsp;Form Tambah Anggota Kegiatan</p>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <form action=" {{ route('pengusul.usulan.anggota_post') }} " method="POST">
-                                {{ csrf_field() }} {{ method_field('POST') }}
-                                    <div class="modal-body">
-                                        <input type="hidden" name="usulan_id" id="usulan_id">
-                                        <div class="row">
-                                            <div class="form-group col-md-12">
-                                                <label for="exampleInputEmail1">Pilih Anggota Kelompok</label>
-                                                <select name="anggota_id" id="anggota_id" class="form-control" required style="font-size:13px; width:100%;">
-                                                    <option value="" disabled selected>-- pilih anggota kelompok --</option>
-                                                    {{-- @foreach ($dosens as $dosen)
-                                                        @for ($i = 0; $i <sizeof($dosen) ; $i++)
-                                                            @if ($dosen[$i]['pegawai']['pegIsAktif'] == 1)
-                                                                @if ($dosen[$i]['pegawai']['pegNama'] != "0" || $dosen[$i]['pegawai']['pegNama'] != "000000000")
-                                                                    @if ($dosen[$i]['pegawai']['pegGelarDepan'] != "null" && $dosen[$i]['pegawai']['pegGelarBelakang'] != "null")
-                                                                        <option value=" {{ $dosen[$i]['dsnPegNip'] }} "> {{ $dosen[$i]['pegawai']['pegGelarDepan'] }} {{ $dosen[$i]['pegawai']['pegNama'] }} {{ $dosen[$i]['pegawai']['pegGelarBelakang'] }} </option>
-                                                                            @elseif($dosen[$i]['pegawai']['pegGelarDepan'] != "null" && $dosen[$i]['pegawai']['pegGelarBelakang'] == "null")
-                                                                            <option value=" {{ $dosen[$i]['dsnPegNip'] }} "> {{ $dosen[$i]['pegawai']['pegGelarDepan'] }} {{ $dosen[$i]['pegawai']['pegNama'] }} </option>
-                                                                                @elseif($dosen[$i]['pegawai']['pegGelarDepan'] == "null" && $dosen[$i]['pegawai']['pegGelarBelakang'] != "null")
-                                                                                <option value=" {{ $dosen[$i]['dsnPegNip'] }} "> {{ $dosen[$i]['pegawai']['pegNama'] }} {{ $dosen[$i]['pegawai']['pegGelarBelakang'] }}</option>
-                                                                                    @else
-                                                                                    <option value=" {{ $dosen[$i]['dsnPegNip'] }} "> {{ $dosen[$i]['pegawai']['pegNama'] }} </option>
-                                                                    @endif
-                                                                @endif
-                                                            @endif
-                                                        @endfor
-                                                    @endforeach --}}
-                                                </select>
-                                            </div>
-
-                                            <div class="col-md-12">
-                                                 <button type="submit" style="font-size:13px;" class="btn btn-primary" disabled id="btn-submit-anggota"><i class="fa fa-save"></i>&nbsp;Simpan</button>
-                                                 <button type="reset" style="font-size:13px;" class="btn btn-danger"><i class="fa fa-refresh"></i>&nbsp; Reset</button>
-                                            </div>
-                                        </div>
-
-                                        <div class="row">
-                                            <div class="col-md-12 table-responsive">
-                                                <div class="alert alert-success alert-block" id="berhasil">
-                                                    <button type="button" class="close" data-dismiss="alert">×</button>
-                                                    <strong><i class="fa fa-info-circle"></i>&nbsp;Perhatian: </strong> Berikut adalah kelompok penelitian dengan judul : <a style="font-weight:bold; font-size:12px; text-decoration:underline;" id="judul">, silahkan tambahkan anggota baru jika diperlukan</a>
-                                                </div>
-                                                <table class="table table-bordered table-striped" id="anggota" style="width:100%;">
-                                                    <thead>
-                                                        <tr>
-                                                            <th>No</th>
-                                                            <th>Nama Aggota</th>
-                                                            <th>Nip</th>
-                                                            <th>Program Studi</th>
-                                                            <th>Fakultas</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody id="tbody">
-
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-danger" style="font-size:13px;" data-dismiss="modal"><i class="fa fa-arrow-left"></i>&nbsp;Kembali</button>
-                                    </div>
-                                </div>
-                            </form>
                         </div>
                     </div>
                 </div>
@@ -519,12 +448,6 @@
             });
         } );
 
-        $(document).ready(function() {
-            $('#anggota').DataTable({
-                responsive : true,
-            });
-        } );
-
         function ubahUsulan(id){
             $.ajax({
                 url: "{{ url('pengusul/manajemen_usulan') }}"+'/'+ id + "/edit",
@@ -542,6 +465,7 @@
                     CKEDITOR.instances['abstrak_edit'].setData(data.abstrak);
                     CKEDITOR.instances['tujuan_edit'].setData(data.tujuan);
                     $('#peta_name').text(data.peta_jalan);
+                    $('#lembar_name').text(data.lembar_pengesahan);
                     $('#usulan_name').text(data.file_usulan);
                 },
                 error:function(){

@@ -83,7 +83,7 @@
                                 <input type="text" name="nm_reviewer" id="nm_reviewer" class="form-control" required >
                             </div>
                             <div class="form-group col-md-6">
-                                <label for="exampleInputEmail1">Nip Reviewer</label>
+                                <label for="exampleInputEmail1">Nip/Nik Reviewer</label>
                                 <input type="text" name="nip_reviewer" id="nip_reviewer" class="form-control" required readonly>
                             </div>
                             <div class="form-group col-md-6">

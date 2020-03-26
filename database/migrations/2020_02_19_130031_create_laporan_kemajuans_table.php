@@ -17,6 +17,8 @@ class CreateLaporanKemajuansTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('usulan_id');
             $table->string('file_kemajuan');
+            $table->string('file_perbaikan')->nullable();
+            $table->text('komentar')->nullable();
             $table->timestamps();
         });
     }
