@@ -22,8 +22,10 @@ class HasilUsulanController extends Controller
                                             'ketua_peneliti_nama as nm_ketua_peneliti',
                                             DB::raw('group_concat(distinct concat(anggota_usulans.anggota_nama) SEPARATOR "<br>") as "nm_anggota" ')
                                             )
-                                    ->where('usulans.status_usulan','3')
-                                    ->orWhere('usulans.status_usulan','6')
+                                    ->where(function($query) {
+                                        $query->where('status_usulan','3')
+                                        ->orWhere('status_usulan','6');
+                                    })
                                     ->groupBy('usulans.id')
                                     ->get();
         return view('operator/usulan/disetujui.index',compact('usulans'));

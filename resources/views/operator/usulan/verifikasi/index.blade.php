@@ -77,8 +77,10 @@
                                     <th>No</th>
                                     <th>Judul Kegiatan</th>
                                     <th>Total Skor</th>
-                                    <th>Detail Skor</th>
+                                    <th>Detail Per Indikator</th>
+                                    <th>Detail Per Reviewer</th>
                                     <th style="text-align:center;">Komentar Reviewer</th>
+                                    <th>Reviewer 3</th>
 
                                 </tr>
                             </thead>
@@ -112,8 +114,14 @@
                                         <td style="padding:15px 30px;">
                                             <a onclick="detail({{ $usulan->id }})" class="btn btn-primary btn-sm" style="color:white; cursor:pointer;"><i class="fa fa-info-circle"></i></a>
                                         </td>
+                                        <td style="padding:15px 30px;">
+                                            <a onclick="detailReviewer({{ $usulan->id }})" class="btn btn-primary btn-sm" style="color:white; cursor:pointer;"><i class="fa fa-info-circle"></i></a>
+                                        </td>
                                         <td style="text-align:center;">
                                             <a onclick="komentar( {{ $usulan->id }} )"  class="btn btn-primary btn-sm" style="color:white; cursor:pointer;"> <i class="fa fa-comments"></i></a>
+                                        </td>
+                                        <td style="text-align:center;">
+                                            <a href="{{ route('operator.verifikasi.reviewer3',[$usulan->id, $usulan->skim_id]) }}"  class="btn btn-primary btn-sm" style="color:white; cursor:pointer;"> <i class="fa fa-plus"></i></a>
                                         </td>
                                     </tr>
                                 @endforeach
@@ -147,6 +155,47 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody id="detail-skor">
+
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-danger" data-dismiss="modal" style="font-size:13px;"><i class="fa fa-arrow-left"></i>&nbsp;Kembali</button>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                         <!-- Modal Detail-->
+                         <div class="modal fade" id="modaldetailreviewer" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-lg" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                <p style="font-size:15px; color:black;" class="modal-title" id="exampleModalLabel"><i class="fa fa-info-circle"></i>&nbsp;Detail Skor Usulan Penelitian</p>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="alert alert-success alert-block" id="berhasil">
+                                                <button type="button" class="close" data-dismiss="alert">×</button>
+                                                <strong><i class="fa fa-info-circle"></i>&nbsp;Data Detail Skor Per Kriteria Penilaian & Reviewer</strong>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <table class="table table-bordered table-striped" style="width:100%">
+                                                <thead>
+                                                    <tr>
+                                                        <td>No</td>
+                                                        <td>Reviewer</td>
+                                                        <td>Kriteria Penilaian</td>
+                                                        <td>Skor</td>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="detail-reviewer">
 
                                                 </tbody>
                                             </table>
@@ -278,6 +327,32 @@
                         '</tr>';
                     });
                     $('#detail-skor').html(res);
+                },
+                error:function(){
+                    alert("Nothing Data");
+                }
+            });
+        }
+
+        function detailReviewer(id){
+            $.ajax({
+                url: "{{ url('operator/usulan_dosen/menunggu_verifikasi') }}"+'/'+ id + "/detail_reviewer",
+                type: "GET",
+                dataType: "JSON",
+                success: function(data){
+                    $('#modaldetailreviewer').modal('show');
+                    var no=1;
+                    var res='';
+                    $.each (data, function (key, value) {
+                        res +=
+                        '<tr>'+
+                            '<td>'+no+++'</td>'+
+                            '<td>'+value.reviewer_nama+'</td>'+
+                            '<td>'+value.kriteria_penilaian+'</td>'+
+                            '<td>'+value.skor.toFixed(2)+'</td>'+
+                        '</tr>';
+                    });
+                    $('#detail-reviewer').html(res);
                 },
                 error:function(){
                     alert("Nothing Data");

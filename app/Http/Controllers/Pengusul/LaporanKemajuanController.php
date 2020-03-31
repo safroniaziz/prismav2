@@ -17,10 +17,12 @@ class LaporanKemajuanController extends Controller
             if($sesi == 1){
                 $usulans = Usulan::leftJoin('anggota_usulans','anggota_usulans.usulan_id','usulans.id')
                                     ->leftJoin('laporan_kemajuans','laporan_kemajuans.usulan_id','usulans.id')
-                                    ->select('usulans.id','judul_kegiatan','file_kemajuan','file_perbaikan','jenis_kegiatan','ketua_peneliti_nama','tahun_usulan')
-                                    ->where('usulans.ketua_peneliti_nip',Session::get('nip'))
-                                    ->where('status_usulan','3')
-                                    ->orWhere('status_usulan','6')
+                                    ->select('usulans.id','ketua_peneliti_nip','judul_kegiatan','file_kemajuan','file_perbaikan','jenis_kegiatan','biaya_diusulkan','ketua_peneliti_nama','tahun_usulan')
+                                    ->where('ketua_peneliti_nip',Session::get('nip'))
+                                    ->where(function($query) {
+                                        $query->where('status_usulan','3')
+                                        ->orWhere('status_usulan','6');
+                                    })
                                     ->groupBy('usulans.id')
                                     ->get();
                 return view('pengusul/usulan/laporan_kemajuan.index',compact('usulans'));
@@ -89,5 +91,18 @@ class LaporanKemajuanController extends Controller
     public function detailJudul($id){
         $judul = Usulan::find($id);
         return $judul;
+    }
+
+    function ubahBiaya($id){
+        $biaya = Usulan::select('biaya_diusulkan','id')->where('id',$id)->first();
+        return $biaya;
+    }
+
+    public function ubahBiayaPost(Request $request){
+        $usulan = Usulan::where('id',$request->id)->update([
+            'biaya_diusulkan'   =>  $request->biaya_diusulkan,
+        ]);
+
+        return redirect()->route('pengusul.laporan_kemajuan')->with(['success'  =>  'Jumlah Anggaran Berhasil Diubah !!']);
     }
 }

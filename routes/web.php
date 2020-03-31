@@ -105,8 +105,11 @@ Route::group(['prefix'  => 'operator/usulan_dosen/menunggu_verifikasi'],function
     Route::get('/anggaran/{id}/cetak','Operator\VerifikasiUsulanController@anggaranCetak')->name('operator.verifikasi.anggaran.cetak');
     Route::patch('/verifikasi','Operator\VerifikasiUsulanController@verifikasi')->name('operator.verifikasi.verifikasi');
     Route::get('/{id}/detail','Operator\VerifikasiUsulanController@detail')->name('operator.verifikasi.detail');
+    Route::get('/{id}/detail_reviewer','Operator\VerifikasiUsulanController@detailReviewer')->name('operator.verifikasi.detail_reviewer');
     Route::get('/{id}/detail_judul','Operator\VerifikasiUsulanController@detailJudul')->name('operator.verifikasi.detail_judul');
     Route::get('/{id}/komentar','Operator\VerifikasiUsulanController@komentar')->name('operator.verifikasi.komentar');
+    Route::get('/{id}/{skim_id}/reviewer3','Operator\VerifikasiUsulanController@reviewerTiga')->name('operator.verifikasi.reviewer3');
+    Route::post('reviewer3','Operator\VerifikasiUsulanController@reviewerTigaPost')->name('operator.verifikasi.reviewer3_post');
 });
 
 Route::group(['prefix'  => 'operator/usulan_dosen/laporan_kemajuan/menunggu_verifikasi'],function(){
@@ -191,6 +194,15 @@ Route::group(['prefix'  => 'pengusul/upload_laporan_kemajuan'],function(){
     Route::post('/','Pengusul\LaporanKemajuanController@uploadLaporan')->name('pengusul.upload_laporan_kemajuan');
     Route::patch('/','Pengusul\LaporanKemajuanController@uploadLaporanPerbaikan')->name('pengusul.upload_laporan_perbaikan');
     Route::get('/{id}/detail_judul','Pengusul\LaporanKemajuanController@detailJudul')->name('pengusul.upload_laporan_kemajuan.detail_judul');
+    Route::get('/{id}/ubah_biaya','Pengusul\LaporanKemajuanController@ubahBiaya')->name('pengusul.upload_laporan_kemajuan.ubah_biaya');
+    Route::patch('/ubah_biaya','Pengusul\LaporanKemajuanController@ubahBiayaPost')->name('pengusul.upload_laporan_kemajuan.ubah_biaya_post');
+
+    Route::get('/{id}/detail_anggaran','Pengusul\UsulanController@detailAnggaran')->name('pengusul.laporan_kemajuan.detail_anggaran');
+
+    Route::delete('/detail_anggaran','Pengusul\UsulanController@hapusHonor')->name('pengusul.laporan_kemajuan.detail_anggaran.honor_hapus');
+    Route::delete('/detail_anggaran_habis','Pengusul\UsulanController@hapusHabis')->name('pengusul.laporan_kemajuan.detail_anggaran.habis_hapus');
+    Route::delete('/detail_anggaran_penunjang','Pengusul\UsulanController@hapusPenunjang')->name('pengusul.laporan_kemajuan.detail_anggaran.penunjang_hapus');
+    Route::delete('/detail_anggaran_lainnya','Pengusul\UsulanController@hapusLainnya')->name('pengusul.laporan_kemajuan.detail_anggaran.lainnya_hapus');
 });
 
 Route::group(['prefix'  => 'pengusul/anggota_kegiatan'],function(){

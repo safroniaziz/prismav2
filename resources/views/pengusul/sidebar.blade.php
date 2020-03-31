@@ -12,7 +12,13 @@
     <a href=" {{ route('pengusul.usulan') }} "><i class="fa fa-newspaper-o"></i>Usulan Baru</a>
 </li>
 
-<li>
+<li
+    @if (Route::current()->getName() == "pengusul.laporan_kemajuan.detail_anggaran")
+    class="current-page"
+        @elseif(Route::current()->getName() == "pengusul.laporan_kemajuan.detail_anggota")
+            class="current-page"
+    @endif
+>
     <a href=" {{ route('pengusul.laporan_kemajuan') }} "><i class="fa fa-upload"></i>Upload Laporan Kemajuan</a>
 </li>
 

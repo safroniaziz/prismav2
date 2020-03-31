@@ -24,6 +24,8 @@
     <ul class="nav child_menu"
         @if (Route::current()->getName() == "operator.menunggu.detail_reviewer")
             style="display:block !important;"
+            @elseif(Route::current()->getName() == "operator.verifikasi.reviewer3")
+            style="display:block !important;"
         @endif
     >
         <li
@@ -32,7 +34,11 @@
             @endif
         ><a href=" {{ route('operator.menunggu') }} ">Tambah Reviewer</a></li>
         <li><a href=" {{ route('operator.proses_review') }} ">Dalam Proses Review</a></li>
-        <li><a href=" {{ route('operator.verifikasi') }} ">Menunggu Verifikasi</a></li>
+        <li
+            @if (Route::current()->getName() == "operator.verifikasi.reviewer3")
+                class="current-page"
+            @endif
+        ><a href=" {{ route('operator.verifikasi') }} ">Menunggu Verifikasi</a></li>
     </ul>
 </li>
 

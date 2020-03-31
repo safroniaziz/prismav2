@@ -63,6 +63,7 @@
                                 <th>No</th>
                                 <th>Judul Kegiatan</th>
                                 <th style="text-align:center;">Laporan Perbaikan</th>
+                                <th style="text-align:center;">Kelola Anggaran</th>
                                 <th style="text-align:center;">Laporan Kemajuan</th>
                             </tr>
                         </thead>
@@ -92,6 +93,12 @@
                                                 <hr>
                                                 <button style="color:white; cursor:pointer;" disabled class="btn btn-primary btn-sm"><i class="fa fa-upload"></i></button>
                                         @endif
+                                    </td>
+                                    <td style="width:25%; text-align:center;">
+                                        <a onclick="ubahAnggaran( {{ $usulan->id }} )" style="color:#5A738E; cursor:pointer;"> Rp. {{ number_format($usulan->biaya_diusulkan, 2) }} </a>
+                                        <br>
+                                        <hr style="margin-bottom:5px !important; margin-top:5px !important;">
+                                        <a href="{{ route('pengusul.laporan_kemajuan.detail_anggaran',[$usulan->id]) }}" class="btn btn-primary btn-sm" style="color:white; cursor:pointer;"><i class="fa fa-gear"></i>&nbsp; kelola anggaran</a>
                                     </td>
                                     <td style="text-align:center;">
                                         @if ($usulan->file_kemajuan == null)
@@ -200,6 +207,38 @@
                 </div>
             </div>
         </div>
+        <!-- Modal -->
+        <div class="modal fade" id="modalubahbiaya" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <p style="font-size:15px;" class="modal-title" id="exampleModalLabel"><i class="fa fa-user"></i>&nbsp;Form Upload Laporan kemajuan</p>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <form action=" {{ route('pengusul.upload_laporan_kemajuan.ubah_biaya_post') }} " method="POST" enctype="multipart/form-data">
+                        {{ csrf_field() }} {{ method_field('PATCH') }}`
+                        <div class="modal-body">
+                            <div class="alert alert-primary alert-block" id="berhasil">
+                                <button type="button" class="close" data-dismiss="alert">×</button>
+                                <strong><i class="fa fa-info-circle"></i>&nbsp;Perhatian: </strong> Silahkan ubah anggaran biaya anda dengan benar !!
+                            </div>
+                            <input type="hidden" name="id_usulan" id="id_perbaikan">
+                            <div class="form-group col-md-12">
+                                <input type="hidden" name="id" id="id_usulan_biaya">
+                                <label for="exampleInputEmail1">Anggaran Biaya :</label>
+                                <input type="text" name="biaya_diusulkan" id="biaya_diusulkan"  class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal"><i class="fa fa-close"></i>&nbsp;Batalkan</button>
+                            <button type="submit" class="btn btn-primary btn-sm"><i class="fa fa-check-circle"></i>&nbsp;Simpan Perubahan</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     </section>
 @endsection
 
@@ -230,6 +269,22 @@
                 $('#modaldetail').modal('show');
                     $('#id').val(data.id);
                     $('#detail-text').text(data.judul_kegiatan);
+                },
+                error:function(){
+                    alert("Nothing Data");
+                }
+            });
+        }
+
+        function ubahAnggaran(id){
+            $.ajax({
+                url: "{{ url('pengusul/upload_laporan_kemajuan') }}"+'/'+ id + "/ubah_biaya",
+                type: "GET",
+                dataType: "JSON",
+                success: function(data){
+                $('#modalubahbiaya').modal('show');
+                    $('#id_usulan_biaya').val(data.id);
+                    $('#biaya_diusulkan').val(data.biaya_diusulkan);
                 },
                 error:function(){
                     alert("Nothing Data");
