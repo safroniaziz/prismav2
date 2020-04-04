@@ -207,7 +207,7 @@
                                                                     <textarea name="judul_kegiatan" id="judul_kegiatan" cols="30" rows="3" class="form-control" required></textarea>
                                                                 </div>
                                                                 <div class="form-group col-md-12">
-                                                                    <label for="exampleInputEmail1">Abstrak</label>
+                                                                    <label for="exampleInputEmail1">Ringkasan</label>
                                                                     <textarea name="abstrak" id="abstrak_edit" cols="30" rows="10" required></textarea>
                                                                 </div>
                                                                 <div class="form-group col-md-12">
@@ -297,7 +297,7 @@
                                                             <textarea name="judul_kegiatan" cols="30" rows="3" class="form-control" required></textarea>
                                                         </div>
                                                         <div class="form-group col-md-12">
-                                                            <label for="exampleInputEmail1">Abstrak</label>
+                                                            <label for="exampleInputEmail1">Ringkasan</label>
                                                             <textarea name="abstrak" id="abstrak" class="form-control" cols="30" rows="10" required></textarea>
                                                         </div>
                                                         <div class="form-group col-md-12">

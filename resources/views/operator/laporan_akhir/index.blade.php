@@ -155,7 +155,7 @@
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td>Abstrak</td>
+                                                <td>Ringkasan</td>
                                                 <td> : </td>
                                                 <td>
                                                     <p id="abstrak_detail"> </p>
