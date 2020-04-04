@@ -17,6 +17,7 @@
     <ul class="nav child_menu">
         <li><a href=" {{ route('operator.skim') }} ">Skim Penelitian</a></li>
         <li><a href=" {{ route('operator.kriteria_penilaian') }} ">Kriteria Penilaian</a></li>
+        <li><a href=" {{ route('operator.publikasi') }} ">Jenis Publikasi</a></li>
     </ul>
 </li>
 

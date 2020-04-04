@@ -35,6 +35,16 @@ Route::group(['prefix'  => 'operator/manajemen_skim'],function(){
     Route::delete('/','Operator\SkimController@delete')->name('operator.skim.delete');
 });
 
+Route::group(['prefix'  => 'operator/jenis_publikasi'],function(){
+    Route::get('/','Operator\PublikasiController@index')->name('operator.publikasi');
+    Route::post('/','Operator\PublikasiController@post')->name('operator.publikasi.add');
+    Route::get('/{id}/edit','Operator\PublikasiController@edit')->name('operator.publikasi.edit');
+    Route::patch('/','Operator\PublikasiController@update')->name('operator.publikasi.update');
+    Route::delete('/','Operator\PublikasiController@delete')->name('operator.publikasi.delete');
+    Route::patch('/aktifkan_status/{id}','Operator\PublikasiController@aktifkanStatus')->name('operator.aktifkan_status');
+    Route::patch('/non_aktifkan_status/{id}','Operator\PublikasiController@nonAktifkanStatus')->name('operator.non_aktifkan_status');
+});
+
 Route::group(['prefix'  => 'operator/manajemen_prodi'],function(){
     Route::get('/','Operator\ProdiController@index')->name('operator.prodi');
     Route::get('/get_data_prodi','Operator\ProdiController@getDataProdi')->name('operator.get_data_prodi');
