@@ -228,7 +228,7 @@
                                                                     <input type="number" name="biaya_diusulkan" id="biaya_diusulkan" class="form-control" required>
                                                                 </div>
                                                                 <div class="form-group col-md-6">
-                                                                    <label for="exampleInputEmail1">File Peta Jalan : <a style="color:red; font-style:italic; font-size:12px;">Harap masukan hanya file pdf/jpg/png/jpeg</a></label>
+                                                                    <label for="exampleInputEmail1">File Peta Jalan : <a style="color:red; font-style:italic; font-size:12px;">masukan file pdf/jpg/png/jpeg. Max : 5MB</a></label>
                                                                     <input type="file" name="peta_jalan" id="peta_jalan" accept="application/pdf, image/jpg, image/jpeg, image/png" class="form-control" style="padding-bottom:30px;">
                                                                     <div style="color:red;" style="margin-bottom:10px;">
                                                                         File Lama :<a id="peta_name"></a>
@@ -244,7 +244,7 @@
                                                                 </div>
 
                                                                 <div class="form-group col-md-6">
-                                                                    <label for="exampleInputEmail1">File Usulan : <a style="color:red; font-style:italic; font-size:12px;">Harap masukan file pdf</a></label>
+                                                                    <label for="exampleInputEmail1">File Usulan : <a style="color:red; font-style:italic; font-size:12px;">Harap masukan file pdf. Max : 5MB</a></label>
                                                                     <input type="file" name="file_usulan" id="file_usulan" accept="application/pdf" class="form-control" style="padding-bottom:30px;">
                                                                     <div style="color:red;" style="margin-bottom:10px;">
                                                                         File Lama :<a id="usulan_name"></a>
@@ -318,7 +318,7 @@
                                                             <input type="number" name="biaya_diusulkan" class="form-control" required>
                                                         </div>
                                                         <div class="form-group col-md-6">
-                                                            <label for="exampleInputEmail1">File Peta Jalan : <a style="color:red; font-style:italic; font-size:12px;">Harap masukan hanya file pdf/jpg/png/jpeg</a></label>
+                                                            <label for="exampleInputEmail1">File Peta Jalan : <a style="color:red; font-style:italic; font-size:12px;">masukan file pdf/jpg/png/jpeg. Max : 5MB</a></label>
                                                             <input type="file" name="peta_jalan" id="peta_jalan1" accept="application/pdf, image/jpg, image/jpeg, image/png" class="form-control" style="padding-bottom:30px;" required>
                                                         </div>
 
@@ -328,7 +328,7 @@
                                                         </div>
 
                                                         <div class="form-group col-md-6">
-                                                            <label for="exampleInputEmail1">File Usulan : <a style="color:red; font-style:italic; font-size:12px;">Harap masukan file pdf</a></label>
+                                                            <label for="exampleInputEmail1">File Usulan : <a style="color:red; font-style:italic; font-size:12px;">Harap masukan file pdf. Max : 5MB</a></label>
                                                             <input type="file" name="file_usulan" id="file_usulan1" accept="application/pdf" class="form-control" style="padding-bottom:30px;" required>
                                                         </div>
                                                     </div>

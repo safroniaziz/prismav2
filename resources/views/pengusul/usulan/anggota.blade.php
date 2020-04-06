@@ -183,16 +183,28 @@
                 method :"get",
                 success:function(data){
                     if(data['jumlah'] == 1){
-                        $('#sudah').show();
-                        $('#nip_anggota').val(data['detail']['pegawai'][0]['pegNip']);
-                        $('#nm_anggota').val(data['detail']['pegawai'][0]['pegNama']);
-                        $('#prodi_anggota').val(data['detail']['pegawai'][0]['dosen']['prodi']['prodiNamaResmi']);
-                        $('#prodi_kode_anggota').val(data['detail']['pegawai'][0]['dosen']['prodi']['prodiKode']);
-                        $('#fakultas_anggota').val(data['detail']['pegawai'][0]['dosen']['prodi']['fakultas']['fakNamaResmi']);
-                        $('#fakultas_kode_anggota').val(data['detail']['pegawai'][0]['dosen']['prodi']['fakultas']['fakKode']);
-                        $('#jk_anggota').val(data['detail']['pegawai'][0]['pegawai_simpeg']['pegJenkel']);
-                        $('#jabatan_anggota').val(data['detail']['pegawai'][0]['pegawai_simpeg']['pegNmJabatan']);
-                        $('#btn-submit').prop('disabled',false);
+                        if(data['detail']['pegawai'][0]['pegawai_simpeg']= "" || data['detail']['pegawai'][0]['pegawai_simpeg'] == null){
+                            $('#sudah').show();
+                            $('#nip_anggota').val(data['detail']['pegawai'][0]['pegNip']);
+                            $('#nm_anggota').val(data['detail']['pegawai'][0]['pegNama']);
+                            $('#prodi_anggota').val(data['detail']['pegawai'][0]['dosen']['prodi']['prodiNamaResmi']);
+                            $('#prodi_kode_anggota').val(data['detail']['pegawai'][0]['dosen']['prodi']['prodiKode']);
+                            $('#fakultas_anggota').val(data['detail']['pegawai'][0]['dosen']['prodi']['fakultas']['fakNamaResmi']);
+                            $('#fakultas_kode_anggota').val(data['detail']['pegawai'][0]['dosen']['prodi']['fakultas']['fakKode']);
+                            $('#btn-submit').prop('disabled',false);
+                        }
+                        else{
+                            $('#sudah').show();
+                            $('#nip_anggota').val(data['detail']['pegawai'][0]['pegNip']);
+                            $('#nm_anggota').val(data['detail']['pegawai'][0]['pegNama']);
+                            $('#prodi_anggota').val(data['detail']['pegawai'][0]['dosen']['prodi']['prodiNamaResmi']);
+                            $('#prodi_kode_anggota').val(data['detail']['pegawai'][0]['dosen']['prodi']['prodiKode']);
+                            $('#fakultas_anggota').val(data['detail']['pegawai'][0]['dosen']['prodi']['fakultas']['fakNamaResmi']);
+                            $('#fakultas_kode_anggota').val(data['detail']['pegawai'][0]['dosen']['prodi']['fakultas']['fakKode']);
+                            $('#jk_anggota').val(data['detail']['pegawai'][0]['pegawai_simpeg']['pegJenkel']);
+                            $('#jabatan_anggota').val(data['detail']['pegawai'][0]['pegawai_simpeg']['pegNmJabatan']);
+                            $('#btn-submit').prop('disabled',false);
+                        }
                     }
                 }
             })

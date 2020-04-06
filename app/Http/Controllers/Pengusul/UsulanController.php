@@ -393,7 +393,7 @@ class UsulanController extends Controller
         if(Session::get('login') && Session::get('login',1) && Session::get('akses',1)){
             if($sesi == 1){
 
-                $sudah = AnggotaUsulan::select('anggota_nip')->where('anggota_nip',$request->nip_anggota)->first();
+                $sudah = AnggotaUsulan::select('anggota_nip')->where('anggota_nip',$request->nip_anggota)->where('usulan_id',$usulan_id_anggaran)->first();
                 if (count($sudah) != 0) {
                     return redirect()->route('pengusul.usulan.detail_anggota',[$request->usulan_id_anggaran])->with(['error' =>  'Anggota yang dipilih sudah ditambahkan !']);
                 }
@@ -724,6 +724,7 @@ class UsulanController extends Controller
     public function detailAnggota($id){
         $anggotas = AnggotaUsulan::join('usulans','usulans.id','anggota_usulans.usulan_id')
                                     ->select('anggota_usulans.id','anggota_nip','anggota_nama','anggota_prodi_nama','anggota_fakultas_nama','judul_kegiatan')
+                                    ->where('usulans.id',$id)
                                     ->get();
         $id_usulan = $id;
         $jumlah = count($anggotas);

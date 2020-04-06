@@ -21,7 +21,7 @@
         </header>
         <div class="panel-body" style="border-top: 1px solid #eee; padding:15px; background:white;">
             <div class="row" style="margin-right:-15px; margin-left:-15px;">
-                <div class="col-md-12">Selamat datang <strong> {{ Session::get('nm_dosen') }} </strong> di halaman Dashboard Dosen Pengul <b> Sistem Informasi Publikasi, Riset dan Pengabdian Kepada Masyarakat                            </b></div>
+                <div class="col-md-12">Selamat datang <strong> {{ Session::get('nm_dosen') }} </strong> di halaman Dashboard Dosen Pengusul <b> Sistem Informasi Publikasi, Riset dan Pengabdian Kepada Masyarakat                            </b></div>
             </div>
         </div>
     </section>
