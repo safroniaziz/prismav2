@@ -393,7 +393,7 @@ class UsulanController extends Controller
         if(Session::get('login') && Session::get('login',1) && Session::get('akses',1)){
             if($sesi == 1){
 
-                $sudah = AnggotaUsulan::select('anggota_nip')->where('anggota_nip',$request->nip_anggota)->where('usulan_id',$usulan_id_anggaran)->first();
+                $sudah = AnggotaUsulan::select('anggota_nip')->where('anggota_nip',$request->nip_anggota)->where('usulan_id',$request->usulan_id_anggaran)->first();
                 if (count($sudah) != 0) {
                     return redirect()->route('pengusul.usulan.detail_anggota',[$request->usulan_id_anggaran])->with(['error' =>  'Anggota yang dipilih sudah ditambahkan !']);
                 }
@@ -735,7 +735,7 @@ class UsulanController extends Controller
     public function cariAnggota(Request $request){
         $panda = new UserLoginController();
         $dosen = '
-        {pegawai(pegNama:"'.$request->nm_anggota.'") {
+        {pegawai(pegNip:"'.$request->nip_anggota.'") {
             pegNip
             pegIsAktif
             pegNama

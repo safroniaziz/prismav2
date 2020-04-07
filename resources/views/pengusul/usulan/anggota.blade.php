@@ -58,7 +58,7 @@
                 <div class="col-md-12" id="form-tambah" style="display:none;">
                     <div class="alert alert-success alert-block" style="display:none;" id="sudah">
                         <button type="button" class="close" data-dismiss="alert">×</button>
-                        <strong><i class="fa fa-check-circle"></i>&nbsp;Nama Berhasil Ditemukan  </strong>
+                        <strong><i class="fa fa-check-circle"></i>&nbsp;Nip Dosen Berhasil Ditemukan  </strong>
                     </div>
                     <form action=" {{ route('pengusul.usulan.anggota_post') }} " method="POST">
                         {{ csrf_field() }} {{ method_field('POST') }}
@@ -69,12 +69,12 @@
                             <input type="hidden" name="jk_anggota" id="jk_anggota">
                             <input type="hidden" name="jabatan_anggota" id="jabatan_anggota">
                             <div class="form-group col-md-6">
-                                <label for="exampleInputEmail1">Nama Anggota</label>
-                                <input type="text" name="nm_anggota" id="nm_anggota" class="form-control" required >
+                                <label for="exampleInputEmail1">Nip Anggota</label>
+                                <input type="text" name="nip_anggota" id="nip_anggota" class="form-control" required >
                             </div>
                             <div class="form-group col-md-6">
-                                <label for="exampleInputEmail1">Nip/Nik Anggota</label>
-                                <input type="text" name="nip_anggota" id="nip_anggota" class="form-control" required readonly>
+                                <label for="exampleInputEmail1">Nama Anggota</label>
+                                <input type="text" name="nm_anggota" id="nm_anggota" class="form-control" required readonly>
                             </div>
                             <div class="form-group col-md-6">
                                 <label for="exampleInputEmail1">Prodi Anggota</label>
@@ -174,12 +174,12 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
-            $("#nm_anggota").keyup(function(){
-            var nm_anggota = $("#nm_anggota").val();
+            $("#nip_anggota").keyup(function(){
+            var nip_anggota = $("#nip_anggota").val();
             url = "{{ url('pengusul/manajemen_usulan/cari_anggota') }}";
             $.ajax({
                 url :url,
-                data : {nm_anggota:nm_anggota},
+                data : {nip_anggota:nip_anggota},
                 method :"get",
                 success:function(data){
                     if(data['jumlah'] == 1){
