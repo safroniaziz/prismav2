@@ -58,7 +58,7 @@
                 <div class="col-md-12" id="form-tambah" style="display:none;">
                     <div class="alert alert-success alert-block" style="display:none;" id="sudah">
                         <button type="button" class="close" data-dismiss="alert">×</button>
-                        <strong><i class="fa fa-check-circle"></i>&nbsp;Nip Dosen Berhasil Ditemukan  </strong>
+                        <strong><i class="fa fa-check-circle"></i>&nbsp;Nip/Nik Portal Akademik (PAK) Dosen Berhasil Ditemukan  </strong>
                     </div>
                     <form action=" {{ route('pengusul.usulan.anggota_post') }} " method="POST">
                         {{ csrf_field() }} {{ method_field('POST') }}
@@ -69,7 +69,7 @@
                             <input type="hidden" name="jk_anggota" id="jk_anggota">
                             <input type="hidden" name="jabatan_anggota" id="jabatan_anggota">
                             <div class="form-group col-md-6">
-                                <label for="exampleInputEmail1">Nip Anggota</label>
+                                <label for="exampleInputEmail1">Nip/Nik Portal Akademik (PAK)</label>
                                 <input type="text" name="nip_anggota" id="nip_anggota" class="form-control" required >
                             </div>
                             <div class="form-group col-md-6">
