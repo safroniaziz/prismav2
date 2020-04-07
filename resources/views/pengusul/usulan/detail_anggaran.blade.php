@@ -79,7 +79,7 @@
                                     <form action=" {{ route('pengusul.usulan.anggaran_honor_post') }} " method="POST">
                                         {{ csrf_field() }} {{ method_field('POST') }}
                                         <input type="hidden" name="usulan_id_anggaran" id="usulan_id_anggaran">
-                                        <div class="row" id="formanggaranhonor" style="display:;">
+                                        <div class="row" id="formanggaranhonor" style="display:none;">
                                             <div class="form-group col-md-6">
                                                 <label for="exampleInputEmail1">Keterangan Honor</label>
                                                 <input type="text" name="keterangan_honor" class="form-control" required placeholder="masukan keterangan">
@@ -379,35 +379,22 @@
 @push('scripts')
     <script>
         function kelolaAnggaranHonor(id){
-            $('#formanggaranhabis').hide(300);
             $('#formanggaranhonor').show(300);
-            $('#formanggaranpenunjang').hide(300);
-            $('#formanggaranlainnya').hide(300);
             $('#usulan_id_anggaran').val(id);
         }
 
         function kelolaAnggaranHabis(id){
             $('#formanggaranhabis').show(300);
-            $('#formanggaranhonor').hide(300);
-            $('#formanggaranpenunjang').hide(300);
-            $('#formanggaranlainnya').hide(300);
-            $('#usulan_id_anggaran').val(id);
             $('#usulan_id_anggaran_habis').val(id);
         }
 
         function kelolaAnggaranPenunjang(id){
             $('#formanggaranpenunjang').show(300);
-            $('#formanggaranhabis').hide(300);
-            $('#formanggaranhonor').hide(300);
-            $('#formanggaranlainnya').hide(300);
             $('#usulan_id_anggaran_penunjang').val(id);
         }
 
         function kelolaAnggaranLainnya(id){
             $('#formanggaranlainnya').show(300);
-            $('#formanggaranpenunjang').hide(300);
-            $('#formanggaranhabis').hide(300);
-            $('#formanggaranhonor').hide(300);
             $('#usulan_id_anggaran_lainnya').val(id);
         }
 
