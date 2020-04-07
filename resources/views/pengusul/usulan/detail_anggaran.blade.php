@@ -76,6 +76,8 @@
                                             @endphp
                                         @endif
                                     </div>
+                                </div>
+                                <div class="col-md-12">
                                     <form action=" {{ route('pengusul.usulan.anggaran_honor_post') }} " method="POST">
                                         {{ csrf_field() }} {{ method_field('POST') }}
                                         <input type="hidden" name="usulan_id_anggaran" id="usulan_id_anggaran">
@@ -103,6 +105,8 @@
                                             </div>
                                         </div>
                                     </form>
+                                </div>
+                                <div class="col-md-12">
                                     @include('pengusul/usulan/anggaran_honor')
                                 </div>
                             </div>

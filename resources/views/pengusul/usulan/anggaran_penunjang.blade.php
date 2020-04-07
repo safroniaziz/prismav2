@@ -10,6 +10,8 @@
                     @endphp
                 @endif
             </div>
+        </div>
+        <div class="col-md-12">
             <form action=" {{ route('pengusul.usulan.anggaran_penunjang_post') }} " method="POST">
                 {{ csrf_field() }} {{ method_field('POST') }}
                 <input type="hidden" name="usulan_id_anggaran_penunjang" id="usulan_id_anggaran_penunjang">
@@ -37,6 +39,8 @@
                     </div>
                 </div>
             </form>
+        </div>
+        <div class="col-md-12">
             <table class="table table-bordered" style="width:100%" id="table">
                 <thead>
                     <tr>
@@ -96,31 +100,31 @@
                     @endif
                 </tbody>
             </table>
-            <!-- Modal Hapus -->
-            <div class="modal modal-danger fade" id="modalhapuspenunjang" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header modal-header-danger">
-                        <p style="font-size:15px;" class="modal-title" id="exampleModalLabel"><i class="fa fa-user"></i>&nbsp;Form Konfirmasi Hapus Data Anggaran Perjalanan</p>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                    Apakah anda yakin akan menghapus data anggaran ?
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-outline-light btn-sm " style="color:white;" data-dismiss="modal"><i class="fa fa-close"></i>&nbsp;Close</button>
-                        <form method="POST" action="{{ route('pengusul.usulan.detail_anggaran.penunjang_hapus') }}">
-                            {{ csrf_field() }}
-                            {{ method_field('DELETE') }}
-                            <input type="hidden" name="id_anggaran_penunjang" id="id_anggaran_penunjang">
-                            <input type="hidden" name="id_usulan" value="{{ $id_usulan }}">
-                            <button type="submit" class="btn btn-outline-light btn-sm" style="color:white;"><i class="fa fa-check-circle"></i>&nbsp; Ya, Hapus Data !</button>
-                        </form>
-                    </div>
+        </div>
+        <!-- Modal Hapus -->
+        <div class="modal modal-danger fade" id="modalhapuspenunjang" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header modal-header-danger">
+                    <p style="font-size:15px;" class="modal-title" id="exampleModalLabel"><i class="fa fa-user"></i>&nbsp;Form Konfirmasi Hapus Data Anggaran Perjalanan</p>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                 </div>
+                <div class="modal-body">
+                Apakah anda yakin akan menghapus data anggaran ?
                 </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-light btn-sm " style="color:white;" data-dismiss="modal"><i class="fa fa-close"></i>&nbsp;Close</button>
+                    <form method="POST" action="{{ route('pengusul.usulan.detail_anggaran.penunjang_hapus') }}">
+                        {{ csrf_field() }}
+                        {{ method_field('DELETE') }}
+                        <input type="hidden" name="id_anggaran_penunjang" id="id_anggaran_penunjang">
+                        <input type="hidden" name="id_usulan" value="{{ $id_usulan }}">
+                        <button type="submit" class="btn btn-outline-light btn-sm" style="color:white;"><i class="fa fa-check-circle"></i>&nbsp; Ya, Hapus Data !</button>
+                    </form>
+                </div>
+            </div>
             </div>
         </div>
     </div>
