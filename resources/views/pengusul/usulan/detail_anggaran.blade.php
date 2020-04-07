@@ -79,7 +79,7 @@
                                     <form action=" {{ route('pengusul.usulan.anggaran_honor_post') }} " method="POST">
                                         {{ csrf_field() }} {{ method_field('POST') }}
                                         <input type="hidden" name="usulan_id_anggaran" id="usulan_id_anggaran">
-                                        <div class="row" id="formanggaranhonor" style="display:none;">
+                                        <div class="row" id="formanggaranhonor" style="display:;">
                                             <div class="form-group col-md-6">
                                                 <label for="exampleInputEmail1">Keterangan Honor</label>
                                                 <input type="text" name="keterangan_honor" class="form-control" required placeholder="masukan keterangan">

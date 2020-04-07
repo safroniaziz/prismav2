@@ -13,7 +13,7 @@
             <form action=" {{ route('pengusul.usulan.anggaran_lainnya_post') }} " method="POST">
                 {{ csrf_field() }} {{ method_field('POST') }}
                 <input type="hidden" name="usulan_id_anggaran_lainnya" id="usulan_id_anggaran_lainnya">
-                <div class="row" id="formanggaranlainnya" style="display:none;">
+                <div class="row" id="formanggaranlainnya" style="display:;">
                     <div class="form-group col-md-6">
                         <label for="exampleInputEmail1">Material</label>
                         <input type="text" name="material_lainnya" class="form-control" required placeholder="masukan material">
