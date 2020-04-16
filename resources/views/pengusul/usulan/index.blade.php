@@ -40,10 +40,17 @@
                             <strong><i class="fa fa-info-circle"></i>&nbsp;Berhasil: </strong> {{ $message }}
                         </div>
                         @else
+                        @if ($now >= $jadwal->tanggal_awal && $now <= $jadwal->tanggal_akhir)
                         <div class="alert alert-danger alert-block" id="keterangan">
                             <button type="button" class="close" data-dismiss="alert">×</button>
                             <strong><i class="fa fa-info-circle"></i>&nbsp;Perhatian: </strong> Silahkan tambahkan usulan kegiatan anda, harap melengkapi data terlebih dahulu sebelum anda mengusulkan kegiatan !!
                         </div>
+                            @else
+                            <div class="alert alert-danger alert-block" id="keterangan">
+                                <button type="button" class="close" data-dismiss="alert">×</button>
+                                <strong><i class="fa fa-info-circle"></i>&nbsp;Perhatian: </strong> Saat Ini Bukan Masa Upload Usulan Kegiatan !!
+                            </div>
+                        @endif
                     @endif
                     @if ($message = Session::get('error'))
                         <div class="alert alert-danger alert-block" id="berhasil">
@@ -60,10 +67,17 @@
                         <i class="fa fa-close"></i><strong>&nbsp;Gagal :</strong> Proses pengusulan gagal !!
                     </div>
                 </div>
+
                 <div class="col-md-12" style="margin-bottom:5px;">
-                    <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#exampleModal">
-                        <i class="fa fa-plus" style="font-size:12px;"></i>&nbsp;Tambah Usulan
-                    </button>
+                    @if ($now >= $jadwal->tanggal_awal && $now <= $jadwal->tanggal_akhir)
+                        <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#exampleModal">
+                            <i class="fa fa-plus" style="font-size:12px;"></i>&nbsp;Tambah Usulan
+                        </button>
+                        @else
+                        <button type="button" class="btn btn-primary btn-sm disabled">
+                            <i class="fa fa-plus" style="font-size:12px;"></i>&nbsp;Tambah Usulan
+                        </button>
+                    @endif
                 </div>
                 <div class="col-md-12">
                     <table class="table table-striped table-bordered" id="table" style="width:100%;">

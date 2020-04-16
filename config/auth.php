@@ -45,6 +45,16 @@ return [
             'driver' => 'token',
             'provider' => 'users',
         ],
+
+        'reviewerusulan' => [
+            'driver' => 'session',
+            'provider' => 'reviewer1s',
+        ],
+
+        'api-reviewerusulan' => [
+            'driver' => 'token',
+            'provider' => 'reviewer1s',
+        ],
     ],
 
     /*
@@ -68,6 +78,11 @@ return [
         'users' => [
             'driver' => 'eloquent',
             'model' => App\User::class,
+        ],
+
+        'reviewer1s' => [
+            'driver' => 'eloquent',
+            'model' => App\Reviewer1::class,
         ],
 
         // 'users' => [
@@ -96,6 +111,12 @@ return [
             'provider' => 'users',
             'table' => 'password_resets',
             'expire' => 60,
+        ],
+
+        'reviewer1s' => [
+            'provider' => 'reviewer1s',
+            'table' => 'password_resets',
+            'expire' => 15,
         ],
     ],
 

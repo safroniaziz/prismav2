@@ -27,6 +27,8 @@
             style="display:block !important;"
             @elseif(Route::current()->getName() == "operator.verifikasi.reviewer3")
             style="display:block !important;"
+            @elseif(Route::current()->getName() == "operator.proses_review.detail_reviewer")
+            style="display:block !important;"
         @endif
     >
         <li><a href=" {{ route('operator.pending') }} ">Usulan Pending</a></li>
@@ -35,7 +37,11 @@
                 class="current-page"
             @endif
         ><a href=" {{ route('operator.menunggu') }} ">Tambah Reviewer</a></li>
-        <li><a href=" {{ route('operator.proses_review') }} ">Dalam Proses Review</a></li>
+        <li
+            @if (Route::current()->getName() == "operator.proses_review.detail_reviewer")
+                class="current-page"
+            @endif
+        ><a href=" {{ route('operator.proses_review') }} ">Dalam Proses Review</a></li>
         <li
             @if (Route::current()->getName() == "operator.verifikasi.reviewer3")
                 class="current-page"

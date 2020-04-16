@@ -11,6 +11,7 @@ use Carbon;
 use App\Usulan;
 use App\AnggotaUsulan;
 use App\Formulir;
+use App\JadwalReviewUsulan;
 use App\Komentar1;
 use App\NilaiFormulir;
 use App\Reviewer1;
@@ -34,7 +35,10 @@ class UsulanMenungguController extends Controller
                                     ->where('reviewer_nip',Session::get('nip'))
                                     ->groupBy('usulans.id')
                                     ->get();
-                return view('reviewer.usulan.menunggu.index', compact('usulans'));
+                $jadwal = JadwalReviewUsulan::select('tanggal_awal','tanggal_akhir')->where('status','1')->first();
+                $mytime = Carbon\Carbon::now();
+                $now =  $mytime->toDateString();
+                return view('reviewer.usulan.menunggu.index', compact('usulans','jadwal','now'));
             }
             else{
                 Session::flush();

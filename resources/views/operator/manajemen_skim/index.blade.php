@@ -89,7 +89,7 @@
                                 <tr>
                                     <td> {{ $no++ }} </td>
                                     <td>
-                                        @if ($skim->j_kegiatan == "Penelitian")
+                                        @if ($skim->j_kegiatan == "penelitian")
                                             <span class="badge badge-danger">{{ $skim->j_kegiatan }}</span>
                                             @else
                                             <span class="badge badge-info">{{ $skim->j_kegiatan }}</span>

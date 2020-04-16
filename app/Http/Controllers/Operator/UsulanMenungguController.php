@@ -254,4 +254,12 @@ class UsulanMenungguController extends Controller
             return response()->json($data);
         }
     }
+
+    public function batalkan($id){
+        $batalkan = Usulan::where('id',$id)->update([
+            'status_usulan' =>  '0',
+        ]);
+
+        return redirect()->route('operator.menunggu')->with(['success' =>  'Usulan kegiatan sudah dibatalkan!! !']);
+    }
 }

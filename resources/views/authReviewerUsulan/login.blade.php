@@ -36,11 +36,11 @@
                         </div>
                     @endif
                 @endif
-                <form method="post" action="{{ route('panda.login.reviewer') }}">
+                <form method="post" action="{{ route('reviewer_usulan.login.submit') }}">
                     @csrf
-                    <p>Nip</p>
-                    <input type="text" name="username" placeholder="masukan nip">
-                    <p>Password PAK</p>
+                    <p>Nip Reviewer</p>
+                    <input type="text" name="reviewer_nip" placeholder="masukan nip">
+                    <p>Password</p>
                     <input type="password" name="password" placeholder="••••••">
 
                     <button type="submit" name="submit" style="margin-bottom:10px;r"><i class="fa fa-sign-in"></i>&nbsp; Login</button>

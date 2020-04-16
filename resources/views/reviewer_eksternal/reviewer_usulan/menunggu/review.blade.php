@@ -1,18 +1,18 @@
 @extends('layouts.layout')
 @section('title', 'Dashboard')
 @section('user-login')
-    @if(Session::get('login') && Session::get('login',1))
-        {{ Session::get('nm_dosen') }}
+    @if (Auth::guard('reviewerusulan')->check())
+        {{ Auth::guard('reviewerusulan')->user()->reviewer_nama }}
     @endif
 @endsection
 @section('user-login2')
-    @if(Session::get('login') && Session::get('login',1))
-        {{ Session::get('nm_dosen') }}
+    @if (Auth::guard('reviewerusulan')->check())
+        {{ Auth::guard('reviewerusulan')->user()->reviewer_nama }}
     @endif
 @endsection
-@section('login_as', 'Reviewer')
+@section('login_as', 'Reviewer Eksternal')
 @section('sidebar-menu')
-    @include('reviewer/sidebar')
+    @include('reviewer_eksternal/sidebar')
 @endsection
 @section('content')
     <section class="panel" style="margin-bottom:20px;">
@@ -41,7 +41,7 @@
                     @endif
                 </div>
                 <div class="col-md-12">
-                    <form action="{{ route('reviewer.usulan.review_post') }}" method="POST">
+                    <form action="{{ route('reviewer_usulan.usulan.review_post') }}" method="POST">
                         {{ csrf_field() }} {{ method_field('POST') }}
                         <table class="table table-bordered table-striped">
                             <tr>

@@ -120,6 +120,7 @@
                                                                     <span style="font-size:10px !important; text-transform:capitalize;" for="" class="badge badge-info">{{ $penelitan->jenis_kegiatan }}</span>
                                                                     <span style="font-size:10px !important;" for="" class="badge badge-danger">{{ $penelitan->ketua_peneliti_nama }}</span>
                                                                     <span style="font-size:10px !important;" for="" class="badge badge-secondary">{{ $penelitan->tahun_usulan }}</span>
+                                                                    <span style="font-size:10px !important;" for="" class="badge badge-success">{{ $penelitan->nm_skim }}</span>
                                                                     <hr style="margin-bottom:5px !important; margin-top:5px !important;">
                                                                     <a href="{{ asset('upload/file_usulan/'.$penelitan->file_usulan) }}" download="{{ $penelitan->file_usulan }}"><i class="fa fa-download"></i>&nbsp; download file usulan</a>
                                                                     <br>

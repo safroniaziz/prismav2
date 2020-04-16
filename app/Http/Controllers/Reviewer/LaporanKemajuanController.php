@@ -11,6 +11,7 @@ use App\Usulan;
 use App\AnggotaUsulan;
 use App\Reviewer2;
 use App\Formulir;
+use App\JadwalReviewUsulan;
 use App\NilaiFormulir2;
 use App\Komentar2;
 
@@ -36,7 +37,10 @@ class LaporanKemajuanController extends Controller
                                     ->where('reviewer_nip',Session::get('nip'))
                                     ->groupBy('nilai_formulir2s.reviewer_id')
                                     ->get();
-                return view('reviewer.usulan.laporan_kemajuan.index', compact('usulans'));
+                $jadwal = JadwalReviewUsulan::select('tanggal_awal','tanggal_akhir')->where('status','1')->first();
+                $mytime = Carbon\Carbon::now();
+                $now =  $mytime->toDateString();
+                return view('reviewer.usulan.laporan_kemajuan.index', compact('usulans','jadwal','now'));
             }
             else{
                 Session::flush();

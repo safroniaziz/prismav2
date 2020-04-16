@@ -19,8 +19,10 @@ use App\Dosen;
 use App\Skim;
 use App\Usulan;
 use App\Fakultas;
+use App\JadwalUsulan;
 use App\Prodi;
 use App\RancanganAnggaran;
+use Carbon;
 
 if(version_compare(PHP_VERSION, '7.2.0', '>=')) {
     error_reporting(E_ALL ^ E_NOTICE ^ E_WARNING);
@@ -42,7 +44,10 @@ class UsulanController extends Controller
                                     ->get();
                 $skims  =   Skim::select('id','nm_skim')->where('tahun',date('Y'))->get();
                 $bidangs  =   BidangPenelitian::select('id','nm_bidang')->get();
-                return view('pengusul/usulan.index',compact('usulans','skims','bidangs','fakultas'));
+                $jadwal = JadwalUsulan::select('tanggal_awal','tanggal_akhir')->where('status','1')->first();
+                $mytime = Carbon\Carbon::now();
+                $now =  $mytime->toDateString();
+                return view('pengusul/usulan.index',compact('usulans','skims','bidangs','fakultas','jadwal','now'));
             }
             else{
                 Session::flush();

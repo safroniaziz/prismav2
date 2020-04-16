@@ -31,11 +31,13 @@ class VerifikasiUsulanController extends Controller
     public function index(){
         $penelitians = Usulan::leftJoin('nilai_formulirs','nilai_formulirs.usulan_id','usulans.id')
                             ->leftJoin('formulirs','formulirs.id','nilai_formulirs.formulir_id')
-                            ->select('usulans.id','jenis_kegiatan','ketua_peneliti_nama','tahun_usulan','formulirs.skim_id','judul_kegiatan',DB::raw('SUM(skor * (bobot/100)) as totalskor')
+                            ->leftJoin('skims','skims.id','formulirs.skim_id')
+                            ->select('usulans.id','jenis_kegiatan','ketua_peneliti_nama','bobot','nm_skim','tahun_usulan','formulirs.skim_id','judul_kegiatan',DB::raw('SUM(skor * (bobot/100)) as totalskor')
                             )
                             ->groupBy('usulans.id')
                             ->where('status_usulan','2')
                             ->where('jenis_kegiatan','penelitian')
+                            ->orderBy('usulans.skim_id')
                             ->get();
         $pengabdians = Usulan::leftJoin('nilai_formulirs','nilai_formulirs.usulan_id','usulans.id')
                             ->leftJoin('formulirs','formulirs.id','nilai_formulirs.formulir_id')

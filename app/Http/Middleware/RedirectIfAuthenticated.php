@@ -21,6 +21,19 @@ class RedirectIfAuthenticated
         if (Auth::guard($guard)->check()) {
                 return redirect()->route('operator.dashboard');
         }
+        switch ($guard){
+            case 'reviewerusulan':
+                if (Auth::guard($guard)->check()) {
+                    return redirect()->route('reviewer_usulan.dashboard');
+                }
+                break;
+
+            default:
+                if (Auth::guard($guard)->check()) {
+                    return redirect()->route('operator.dashboard');
+                }
+                break;
+        }
         return $next($request);
     }
 }

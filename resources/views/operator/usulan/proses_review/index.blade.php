@@ -134,6 +134,7 @@
                                                     <th style="text-align:center;">Biaya Diusulkan</th>
                                                     <th style="text-align:center;">Peta Jalan Penelitian</th>
                                                     <th style="text-align:center;">Reviewer</th>
+                                                    <th style="text-align:center;">Ubah Reviewer</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -184,6 +185,9 @@
                                                                 @else
                                                                 <label class="badge" style="font-size:12px;">&nbsp;{!! $pengabdian->nm_reviewer !!}</label>
                                                             @endif
+                                                        </td>
+                                                        <td style="text-align:center;">
+                                                            <a href=" {{ route('operator.proses_review.detail_reviewer',[$pengabdian->id]) }} " class="btn btn-primary btn-sm" style="color:white; cursor:pointer;"><i class="fa fa-user-plus"></i></a>
                                                         </td>
                                                     </tr>
                                                     @endif

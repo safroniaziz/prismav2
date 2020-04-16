@@ -22,6 +22,21 @@ Route::get('/login','UserLoginController@showLoginForm')->name('panda.login.form
 Route::post('/pandalogin','UserLoginController@pandaLogin')->name('panda.login.dosen');
 Route::get('/user_logout','UserLoginController@userLogout')->name('logout_user');
 
+Route::group(['prefix'  => 'reviewer_eksternal/usulan'],function(){
+    Route::get('/login','AuthReviewerUsulan\LoginController@showLoginForm')->name('reviewer_usulan.login');
+    Route::post('/login','AuthReviewerUsulan\LoginController@login')->name('reviewer_usulan.login.submit');
+    Route::get('/','ReviewerEksternal\ReviewerUsulanController@dashboard')->name('reviewer_usulan.dashboard');
+});
+
+Route::group(['prefix'  => 'reviewer_eksternal/usulan/menunggu_disetujui'],function(){
+    Route::get('/','ReviewerEksternal\UsulanMenungguController@index')->name('reviewer_usulan.menunggu');
+    Route::get('/{id}/detail','ReviewerEksternal\UsulanMenungguController@detail')->name('reviewer_usulan.menunggu.detail');
+    Route::get('/anggaran/{id}/cetak','ReviewerEksternal\UsulanMenungguController@anggaranCetak')->name('reviewer_usulan.usulan.anggaran.cetak');
+    Route::get('/{id}/{skim_id}/review','ReviewerEksternal\UsulanMenungguController@review')->name('reviewer_usulan.usulan.review');
+    Route::post('/review','ReviewerEksternal\UsulanMenungguController@reviewPost')->name('reviewer_usulan.usulan.review_post');
+    Route::get('/riwayat_review','ReviewerEksternal\UsulanMenungguController@riwayat')->name('reviewer_usulan.riwayat');
+});
+
 Route::group(['prefix'  => 'operator/'],function(){
     Route::get('/','Operator\DashboardController@index')->name('operator.dashboard');
     Auth::routes();
@@ -90,6 +105,9 @@ Route::group(['prefix'  => 'operator/usulan_dosen/menunggu_disetujui'],function(
     Route::get('/cari_reviewer','Operator\UsulanMenungguController@cariReviewer')->name('operator.menunggu.cari_reviewer');
     Route::delete('/detail_reviewer','Operator\UsulanMenungguController@hapusReviewer')->name('operator.menunggu.detail_reviewer.hapus');
     Route::delete('/detail_reviewer_eksternal','Operator\UsulanMenungguController@hapusReviewerEksternal')->name('operator.menunggu.detail_reviewer_eksternal.hapus');
+    Route::patch('/batalkan/{id}','Operator\UsulanMenungguController@batalkan')->name('operator.menunggu.batalkan');
+
+
 });
 
 Route::group(['prefix'  => 'operator/usulan_dosen/laporan_kemajuan'],function(){
@@ -120,6 +138,15 @@ Route::group(['prefix'  => 'operator/usulan_dosen/proses_review'],function(){
     Route::get('/{id}/detail','Operator\UsulanProsesReviewController@detail')->name('operator.proses_review.deail');
     Route::get('/{id}/get_reviewer','Operator\UsulanProsesReviewController@getReviewer')->name('operator.usulan.get_reviewer');
     Route::get('/anggaran/{id}/cetak','Operator\UsulanProsesReviewController@anggaranCetak')->name('operator.usulan.anggaran.cetak');
+
+    Route::get('/{id}/detail_reviewer','Operator\UsulanProsesReviewController@detailReviewer')->name('operator.proses_review.detail_reviewer');
+    Route::get('/cari_reviewer','Operator\UsulanProsesReviewController@cariReviewer')->name('operator.proses_review.cari_reviewer');
+    Route::delete('/detail_reviewer','Operator\UsulanProsesReviewController@hapusReviewer')->name('operator.proses_review.detail_reviewer.hapus');
+    Route::delete('/detail_reviewer_eksternal','Operator\UsulanProsesReviewController@hapusReviewerEksternal')->name('operator.proses_review.detail_reviewer_eksternal.hapus');
+
+    Route::post('/reviewer','Operator\UsulanProsesReviewController@reviewerPost')->name('operator.proses_review.reviewer_post');
+    Route::post('/reviewer_eksternal','Operator\UsulanProsesReviewController@reviewerEksternalPost')->name('operator.proses_review.reviewer_eksternal_post');
+    Route::get('/{id}/get_reviewer','Operator\UsulanProsesReviewController@getReviewer')->name('operator.proses_review.get_reviewer');
 });
 
 Route::group(['prefix'  => 'operator/usulan_dosen/menunggu_verifikasi'],function(){
