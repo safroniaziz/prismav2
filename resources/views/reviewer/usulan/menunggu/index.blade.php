@@ -1,3 +1,6 @@
+@php
+    use App\Usulan;
+@endphp
 @extends('layouts.layout')
 @section('title', 'Review Usulan Kegiatan')
 @section('user-login')
@@ -74,43 +77,46 @@
                                 $no=1;
                             @endphp
                             @foreach ($usulans as $usulan)
-                                <tr>
-                                    <td> {{ $no++ }} </td>
-                                    <td style="width:30% !important;">
-                                        {!! $usulan->shortJudul !!}
-                                        <a onclick="detail({{ $usulan->id }})" id="selengkapnya">selengkapnya</a>
-                                        <br>
-                                        <hr style="margin-bottom:5px !important; margin-top:5px !important;">
-                                        <span style="font-size:10px !important; text-transform:capitalize;" for="" class="badge badge-info">{{ $usulan->jenis_kegiatan }}</span>
-                                        <span style="font-size:10px !important;" for="" class="badge badge-danger">{{ $usulan->nm_ketua_peneliti }}</span>
-                                        <span style="font-size:10px !important;" for="" class="badge badge-secondary">{{ $usulan->tahun_usulan }}</span>
-                                        <hr style="margin-bottom:5px !important; margin-top:5px !important;">
-                                        <a href="{{ asset('upload/file_usulan/'.$usulan->file_usulan) }}" download="{{ $usulan->file_usulan }}"><i class="fa fa-download"></i>&nbsp; download file usulan</a>
-                                        <br>
-                                        <a href="{{ asset('upload/peta_jalan/'.$usulan->peta_jalan) }}" download="{{ $usulan->peta_jalan }}"><i class="fa fa-download"></i>&nbsp; download file peta jalan</a>
-                                        <br>
-                                        <a href="{{ asset('upload/lembar_pengesahan/'.$usulan->lembar_pengesahan) }}" download="{{ $usulan->lembar_pengesahan }}"><i class="fa fa-download"></i>&nbsp; download file lembar pengesahan</a>
-                                    </td>
-                                    <td style="text-align:center;">
-                                        @if ($usulan->nm_anggota == null)
-                                            <label class="badge badge-danger"><i class="fa fa-close" style="padding:5px;"></i>&nbsp;Belum ditambahkan</label>
-                                            @else
-                                            <label class="badge" style="font-size:12px;">&nbsp;{!! $usulan->nm_anggota !!}</label>
-                                        @endif
-                                    </td>
-                                    <td style="text-align:center;"> Rp. {{ number_format($usulan->biaya_diusulkan, 2) }} </td>
-                                    <td style="text-align:center;">
-                                        <a href="{{ route('reviewer.usulan.anggaran.cetak',[$usulan->id]) }}" class="btn btn-primary btn-sm" style="color:white; cursor:pointer;"><i class="fa fa-print"></i></a>
-                                    </td>
+                                @php
+                                    $sudah = Usulan::leftJoin('nilai_formulirs','nilai_formulirs.usulan_id','usulans.id')->select('usulans.id')->where('nilai_formulirs.reviewer_id',$usulan->nip_reviewer)->where('usulans.id',$usulan->id)->first();
+                                @endphp
+                                @if ($sudah['id'] == null)
+                                    <tr>
+                                        <td> {{ $no++ }} </td>
+                                        <td style="width:30% !important;">
+                                            {!! $usulan->shortJudul !!}
+                                            <a onclick="detail({{ $usulan->id }})" id="selengkapnya">selengkapnya</a>
+                                            <br>
+                                            <hr style="margin-bottom:5px !important; margin-top:5px !important;">
+                                            <span style="font-size:10px !important; text-transform:capitalize;" for="" class="badge badge-info">{{ $usulan->jenis_kegiatan }}</span>
+                                            <span style="font-size:10px !important;" for="" class="badge badge-danger">{{ $usulan->nm_ketua_peneliti }}</span>
+                                            <span style="font-size:10px !important;" for="" class="badge badge-secondary">{{ $usulan->tahun_usulan }}</span>
+                                            <hr style="margin-bottom:5px !important; margin-top:5px !important;">
+                                            <a href="{{ asset('upload/file_usulan/'.$usulan->file_usulan) }}" download="{{ $usulan->file_usulan }}"><i class="fa fa-download"></i>&nbsp; download file usulan</a>
+                                            <br>
+                                            <a href="{{ asset('upload/peta_jalan/'.$usulan->peta_jalan) }}" download="{{ $usulan->peta_jalan }}"><i class="fa fa-download"></i>&nbsp; download file peta jalan</a>
+                                            <br>
+                                            <a href="{{ asset('upload/lembar_pengesahan/'.$usulan->lembar_pengesahan) }}" download="{{ $usulan->lembar_pengesahan }}"><i class="fa fa-download"></i>&nbsp; download file lembar pengesahan</a>
+                                        </td>
+                                        <td style="text-align:center;">
+                                            @if ($usulan->nm_anggota == null)
+                                                <label class="badge badge-danger"><i class="fa fa-close" style="padding:5px;"></i>&nbsp;Belum ditambahkan</label>
+                                                @else
+                                                <label class="badge" style="font-size:12px;">&nbsp;{!! $usulan->nm_anggota !!}</label>
+                                            @endif
+                                        </td>
+                                        <td style="text-align:center;"> Rp. {{ number_format($usulan->biaya_diusulkan, 2) }} </td>
+                                        <td style="text-align:center;">
+                                            <a href="{{ route('reviewer.usulan.anggaran.cetak',[$usulan->id]) }}" class="btn btn-primary btn-sm" style="color:white; cursor:pointer;"><i class="fa fa-print"></i></a>
+                                        </td>
 
-                                    <td style="text-align:center;">
-                                        @if ($usulan->reviewer_id == null)
+                                        <td style="text-align:center;">
                                             <a href=" {{ route('reviewer.usulan.review',[$usulan->id, $usulan->skim_id]) }} " class="btn btn-primary btn-sm" style="color:white;"><i class="fa fa-star"></i></a>
-                                            @else
-                                            <button class="btn btn-primary btn-sm" style="color:white;" disabled><i class="fa fa-star"></i></button>
-                                        @endif
-                                    </td>
-                                </tr>
+                                        </td>
+                                    </tr>
+                                @endif
+
+
                             @endforeach
                         </tbody>
                     </table>

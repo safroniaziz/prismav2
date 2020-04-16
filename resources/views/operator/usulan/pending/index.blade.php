@@ -78,8 +78,6 @@
                                                 <th style="text-align:center;">Anggota Kelompok</th>
                                                 <th style="text-align:center;">Biaya Diusulkan</th>
                                                 <th style="text-align:center;">Status Usulan</th>
-                                                <th style="text-align:center;">Reviewer</th>
-                                                <th style="text-align:center;">Tambah Reviewer</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -132,16 +130,6 @@
                                                             <label class="badge badge-danger" style="color:white;"><i class="fa fa-close" style="padding:5px;"></i>&nbsp;ditolak</label>
                                                         @endif
                                                     </td>
-                                                    <td style="text-align:center;">
-                                                        @if ($penelitian->nm_reviewer == null || $penelitian->nm_reviewer == "")
-                                                            <a style="text-align:center; color:red;"><i>reviewer belum ditambahkan</i></a>
-                                                            @else
-                                                            <label class="badge" style="font-size:12px;">&nbsp;{!! $penelitian->nm_reviewer !!}</label>
-                                                        @endif
-                                                    </td>
-                                                    <td style="text-align:center;">
-                                                        <a href=" {{ route('operator.menunggu.detail_reviewer',[$penelitian->id]) }} " class="btn btn-primary btn-sm" style="color:white; cursor:pointer;"><i class="fa fa-user-plus"></i></a>
-                                                    </td>
                                                 </tr>
                                                 @endif
                                             @endforeach
@@ -161,8 +149,6 @@
                                                 <th style="text-align:center;">Anggota Kelompok</th>
                                                 <th style="text-align:center;">Biaya Diusulkan</th>
                                                 <th style="text-align:center;">Status Usulan</th>
-                                                <th style="text-align:center;">Reviewer</th>
-                                                <th style="text-align:center;">Tambah Reviewer</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -214,16 +200,6 @@
                                                             @elseif($pengabdians->status_usulan == "3")
                                                             <label class="badge badge-danger" style="color:white;"><i class="fa fa-close" style="padding:5px;"></i>&nbsp;ditolak</label>
                                                         @endif
-                                                    </td>
-                                                    <td style="text-align:center;">
-                                                        @if ($pengabdians->nm_reviewer == null || $pengabdians->nm_reviewer == "")
-                                                            <a style="text-align:center; color:red;"><i>reviewer belum ditambahkan</i></a>
-                                                            @else
-                                                            <label class="badge" style="font-size:12px;">&nbsp;{!! $pengabdians->nm_reviewer !!}</label>
-                                                        @endif
-                                                    </td>
-                                                    <td style="text-align:center;">
-                                                        <a href=" {{ route('operator.menunggu.detail_reviewer',[$pengabdians->id]) }} " class="btn btn-primary btn-sm" style="color:white; cursor:pointer;"><i class="fa fa-user-plus"></i></a>
                                                     </td>
                                                 </tr>
                                                 @endif

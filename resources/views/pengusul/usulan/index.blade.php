@@ -285,11 +285,11 @@
                                                         </div>
                                                         <div class="form-group col-md-6">
                                                             <label for="exampleInputEmail1">Pilih Skim :</label>
-                                                            <select name="skim_id" class="form-control" style="font-size:13px;" required>
+                                                            <select name="skim_id" id="skim_id1" class="form-control" style="font-size:13px;" required>
                                                                 <option value="" disabled selected>-- pilih skim --</option>
-                                                                @foreach ($skims as $skim)
+                                                                {{-- @foreach ($skims as $skim)
                                                                     <option value=" {{ $skim->id }}"> {{ $skim->nm_skim }} </option>
-                                                                @endforeach
+                                                                @endforeach --}}
                                                             </select>
                                                         </div>
                                                         <div class="form-group col-md-12">
@@ -533,6 +533,31 @@
 
         $(document).ready(function() {
             $("#anggota_id").select2({ dropdownParent: "#modalanggota" });
+        });
+
+        $(document).ready(function(){
+            $(document).on('change','#jenis_kegiatan',function(){
+                // alert('berhasil');
+                var jenis_kegiatan = $(this).val();
+                var div = $(this).parent().parent();
+                var op=" ";
+                $.ajax({
+                type :'get',
+                url: "{{ url('pengusul/manajemen_usulan/cari_skim') }}",
+                data:{'jenis_kegiatan':jenis_kegiatan},
+                    success:function(data){
+                        op+='<option value="0" selected disabled>-- pilih skim --</option>';
+                        for(var i=0; i<data.length;i++){
+                            // alert(data['jenis_publikasi'][i].jenis_kegiatan);
+                            op+='<option value="'+data[i].id+'">'+data[i].nm_skim+'</option>';
+                        }
+                        div.find('#skim_id1').html(" ");
+                        div.find('#skim_id1').append(op);
+                    },
+                        error:function(){
+                    }
+                });
+            })
         });
     </script>
 @endpush

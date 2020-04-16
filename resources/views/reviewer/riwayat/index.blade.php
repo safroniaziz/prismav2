@@ -1,3 +1,6 @@
+@php
+    use App\Usulan;
+@endphp
 @extends('layouts.layout')
 @section('title', 'Riwayat Review')
 @section('user-login')
@@ -68,59 +71,59 @@
                             @endphp
                             @foreach ($riwayats as $riwayat)
                                 @php
-                                    $jumlah = count(explode('&nbsp;|&nbsp;',$riwayat->nm_reviewer));
+                                    $sudah = Usulan::leftJoin('nilai_formulirs','nilai_formulirs.usulan_id','usulans.id')->select('usulans.id')->where('nilai_formulirs.reviewer_id',$riwayat->nip_reviewer)->where('usulans.id',$riwayat->id)->first();
                                 @endphp
-                                @if ($jumlah < 2)
-                                <tr>
-                                    <td> {{ $no++ }} </td>
-                                    <td style="width:40% !important;">
-                                        {!! $riwayat->shortJudul !!}
-                                        <a onclick="detail({{ $riwayat->id }})" id="selengkapnya">selengkapnya</a>
-                                        <br>
-                                        <hr style="margin-bottom:5px !important; margin-top:5px !important;">
-                                        <span style="font-size:10px !important; text-transform:capitalize;" for="" class="badge badge-info">{{ $riwayat->jenis_kegiatan }}</span>
-                                        <span style="font-size:10px !important;" for="" class="badge badge-danger">{{ $riwayat->nm_ketua_peneliti }}</span>
-                                        <span style="font-size:10px !important;" for="" class="badge badge-secondary">{{ $riwayat->tahun_usulan }}</span>
-                                        <hr style="margin-bottom:5px !important; margin-top:5px !important;">
-                                        <a href="{{ asset('upload/file_usulan/'.$riwayat->file_usulan) }}" download="{{ $riwayat->file_usulan }}"><i class="fa fa-download"></i>&nbsp; download file usulan</a>
-                                        <br>
-                                        <a href="{{ asset('upload/peta_jalan/'.$riwayat->peta_jalan) }}" download="{{ $riwayat->peta_jalan }}"><i class="fa fa-download"></i>&nbsp; download file peta jalan</a>
-                                        <br>
-                                        <a href="{{ asset('upload/lembar_pengesahan/'.$riwayat->lembar_pengesahan) }}" download="{{ $riwayat->lembar_pengesahan }}"><i class="fa fa-download"></i>&nbsp; download file lembar pengesahan</a>
-                                   </td>
-                                    <td>
-                                        @if ($riwayat->nm_anggota == null)
-                                            <label class="badge badge-danger"><i class="fa fa-close" style="padding:5px;"></i>&nbsp;Belum ditambahkan</label>
-                                            @else
-                                            <label class="badge" style="font-size:12px;">&nbsp;{!! $riwayat->nm_anggota !!}</label>
-                                        @endif
+                                @if ($sudah['id'] != null)
+                                    <tr>
+                                        <td> {{ $no++ }} </td>
+                                        <td style="width:40% !important;">
+                                            {!! $riwayat->shortJudul !!}
+                                            <a onclick="detail({{ $riwayat->id }})" id="selengkapnya">selengkapnya</a>
+                                            <br>
+                                            <hr style="margin-bottom:5px !important; margin-top:5px !important;">
+                                            <span style="font-size:10px !important; text-transform:capitalize;" for="" class="badge badge-info">{{ $riwayat->jenis_kegiatan }}</span>
+                                            <span style="font-size:10px !important;" for="" class="badge badge-danger">{{ $riwayat->nm_ketua_peneliti }}</span>
+                                            <span style="font-size:10px !important;" for="" class="badge badge-secondary">{{ $riwayat->tahun_usulan }}</span>
+                                            <hr style="margin-bottom:5px !important; margin-top:5px !important;">
+                                            <a href="{{ asset('upload/file_usulan/'.$riwayat->file_usulan) }}" download="{{ $riwayat->file_usulan }}"><i class="fa fa-download"></i>&nbsp; download file usulan</a>
+                                            <br>
+                                            <a href="{{ asset('upload/peta_jalan/'.$riwayat->peta_jalan) }}" download="{{ $riwayat->peta_jalan }}"><i class="fa fa-download"></i>&nbsp; download file peta jalan</a>
+                                            <br>
+                                            <a href="{{ asset('upload/lembar_pengesahan/'.$riwayat->lembar_pengesahan) }}" download="{{ $riwayat->lembar_pengesahan }}"><i class="fa fa-download"></i>&nbsp; download file lembar pengesahan</a>
                                     </td>
-                                    <td style="width:30%; text-align:center;">
-                                        <a>Rp. {{ number_format($riwayat->biaya_diusulkan, 2) }}</a>
-                                        <br>
-                                        <hr style="margin-bottom:5px !important; margin-top:5px !important;">
-                                        <a href="{{ route('operator.usulan.anggaran.cetak',[$riwayat->id]) }}" class="btn btn-primary btn-sm" style="color:white; cursor:pointer;"><i class="fa fa-print"></i>&nbsp; Cetak</a>
-                                    </td>
-                                    <td style="text-align:center">
-                                        @if ($riwayat->status_usulan == '0')
-                                            <label class="badge badge-warning" style="color:white;"><i class="fa fa-clock-o" style="padding:5px;"></i>&nbsp;belum diusulkan</label>
-                                            @elseif($riwayat->status_usulan == "1")
-                                            <label class="badge badge-info" style="color:white;"><i class="fa fa-clock-o" style="padding:5px;"></i>&nbsp;menunggu verifikasi</label>
-                                            @elseif($riwayat->status_usulan == "2")
-                                            <label class="badge badge-success" style="color:white;"><i class="fa fa-clock-o" style="padding:5px;"></i>&nbsp;sudah di review</label>
-                                            @elseif($riwayat->status_usulan == "3")
-                                            <label class="badge badge-success" style="color:white;"><i class="fa fa-check-circle" style="padding:5px;"></i>&nbsp;usulan diterima</label>
-                                            @elseif($riwayat->status_usulan == "4")
-                                            <label class="badge badge-danger" style="color:white;"><i class="fa fa-close" style="padding:5px;"></i>&nbsp;usulan ditolak</label>
-                                            @elseif($riwayat->status_usulan == "5")
-                                            <label class="badge badge-info" style="color:white;"><i class="fa fa-info-circle" style="padding:5px;"></i>&nbsp;laporan kemajuan</label>
-                                            @elseif($riwayat->status_usulan == "6")
-                                            <label class="badge badge-success" style="color:white;"><i class="fa fa-check-circle" style="padding:5px;"></i>&nbsp;laporan kemajuan diterima</label>
-                                            @elseif($riwayat->status_usulan == "7")
-                                            <label class="badge badge-danger" style="color:white;"><i class="fa fa-close" style="padding:5px;"></i>&nbsp;laporan kemajuan ditolak</label>
-                                        @endif
-                                    </td>
-                                </tr>
+                                        <td>
+                                            @if ($riwayat->nm_anggota == null)
+                                                <label class="badge badge-danger"><i class="fa fa-close" style="padding:5px;"></i>&nbsp;Belum ditambahkan</label>
+                                                @else
+                                                <label class="badge" style="font-size:12px;">&nbsp;{!! $riwayat->nm_anggota !!}</label>
+                                            @endif
+                                        </td>
+                                        <td style="width:30%; text-align:center;">
+                                            <a>Rp. {{ number_format($riwayat->biaya_diusulkan, 2) }}</a>
+                                            <br>
+                                            <hr style="margin-bottom:5px !important; margin-top:5px !important;">
+                                            <a href="{{ route('operator.usulan.anggaran.cetak',[$riwayat->id]) }}" class="btn btn-primary btn-sm" style="color:white; cursor:pointer;"><i class="fa fa-print"></i>&nbsp; Cetak</a>
+                                        </td>
+                                        <td style="text-align:center">
+                                            @if ($riwayat->status_usulan == '0')
+                                                <label class="badge badge-warning" style="color:white;"><i class="fa fa-clock-o" style="padding:5px;"></i>&nbsp;belum diusulkan</label>
+                                                @elseif($riwayat->status_usulan == "1")
+                                                <label class="badge badge-info" style="color:white;"><i class="fa fa-clock-o" style="padding:5px;"></i>&nbsp;menunggu verifikasi</label>
+                                                @elseif($riwayat->status_usulan == "2")
+                                                <label class="badge badge-success" style="color:white;"><i class="fa fa-clock-o" style="padding:5px;"></i>&nbsp;sudah di review</label>
+                                                @elseif($riwayat->status_usulan == "3")
+                                                <label class="badge badge-success" style="color:white;"><i class="fa fa-check-circle" style="padding:5px;"></i>&nbsp;usulan diterima</label>
+                                                @elseif($riwayat->status_usulan == "4")
+                                                <label class="badge badge-danger" style="color:white;"><i class="fa fa-close" style="padding:5px;"></i>&nbsp;usulan ditolak</label>
+                                                @elseif($riwayat->status_usulan == "5")
+                                                <label class="badge badge-info" style="color:white;"><i class="fa fa-info-circle" style="padding:5px;"></i>&nbsp;laporan kemajuan</label>
+                                                @elseif($riwayat->status_usulan == "6")
+                                                <label class="badge badge-success" style="color:white;"><i class="fa fa-check-circle" style="padding:5px;"></i>&nbsp;laporan kemajuan diterima</label>
+                                                @elseif($riwayat->status_usulan == "7")
+                                                <label class="badge badge-danger" style="color:white;"><i class="fa fa-close" style="padding:5px;"></i>&nbsp;laporan kemajuan ditolak</label>
+                                            @endif
+                                        </td>
+                                    </tr>
                                 @endif
                             @endforeach
                         </tbody>

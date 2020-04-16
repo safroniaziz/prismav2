@@ -28,7 +28,7 @@ class UsulanMenungguController extends Controller
 
     public function index(){
         $panda = new UserLoginController();
-        $usulans = Usulan::leftJoin('anggota_usulans','anggota_usulans.usulan_id','usulans.id')
+        $penelitians = Usulan::leftJoin('anggota_usulans','anggota_usulans.usulan_id','usulans.id')
                             ->leftJoin('skims','skims.id','usulans.skim_id')
                             ->leftJoin('reviewer1s','reviewer1s.usulan_id','usulans.id')
                             ->select('usulans.id','judul_kegiatan','jenis_kegiatan',
@@ -38,9 +38,23 @@ class UsulanMenungguController extends Controller
                                     DB::raw('SUM(reviewer_nip) as jumlah')
                                     )
                             ->where('usulans.status_usulan','1')
+                            ->where('usulans.jenis_kegiatan','penelitian')
                             ->groupBy('usulans.id')
                             ->get();
-        return view('operator/usulan/menunggu_disetujui.index',compact('usulans'));
+        $pengabdians = Usulan::leftJoin('anggota_usulans','anggota_usulans.usulan_id','usulans.id')
+                            ->leftJoin('skims','skims.id','usulans.skim_id')
+                            ->leftJoin('reviewer1s','reviewer1s.usulan_id','usulans.id')
+                            ->select('usulans.id','judul_kegiatan','jenis_kegiatan',
+                                    'abstrak','kata_kunci','peta_jalan','file_usulan','lembar_pengesahan','biaya_diusulkan','status_usulan','tahun_usulan','ketua_peneliti_prodi_nama','ketua_peneliti_nama as nm_ketua_peneliti',
+                                    DB::raw('group_concat(distinct concat(anggota_usulans.anggota_nama) SEPARATOR "<br>") as "nm_anggota" '),
+                                    DB::raw('group_concat(distinct concat(reviewer1s.reviewer_nama) SEPARATOR "&nbsp;|&nbsp;") as "nm_reviewer" '),
+                                    DB::raw('SUM(reviewer_nip) as jumlah')
+                                    )
+                            ->where('usulans.status_usulan','1')
+                            ->where('usulans.jenis_kegiatan','pengabdian')
+                            ->groupBy('usulans.id')
+                            ->get();
+        return view('operator/usulan/menunggu_disetujui.index',compact('penelitians','pengabdians'));
     }
 
     public function detail($id){
@@ -86,6 +100,7 @@ class UsulanMenungguController extends Controller
                 $reviewer->reviewer_jabatan_fungsional = $request->jabatan_reviewer;
                 $reviewer->reviewer_jk = $request->jk_reviewer;
                 $reviewer->reviewer_universitas = "Universitas Bengkulu";
+                $reviewer->jenis_reviewer = "internal";
                 $reviewer->save();
 
                 $reviewer = new Reviewer2;
@@ -99,8 +114,57 @@ class UsulanMenungguController extends Controller
                 $reviewer->reviewer_jabatan_fungsional = $request->jabatan_reviewer;
                 $reviewer->reviewer_jk = $request->jk_reviewer;
                 $reviewer->reviewer_universitas = "Universitas Bengkulu";
+                $reviewer->jenis_reviewer = "internal";
                 $reviewer->save();
                 return redirect()->route('operator.menunggu.detail_reviewer',[$request->usulan_id_reviewer])->with(['success' =>  'Reviewer berhasil ditambahkan !']);
+            }
+        }
+    }
+
+    public function reviewerEksternalPost(Request $request){
+        $sudah = AnggotaUsulan::select('anggota_nip')->where('usulan_id',$request->usulan_id_reviewer_eksternal)->where('anggota_nip',$request->nip_reviewer)->first();
+        $sudah2 = Reviewer1::select('reviewer_nip')->where('usulan_id',$request->usulan_id_reviewer_eksternal)->where('reviewer_nip',$request->nip_reviewer)->first();
+        $ketua = Usulan::select('ketua_peneliti_nip')->where('id',$request->usulan_id_reviewer_eksternal)->where('ketua_peneliti_nip',$request->nip_reviewer)->first();
+        if (count($sudah) != 0) {
+            return redirect()->route('operator.menunggu.detail_reviewer',[$request->usulan_id_reviewer_eksternal])->with(['error' =>  'reviewer yang dipilih adalah anggota kegiatan, tidak dapat ditambahkan !']);
+        }
+        else{
+            if(count($sudah2) != 0){
+                return redirect()->route('operator.menunggu.detail_reviewer',[$request->usulan_id_reviewer_eksternal])->with(['error' =>  'reviewer yang dipilih gagal ditambahkan !']);
+            }
+            if(count($ketua) != 0){
+                return redirect()->route('operator.menunggu.detail_reviewer',[$request->usulan_id_reviewer_eksternal])->with(['error' =>  'reviewer yang dipilih adalah ketua usulan kegiatan, tidak dapat ditambahkan !']);
+            }
+            else{
+                $reviewer = new Reviewer1;
+                $reviewer->usulan_id = $request->usulan_id_reviewer_eksternal;
+                $reviewer->reviewer_nip = $request->nip_reviewer;
+                $reviewer->reviewer_nama = $request->nm_reviewer;
+                $reviewer->reviewer_prodi_id = $request->prodi_kode_reviewer;
+                $reviewer->reviewer_prodi_nama = $request->prodi_reviewer;
+                $reviewer->reviewer_fakultas_id = $request->fakultas_kode_reviewer;
+                $reviewer->reviewer_fakultas_nama = $request->fakultas_reviewer;
+                $reviewer->reviewer_jabatan_fungsional = $request->jabatan_reviewer;
+                $reviewer->reviewer_jk = $request->jk_reviewer;
+                $reviewer->reviewer_universitas = $request->universitas;
+                $reviewer->jenis_reviewer = "eksternal";
+                $reviewer->password = bcrypt($request->password);
+                $reviewer->save();
+
+                $reviewer = new Reviewer2;
+                $reviewer->usulan_id = $request->usulan_id_reviewer_eksternal;
+                $reviewer->reviewer_nip = $request->nip_reviewer;
+                $reviewer->reviewer_nama = $request->nm_reviewer;
+                $reviewer->reviewer_prodi_id = $request->prodi_kode_reviewer;
+                $reviewer->reviewer_prodi_nama = $request->prodi_reviewer;
+                $reviewer->reviewer_fakultas_id = $request->fakultas_kode_reviewer;
+                $reviewer->reviewer_fakultas_nama = $request->fakultas_reviewer;
+                $reviewer->reviewer_jabatan_fungsional = $request->jabatan_reviewer;
+                $reviewer->reviewer_jk = $request->jk_reviewer;
+                $reviewer->reviewer_universitas = $request->universitas;
+                $reviewer->jenis_reviewer = "eksternal";
+                $reviewer->save();
+                return redirect()->route('operator.menunggu.detail_reviewer',[$request->usulan_id_reviewer_eksternal])->with(['success' =>  'Reviewer Eksternal berhasil ditambahkan !']);
             }
         }
     }
@@ -110,6 +174,13 @@ class UsulanMenungguController extends Controller
         $anggota->delete();
 
         return redirect()->route('operator.menunggu.detail_reviewer',[$request->id_usulan])->with(['success' =>  'Reviewer usulan kegiatan berhasil dihapus !']);
+    }
+
+    public function hapusReviewerEksternal(Request $request){
+        $anggota = Reviewer1::find($request->id);
+        $anggota->delete();
+
+        return redirect()->route('operator.menunggu.detail_reviewer',[$request->id_usulan])->with(['success' =>  'Reviewer eksternal usulan kegiatan berhasil dihapus !']);
     }
 
     public function anggaranCetak($id){
@@ -134,17 +205,25 @@ class UsulanMenungguController extends Controller
         $reviewers = Reviewer1::join('usulans','usulans.id','reviewer1s.usulan_id')
                                     ->select('reviewer1s.id','reviewer_nip','reviewer_nama','reviewer_prodi_nama','reviewer_fakultas_nama','judul_kegiatan')
                                     ->where('usulans.id',$id)
+                                    ->where('jenis_reviewer','internal')
+                                    ->get();
+        $reviewer_eksternals = Reviewer1::join('usulans','usulans.id','reviewer1s.usulan_id')
+                                    ->select('reviewer1s.id','reviewer_nip','reviewer_nama','reviewer_prodi_nama','reviewer_fakultas_nama','judul_kegiatan')
+                                    ->where('usulans.id',$id)
+                                    ->where('jenis_reviewer','eksternal')
                                     ->get();
         $id_usulan = $id;
-        $jumlah = count($reviewers);
+        $a = count($reviewers);
+        $b = count($reviewer_eksternals);
+        $jumlah = $a+$b;
         $judul_kegiatan = Usulan::select('judul_kegiatan')->where('id',$id)->first();
-        return view('operator/usulan/menunggu_disetujui.reviewer',compact('reviewers','id_usulan','judul_kegiatan','jumlah'));
+        return view('operator/usulan/menunggu_disetujui.reviewer',compact('reviewers','reviewer_eksternals','id_usulan','judul_kegiatan','jumlah'));
     }
 
     public function cariReviewer(Request $request){
         $panda = new UserLoginController();
         $dosen = '
-        {pegawai(pegNama:"'.$request->nm_reviewer.'") {
+        {pegawai(pegNip:"'.$request->nip_reviewer.'") {
             pegNip
             pegIsAktif
             pegNama

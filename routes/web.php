@@ -71,16 +71,25 @@ Route::group(['prefix'  => 'operator/kriteria_penilaian'],function(){
     Route::delete('/','Operator\KriteriaPenilaianController@delete')->name('operator.kriteria_penilaian.delete');
 });
 
+Route::group(['prefix'  => 'operator/usulan_dosen/usulan_pending'],function(){
+    Route::get('/','Operator\UsulanPendingController@index')->name('operator.pending');
+    Route::get('/{id}/detail','Operator\UsulanPendingController@detail')->name('operator.pending.detail');
+    Route::get('/anggaran/{id}/cetak','Operator\UsulanPendingController@anggaranCetak')->name('operator.pending.anggaran.cetak');
+    Route::get('/{id}/detail_reviewer','Operator\UsulanPendingController@detailReviewer')->name('operator.pending.detail_reviewer');
+});
+
 Route::group(['prefix'  => 'operator/usulan_dosen/menunggu_disetujui'],function(){
     Route::get('/','Operator\UsulanMenungguController@index')->name('operator.menunggu');
     Route::get('/{id}/detail','Operator\UsulanMenungguController@detail')->name('operator.menunggu.detail');
     Route::post('/reviewer','Operator\UsulanMenungguController@reviewerPost')->name('operator.usulan.reviewer_post');
+    Route::post('/reviewer_eksternal','Operator\UsulanMenungguController@reviewerEksternalPost')->name('operator.usulan.reviewer_eksternal_post');
     Route::get('/{id}/get_reviewer','Operator\UsulanMenungguController@getReviewer')->name('operator.usulan.get_reviewer');
     Route::get('/anggaran/{id}/cetak','Operator\UsulanMenungguController@anggaranCetak')->name('operator.usulan.anggaran.cetak');
 
     Route::get('/{id}/detail_reviewer','Operator\UsulanMenungguController@detailReviewer')->name('operator.menunggu.detail_reviewer');
     Route::get('/cari_reviewer','Operator\UsulanMenungguController@cariReviewer')->name('operator.menunggu.cari_reviewer');
     Route::delete('/detail_reviewer','Operator\UsulanMenungguController@hapusReviewer')->name('operator.menunggu.detail_reviewer.hapus');
+    Route::delete('/detail_reviewer_eksternal','Operator\UsulanMenungguController@hapusReviewerEksternal')->name('operator.menunggu.detail_reviewer_eksternal.hapus');
 });
 
 Route::group(['prefix'  => 'operator/usulan_dosen/laporan_kemajuan'],function(){
@@ -93,6 +102,10 @@ Route::group(['prefix'  => 'operator/usulan_dosen/laporan_kemajuan'],function(){
     Route::get('/cari_reviewer','Operator\LaporanKemajuanController@cariReviewer')->name('operator.laporan_kemajuan.cari_reviewer');
     Route::delete('/detail_reviewer','Operator\LaporanKemajuanController@hapusReviewer')->name('operator.laporan_kemajuan.detail_reviewer.hapus');
     Route::post('/reviewer','Operator\LaporanKemajuanController@reviewerPost')->name('operator.laporan_kemajuan.reviewer_post');
+    Route::post('/reviewer_eksternal','Operator\LaporanKemajuanController@reviewerEksternalPost')->name('operator.laporan_kemajuan.reviewer_eksternal_post');
+    Route::delete('/detail_reviewer_eksternal','Operator\LaporanKemajuanController@hapusReviewerEksternal')->name('operator.laporan_kemajuan.detail_reviewer_eksternal.hapus');
+
+
 });
 
 Route::group(['prefix'  => 'operator/usulan_dosen/laporan_kemajuan/proses_review'],function(){
@@ -196,7 +209,7 @@ Route::group(['prefix'  => 'pengusul/manajemen_usulan'],function(){
     Route::get('/{id}/detail_anggota','Pengusul\UsulanController@detailAnggota')->name('pengusul.usulan.detail_anggota');
     Route::get('/cari_anggota','Pengusul\UsulanController@cariAnggota')->name('pengusul.usulan.cari_anggota');
     Route::delete('/detail_anggota','Pengusul\UsulanController@hapusAnggota')->name('pengusul.usulan.detail_anggota.hapus');
-
+    Route::get('/cari_skim','Pengusul\UsulanController@cariSkim')->name('deta.pembahasan.cari_skim');
 });
 
 Route::group(['prefix'  => 'pengusul/upload_laporan_kemajuan'],function(){

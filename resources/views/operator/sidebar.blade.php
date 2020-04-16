@@ -29,6 +29,7 @@
             style="display:block !important;"
         @endif
     >
+        <li><a href=" {{ route('operator.pending') }} ">Usulan Pending</a></li>
         <li
             @if (Route::current()->getName() == "operator.menunggu.detail_reviewer")
                 class="current-page"

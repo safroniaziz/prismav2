@@ -1,3 +1,6 @@
+@php
+    use App\Usulan;
+@endphp
 @extends('layouts.layout')
 @section('title', 'Dashboard')
 @section('login_as', 'Administrator')
@@ -38,7 +41,6 @@
         </header>
         <div class="panel-body" style="border-top: 1px solid #eee; padding:15px; background:white;">
             <form action="{{ route('operator.verifikasi.verifikasi') }}" method="POST">
-
                 <div class="row" style="margin-right:-15px; margin-left:-15px;">
                     <div class="col-md-12">
                         @if ($message = Session::get('success'))
@@ -68,65 +70,182 @@
                         </button>
                     </div>
                     <div class="col-md-12">
-                        <table class="table table-striped table-bordered" id="table" style="width:100%; ">
-                            <thead>
-                                <tr>
-                                    <th style="text-align:center" >
-                                        <input type="checkbox" class="form-control selectall">
-                                    </th>
-                                    <th>No</th>
-                                    <th>Judul Kegiatan</th>
-                                    <th>Total Skor</th>
-                                    <th>Detail Per Indikator</th>
-                                    <th>Detail Per Reviewer</th>
-                                    <th style="text-align:center;">Komentar Reviewer</th>
-                                    <th>Reviewer 3</th>
+                        <div style="margin-bottom:10px;">
+                            <ul class="nav nav-tabs" id="myTab">
+                                <li class="active"><a class="nav-item nav-link active" data-toggle="tab" href="#nav-penelitian"><i class="fa fa-book"></i>&nbsp;Usulan Penelitian</a></li>
+                                <li><a class="nav-item nav-link" data-toggle="tab" href="#nav-pengabdian"><i class="fa fa-list-alt"></i>&nbsp;Usulan Pengabdian</a></li>
+                            </ul>
+                            <div class="tab-content" id="nav-tabContent">
+                                <div class="tab-pane fade show active" id="nav-penelitian" role="tabpanel" aria-labelledby="nav-honor-tab">
+                                    <div class="row">
+                                        <div class="col-md-12" style="margin-top:10px;">
+                                            <table class="table table-striped table-bordered" id="table" style="width:100%; ">
+                                                <thead>
+                                                    <tr>
+                                                        <th style="text-align:center" >
+                                                            <input type="checkbox" class="form-control selectall">
+                                                        </th>
+                                                        <th>No</th>
+                                                        <th>Judul Kegiatan</th>
+                                                        <th>Total Skor</th>
+                                                        <th>Detail Per Indikator</th>
+                                                        <th>Detail Per Reviewer</th>
+                                                        <th style="text-align:center;">Komentar Reviewer</th>
+                                                        <th>Reviewer 3</th>
 
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @php
-                                    $no=1;
-                                @endphp
-                                @foreach ($usulans as $usulan)
-                                    <tr>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @php
+                                                        $no=1;
+                                                    @endphp
+                                                    @foreach ($penelitians as $penelitan)
+                                                        @php
+                                                            $jumlah = Usulan::join('reviewer1s','reviewer1s.usulan_id','usulans.id')->select(DB::raw('group_concat(distinct concat(reviewer1s.reviewer_nama) SEPARATOR "&nbsp;|&nbsp;") as "nm_reviewer" '))->where('usulans.id',$penelitan->id)->first();
+                                                            $jumlah2 = count(explode('&nbsp;|&nbsp;',$jumlah->nm_reviewer));
+                                                        @endphp
+                                                        @if ($jumlah2 == 2)
+                                                            <tr>
+                                                                <td style="text-align:center;">
+                                                                    @if($penelitan->status_usulan != "3" && $penelitan->status_usulan != "4")
+                                                                    <input type="checkbox" name="ids[]" class="selectbox" value="{{ $penelitan->id }}">
+                                                                    @endif
+                                                                </td>
+                                                                <td> {{ $no++ }} </td>
+                                                                <td style="width:40% !important;">
+                                                                    {!! $penelitan->shortJudul !!}
+                                                                    <a onclick="selengkapnya({{ $penelitan->id }})" id="selengkapnya">selengkapnya</a>
+                                                                    <br>
+                                                                    <hr style="margin-bottom:5px !important; margin-top:5px !important;">
+                                                                    <span style="font-size:10px !important; text-transform:capitalize;" for="" class="badge badge-info">{{ $penelitan->jenis_kegiatan }}</span>
+                                                                    <span style="font-size:10px !important;" for="" class="badge badge-danger">{{ $penelitan->ketua_peneliti_nama }}</span>
+                                                                    <span style="font-size:10px !important;" for="" class="badge badge-secondary">{{ $penelitan->tahun_usulan }}</span>
+                                                                    <hr style="margin-bottom:5px !important; margin-top:5px !important;">
+                                                                    <a href="{{ asset('upload/file_usulan/'.$penelitan->file_usulan) }}" download="{{ $penelitan->file_usulan }}"><i class="fa fa-download"></i>&nbsp; download file usulan</a>
+                                                                    <br>
+                                                                    <a href="{{ asset('upload/peta_jalan/'.$penelitan->peta_jalan) }}" download="{{ $penelitan->peta_jalan }}"><i class="fa fa-download"></i>&nbsp; download file peta jalan</a>
+                                                                </td>
+                                                                @php
+                                                                    $tambah = Usulan::join('nilai_formulir3s','nilai_formulir3s.usulan_id','usulans.id')
+                                                                                ->join('formulirs','formulirs.id','nilai_formulir3s.formulir_id')
+                                                                                ->select(DB::raw('SUM(skor * (bobot/100)) as totalskor'))
+                                                                                ->where('status_usulan','2')
+                                                                                ->where('usulans.id',$penelitan->id)
+                                                                                ->get();
+                                                                @endphp
+                                                                    @if ($tambah[0]->totalskor == 0 || $tambah[0]->totalskor == null || $tambah[0]->totalskor == "")
+                                                                        <td style="padding:15px 27px;"> {{ number_format(($penelitan->totalskor)/2, 2) }} </td>
+                                                                        @else
+                                                                        <td style="padding:15px 27px;"> {{ number_format(($penelitan->totalskor+$tambah[0]->totalskor)/3, 2) }} </td>
+                                                                    @endif
 
-                                        <td style="text-align:center;">
-                                            @if($usulan->status_usulan != "3" && $usulan->status_usulan != "4")
-                                            <input type="checkbox" name="ids[]" class="selectbox" value="{{ $usulan->id }}">
-                                            @endif
-                                        </td>
-                                        <td> {{ $no++ }} </td>
-                                        <td style="width:40% !important;">
-                                            {!! $usulan->shortJudul !!}
-                                            <a onclick="selengkapnya({{ $usulan->id }})" id="selengkapnya">selengkapnya</a>
-                                            <br>
-                                            <hr style="margin-bottom:5px !important; margin-top:5px !important;">
-                                            <span style="font-size:10px !important; text-transform:capitalize;" for="" class="badge badge-info">{{ $usulan->jenis_kegiatan }}</span>
-                                            <span style="font-size:10px !important;" for="" class="badge badge-danger">{{ $usulan->ketua_peneliti_nama }}</span>
-                                            <span style="font-size:10px !important;" for="" class="badge badge-secondary">{{ $usulan->tahun_usulan }}</span>
-                                            <hr style="margin-bottom:5px !important; margin-top:5px !important;">
-                                            <a href="{{ asset('upload/file_usulan/'.$usulan->file_usulan) }}" download="{{ $usulan->file_usulan }}"><i class="fa fa-download"></i>&nbsp; download file usulan</a>
-                                            <br>
-                                            <a href="{{ asset('upload/peta_jalan/'.$usulan->peta_jalan) }}" download="{{ $usulan->peta_jalan }}"><i class="fa fa-download"></i>&nbsp; download file peta jalan</a>
-                                       </td>
-                                        <td style="padding:15px 27px;"> {{ number_format($usulan->totalskor, 2) }} </td>
-                                        <td style="padding:15px 30px;">
-                                            <a onclick="detail({{ $usulan->id }})" class="btn btn-primary btn-sm" style="color:white; cursor:pointer;"><i class="fa fa-info-circle"></i></a>
-                                        </td>
-                                        <td style="padding:15px 30px;">
-                                            <a onclick="detailReviewer({{ $usulan->id }})" class="btn btn-primary btn-sm" style="color:white; cursor:pointer;"><i class="fa fa-info-circle"></i></a>
-                                        </td>
-                                        <td style="text-align:center;">
-                                            <a onclick="komentar( {{ $usulan->id }} )"  class="btn btn-primary btn-sm" style="color:white; cursor:pointer;"> <i class="fa fa-comments"></i></a>
-                                        </td>
-                                        <td style="text-align:center;">
-                                            <a href="{{ route('operator.verifikasi.reviewer3',[$usulan->id, $usulan->skim_id]) }}"  class="btn btn-primary btn-sm" style="color:white; cursor:pointer;"> <i class="fa fa-plus"></i></a>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
+                                                                <td style="padding:15px 30px;">
+                                                                        <a onclick="detail({{ $penelitan->id }})" class="btn btn-primary btn-sm" style="color:white; cursor:pointer;"><i class="fa fa-info-circle"></i></a>
+                                                                    </td>
+                                                                    <td style="padding:15px 30px;">
+                                                                        <a onclick="detailReviewer({{ $penelitan->id }})" class="btn btn-primary btn-sm" style="color:white; cursor:pointer;"><i class="fa fa-info-circle"></i></a>
+                                                                    </td>
+                                                                    <td style="text-align:center;">
+                                                                        <a onclick="komentar( {{ $penelitan->id }} )"  class="btn btn-primary btn-sm" style="color:white; cursor:pointer;"> <i class="fa fa-comments"></i></a>
+                                                                    </td>
+                                                                    <td style="text-align:center;">
+                                                                        <a href="{{ route('operator.verifikasi.reviewer3',[$penelitan->id, $penelitan->skim_id]) }}"  class="btn btn-primary btn-sm" style="color:white; cursor:pointer;"> <i class="fa fa-plus"></i></a>
+                                                                    </td>
+                                                            </tr>
+                                                        @endif
+                                                    @endforeach
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab-pane fade show" id="nav-pengabdian" role="tabpanel" aria-labelledby="nav-honor-tab">
+                                    <div class="row">
+                                        <div class="col-md-12" style="margin-top:10px;">
+                                            <table class="table table-striped table-bordered" id="table" style="width:100%; ">
+                                                <thead>
+                                                    <tr>
+                                                        <th style="text-align:center" >
+                                                            <input type="checkbox" class="form-control selectall2">
+                                                        </th>
+                                                        <th>No</th>
+                                                        <th>Judul Kegiatan</th>
+                                                        <th>Total Skor</th>
+                                                        <th>Detail Per Indikator</th>
+                                                        <th>Detail Per Reviewer</th>
+                                                        <th style="text-align:center;">Komentar Reviewer</th>
+                                                        <th>Reviewer 3</th>
+
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @php
+                                                        $no=1;
+                                                    @endphp
+                                                    @foreach ($pengabdians as $pengabdians)
+                                                        @php
+                                                            $jumlah = Usulan::join('reviewer1s','reviewer1s.usulan_id','usulans.id')->select(DB::raw('group_concat(distinct concat(reviewer1s.reviewer_nama) SEPARATOR "&nbsp;|&nbsp;") as "nm_reviewer" '))->where('usulans.id',$pengabdians->id)->first();
+                                                            $jumlah2 = count(explode('&nbsp;|&nbsp;',$jumlah->nm_reviewer));
+                                                        @endphp
+                                                        @if ($jumlah2 == 2)
+                                                            <tr>
+                                                                <td style="text-align:center;">
+                                                                    @if($pengabdians->status_usulan != "3" && $pengabdians->status_usulan != "4")
+                                                                    <input type="checkbox" name="ids[]" class="selectbox2" value="{{ $pengabdians->id }}">
+                                                                    @endif
+                                                                </td>
+                                                                <td> {{ $no++ }} </td>
+                                                                <td style="width:40% !important;">
+                                                                    {!! $pengabdians->shortJudul !!}
+                                                                    <a onclick="selengkapnya({{ $pengabdians->id }})" id="selengkapnya">selengkapnya</a>
+                                                                    <br>
+                                                                    <hr style="margin-bottom:5px !important; margin-top:5px !important;">
+                                                                    <span style="font-size:10px !important; text-transform:capitalize;" for="" class="badge badge-info">{{ $pengabdians->jenis_kegiatan }}</span>
+                                                                    <span style="font-size:10px !important;" for="" class="badge badge-danger">{{ $pengabdians->ketua_peneliti_nama }}</span>
+                                                                    <span style="font-size:10px !important;" for="" class="badge badge-secondary">{{ $pengabdians->tahun_usulan }}</span>
+                                                                    <hr style="margin-bottom:5px !important; margin-top:5px !important;">
+                                                                    <a href="{{ asset('upload/file_usulan/'.$pengabdians->file_usulan) }}" download="{{ $pengabdians->file_usulan }}"><i class="fa fa-download"></i>&nbsp; download file usulan</a>
+                                                                    <br>
+                                                                    <a href="{{ asset('upload/peta_jalan/'.$pengabdians->peta_jalan) }}" download="{{ $pengabdians->peta_jalan }}"><i class="fa fa-download"></i>&nbsp; download file peta jalan</a>
+                                                                </td>
+                                                                @php
+                                                                    $tambah = Usulan::join('nilai_formulir3s','nilai_formulir3s.usulan_id','usulans.id')
+                                                                                ->join('formulirs','formulirs.id','nilai_formulir3s.formulir_id')
+                                                                                ->select(DB::raw('SUM(skor * (bobot/100)) as totalskor'))
+                                                                                ->where('status_usulan','2')
+                                                                                ->where('usulans.id',$pengabdians->id)
+                                                                                ->get();
+                                                                @endphp
+                                                                    @if ($tambah[0]->totalskor == 0 || $tambah[0]->totalskor == null || $tambah[0]->totalskor == "")
+                                                                        <td style="padding:15px 27px;"> {{ number_format(($pengabdians->totalskor)/2, 2) }} </td>
+                                                                        @else
+                                                                        <td style="padding:15px 27px;"> {{ number_format(($pengabdians->totalskor+$tambah[0]->totalskor)/3, 2) }} </td>
+                                                                    @endif
+
+                                                                <td style="padding:15px 30px;">
+                                                                        <a onclick="detail({{ $pengabdians->id }})" class="btn btn-primary btn-sm" style="color:white; cursor:pointer;"><i class="fa fa-info-circle"></i></a>
+                                                                    </td>
+                                                                    <td style="padding:15px 30px;">
+                                                                        <a onclick="detailReviewer({{ $pengabdians->id }})" class="btn btn-primary btn-sm" style="color:white; cursor:pointer;"><i class="fa fa-info-circle"></i></a>
+                                                                    </td>
+                                                                    <td style="text-align:center;">
+                                                                        <a onclick="komentar( {{ $pengabdians->id }} )"  class="btn btn-primary btn-sm" style="color:white; cursor:pointer;"> <i class="fa fa-comments"></i></a>
+                                                                    </td>
+                                                                    <td style="text-align:center;">
+                                                                        <a href="{{ route('operator.verifikasi.reviewer3',[$pengabdians->id, $pengabdians->skim_id]) }}"  class="btn btn-primary btn-sm" style="color:white; cursor:pointer;"> <i class="fa fa-plus"></i></a>
+                                                                    </td>
+                                                            </tr>
+                                                        @endif
+                                                    @endforeach
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
                         <!-- Modal Detail-->
                         <div class="modal fade" id="modaldetail" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                             <div class="modal-dialog modal-lg" role="document">
@@ -303,7 +422,7 @@
 @push('scripts')
     <script type="text/javascript">
         $(document).ready(function() {
-            $('#table').DataTable({
+            $("table[id^='table']").DataTable({
                 responsive : true,
                 "ordering": false,
             });
@@ -369,14 +488,18 @@
             $('.selectbox').prop('checked', $(this).prop('checked'));
         });
 
-        $('.selectbox').change(function(){
-            var total = $('.selectbox').length;
-            var number = $('.selectbox:checked').length;
+        $('.selectall2').click(function(){
+            $('.selectbox2').prop('checked', $(this).prop('checked'));
+        });
+
+        $('.selectbox2').change(function(){
+            var total = $('.selectbox2').length;
+            var number = $('.selectbox2:checked').length;
             if(total == number){
-                $('.selectall').prop('checked', true);
+                $('.selectall2').prop('checked', true);
             }
             else{
-                $('.selectall').prop('checked', false);
+                $('.selectall2').prop('checked', false);
             }
         });
 
@@ -428,5 +551,15 @@
                 }
             });
         }
+
+        $(document).ready(function(){
+            $('a[data-toggle="tab"]').on('shown.bs.tab', function(e) {
+                localStorage.setItem('activeTab', $(e.target).attr('href'));
+            });
+            var activeTab = localStorage.getItem('activeTab');
+            if(activeTab){
+                $('#myTab a[href="' + activeTab + '"]').tab('show');
+            }
+        });
     </script>
 @endpush

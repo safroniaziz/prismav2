@@ -29,13 +29,23 @@ class VerifikasiUsulanController extends Controller
     }
 
     public function index(){
-        $usulans = Usulan::leftJoin('nilai_formulirs','nilai_formulirs.usulan_id','usulans.id')
+        $penelitians = Usulan::leftJoin('nilai_formulirs','nilai_formulirs.usulan_id','usulans.id')
                             ->leftJoin('formulirs','formulirs.id','nilai_formulirs.formulir_id')
-                            ->select('usulans.id','jenis_kegiatan','ketua_peneliti_nama','tahun_usulan','formulirs.skim_id','judul_kegiatan',DB::raw('SUM(skor * (bobot/100)/2) as totalskor'))
+                            ->select('usulans.id','jenis_kegiatan','ketua_peneliti_nama','tahun_usulan','formulirs.skim_id','judul_kegiatan',DB::raw('SUM(skor * (bobot/100)) as totalskor')
+                            )
                             ->groupBy('usulans.id')
                             ->where('status_usulan','2')
+                            ->where('jenis_kegiatan','penelitian')
                             ->get();
-        return view('operator/usulan/verifikasi.index',compact('usulans'));
+        $pengabdians = Usulan::leftJoin('nilai_formulirs','nilai_formulirs.usulan_id','usulans.id')
+                            ->leftJoin('formulirs','formulirs.id','nilai_formulirs.formulir_id')
+                            ->select('usulans.id','jenis_kegiatan','ketua_peneliti_nama','tahun_usulan','formulirs.skim_id','judul_kegiatan',DB::raw('SUM(skor * (bobot/100)) as totalskor')
+                            )
+                            ->groupBy('usulans.id')
+                            ->where('status_usulan','2')
+                            ->where('jenis_kegiatan','pengabdian')
+                            ->get();
+        return view('operator/usulan/verifikasi.index',compact('penelitians','pengabdians'));
     }
 
     public function detail($id){
@@ -100,10 +110,10 @@ class VerifikasiUsulanController extends Controller
                     $ver->update();
                 }
             }
-            return redirect()->route('operator.verifikasi')->with(['success'    =>  'Usulan Penelitian berhasil diverifikasi !!']);
+            return redirect()->route('operator.verifikasi')->with(['success'    =>  'Usulan kegiatan berhasil diverifikasi !!']);
         }
         else{
-            return redirect()->route('operator.verifikasi')->with(['error'    =>  'Harap pilih usulan penelitian terlebih dahulu !!']);
+            return redirect()->route('operator.verifikasi')->with(['error'    =>  'Harap pilih usulan kegiatan terlebih dahulu !!']);
         }
     }
 

@@ -41,15 +41,23 @@
                     <hr style="width:50% !important;">
                     <form action="" method="POST" action=" {{ route('operator.skim.add') }} ">
                         {{ csrf_field() }} {{ method_field('POST') }}
-                        <div class="form-group col-md-4">
+                        <div class="form-group col-md-3">
+                            <label for="exampleInputEmail1">Jenis Kegiatan</label>
+                            <select name="jenis_kegiatan" id="jenis_kegiatan" class="form-control">
+                                <option value="" selected disabled>-- pilih jenis kegiatan --</option>
+                                <option value="penelitian">Penelitian</option>
+                                <option value="pengabdian">Pengabdian</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-3">
                             <label for="exampleInputEmail1">Nama Skim</label>
                             <input type="text" name="nm_skim" id="nm_skim" class="form-control" placeholder="masukan nama skim" required>
                         </div>
-                        <div class="form-group col-md-4">
+                        <div class="form-group col-md-3">
                             <label for="exampleInputEmail1">Nama Unit</label>
                             <input type="text" name="nm_unit" id="nm_unit" class="form-control" placeholder="masukan nama unit" required>
                         </div>
-                        <div class="form-group col-md-4">
+                        <div class="form-group col-md-3">
                             <label for="exampleInputEmail1">Tahun Berlaku</label>
                             <select name="tahun" id="tahun" class="form-control" required></select>
                         </div>
@@ -66,6 +74,7 @@
                         <thead>
                             <tr>
                                 <th>No</th>
+                                <th>Jenis Kegiatan</th>
                                 <th>Nama Skim</th>
                                 <th>Nama Unit</th>
                                 <th>Tahun</th>
@@ -79,6 +88,13 @@
                             @foreach ($skims as $skim)
                                 <tr>
                                     <td> {{ $no++ }} </td>
+                                    <td>
+                                        @if ($skim->j_kegiatan == "Penelitian")
+                                            <span class="badge badge-danger">{{ $skim->j_kegiatan }}</span>
+                                            @else
+                                            <span class="badge badge-info">{{ $skim->j_kegiatan }}</span>
+                                        @endif
+                                    </td>
                                     <td> {{ $skim->nm_skim }} </td>
                                     <td> {{ $skim->nm_unit }} </td>
                                     <td>

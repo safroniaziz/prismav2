@@ -15,7 +15,7 @@ class SkimController extends Controller
     }
 
     public function index(){
-        $skims = Skim::select('id','nm_skim','nm_unit','tahun')->get();
+        $skims = Skim::select('id','nm_skim','nm_unit','tahun','j_kegiatan')->orderBy('j_kegiatan','asc')->get();
         return view('operator/manajemen_skim.index',compact('skims'));
     }
 
@@ -40,6 +40,7 @@ class SkimController extends Controller
 
     public function post(Request $request){
         $skim = new Skim;
+        $skim->j_kegiatan = $request->jenis_kegiatan;
         $skim->nm_skim = $request->nm_skim;
         $skim->nm_unit = $request->nm_unit;
         $skim->tahun = $request->tahun;

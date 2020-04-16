@@ -54,84 +54,208 @@
                         </div>
                     @endif
                 </div>
+                <div style="margin-bottom:10px;">
+                    <ul class="nav nav-tabs" id="myTab">
+                        <li class="active"><a class="nav-item nav-link active" data-toggle="tab" href="#nav-internal"><i class="fa fa-book"></i>&nbsp;Reviewer Internal</a></li>
+                        <li><a class="nav-item nav-link" data-toggle="tab" href="#nav-eksternal"><i class="fa fa-list-alt"></i>&nbsp;Reviewer Eksternal</a></li>
+                    </ul>
+                </div>
                 <hr style="width:80%; text-align:center;">
                 <div class="col-md-12">
-                    <a href=" {{ route('operator.laporan_kemajuan') }} " class="btn btn-danger btn-sm" style="color:white;"><i class="fa fa-arrow-left"></i>&nbsp; Kembali</a>
-                    @if ($jumlah >= 2)
-                        <button disabled class="btn btn-primary btn-sm" style="color:white;cursor:pointer;"><i class="fa fa-user-plus" style="font-size:12px;"></i>&nbsp; Tambah Reviewer</button>
-                        @else
-                        <a onclick="tambahReviewer({{ $id_usulan }})" class="btn btn-primary btn-sm" style="color:white;cursor:pointer;"><i class="fa fa-user-plus" style="font-size:12px;"></i>&nbsp; Tambah Reviewer</a>
-                    @endif
-                    <hr style="width:80%; text-align:center;">
-                </div>
-
-                <div class="col-md-12" id="form-tambah" style="display:none;">
-                    <div class="alert alert-success alert-block" style="display:none;" id="sudah">
-                        <button type="button" class="close" data-dismiss="alert">×</button>
-                        <strong><i class="fa fa-check-circle"></i>&nbsp;Nama Berhasil Ditemukan  </strong>
-                    </div>
-                    <form action=" {{ route('operator.laporan_kemajuan.reviewer_post') }} " method="POST">
-                        {{ csrf_field() }} {{ method_field('POST') }}
-                        <input type="hidden" name="usulan_id_reviewer" id="usulan_id_reviewer">
-                        <div class="row">
-                            <input type="hidden" name="prodi_kode_reviewer" id="prodi_kode_reviewer">
-                            <input type="hidden" name="fakultas_kode_reviewer" id="fakultas_kode_reviewer">
-                            <input type="hidden" name="jk_reviewer" id="jk_reviewer">
-                            <input type="hidden" name="jabatan_reviewer" id="jabatan_reviewer">
-                            <div class="form-group col-md-6">
-                                <label for="exampleInputEmail1">Nama Reviewer</label>
-                                <input type="text" name="nm_reviewer" id="nm_reviewer" class="form-control" required >
-                            </div>
-                            <div class="form-group col-md-6">
-                                <label for="exampleInputEmail1">Nip/Nik Reviewer</label>
-                                <input type="text" name="nip_reviewer" id="nip_reviewer" class="form-control" required readonly>
-                            </div>
-                            <div class="form-group col-md-6">
-                                <label for="exampleInputEmail1">Prodi Reviewer</label>
-                                <input type="text" name="prodi_reviewer" id="prodi_reviewer" class="form-control" readonly required>
-                            </div>
-                            <div class="form-group col-md-6">
-                                <label for="exampleInputEmail1">Fakultas Reviewer</label>
-                                <input type="text" name="fakultas_reviewer" id="fakultas_reviewer" class="form-control" readonly required>
-                            </div>
-                            <div class="col-md-12" style="text-align:center;">
-                                <button type="reset" class="btn btn-danger btn-sm" style="font-size:13px;" ><i class="fa fa-refresh"></i>&nbsp;Ulangi</button>
-                                <button type="submit" style="font-size:13px;" class="btn btn-primary btn-sm" id="btn-submit" disabled><i class="fa fa-check-circle"></i>&nbsp;Tambah Reviewer</button>
+                    <div class="tab-content" id="nav-tabContent">
+                        <div class="tab-pane fade show active" id="nav-internal" role="tabpanel" aria-labelledby="nav-honor-tab">
+                            <a href=" {{ route('operator.menunggu') }} " class="btn btn-danger btn-sm" style="color:white;"><i class="fa fa-arrow-left"></i>&nbsp; Kembali</a>
+                            @if ($jumlah >= 2)
+                                <button disabled class="btn btn-primary btn-sm" style="color:white;cursor:pointer;"><i class="fa fa-user-plus" style="font-size:12px;"></i>&nbsp; Tambah Reviewer Internal</button>
+                                @else
+                                <a onclick="tambahReviewer({{ $id_usulan }})" class="btn btn-primary btn-sm" style="color:white;cursor:pointer;"><i class="fa fa-user-plus" style="font-size:12px;"></i>&nbsp; Tambah Reviewer Internal</a>
+                            @endif
+                            <hr style="width:80%; text-align:center;">
+                            <div class="row">
+                                <div class="col-md-12" id="form-tambah" style="display:none;">
+                                    <div class="alert alert-success alert-block" style="display:none;" id="sudah">
+                                        <button type="button" class="close" data-dismiss="alert">×</button>
+                                        <strong><i class="fa fa-check-circle"></i>&nbsp;Nama Berhasil Ditemukan  </strong>
+                                    </div>
+                                    <form action=" {{ route('operator.laporan_kemajuan.reviewer_post') }} " method="POST">
+                                        {{ csrf_field() }} {{ method_field('POST') }}
+                                        <input type="hidden" name="usulan_id_reviewer" id="usulan_id_reviewer">
+                                        <div class="row">
+                                            <input type="hidden" name="prodi_kode_reviewer" id="prodi_kode_reviewer">
+                                            <input type="hidden" name="fakultas_kode_reviewer" id="fakultas_kode_reviewer">
+                                            <input type="hidden" name="jk_reviewer" id="jk_reviewer">
+                                            <input type="hidden" name="jabatan_reviewer" id="jabatan_reviewer">
+                                            <div class="form-group col-md-6">
+                                                <label for="exampleInputEmail1">Nip/Nik Reviewer</label>
+                                                <input type="text" name="nip_reviewer" id="nip_reviewer" class="form-control" required>
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <label for="exampleInputEmail1">Nama Reviewer</label>
+                                                <input type="text" name="nm_reviewer" id="nm_reviewer" class="form-control" required readonly>
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <label for="exampleInputEmail1">Prodi Reviewer</label>
+                                                <input type="text" name="prodi_reviewer" id="prodi_reviewer" class="form-control" readonly required>
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <label for="exampleInputEmail1">Fakultas Reviewer</label>
+                                                <input type="text" name="fakultas_reviewer" id="fakultas_reviewer" class="form-control" readonly required>
+                                            </div>
+                                            <div class="col-md-12" style="text-align:center;">
+                                                <button type="reset" class="btn btn-danger btn-sm" style="font-size:13px;" ><i class="fa fa-refresh"></i>&nbsp;Ulangi</button>
+                                                <button type="submit" style="font-size:13px;" class="btn btn-primary btn-sm" id="btn-submit" disabled><i class="fa fa-check-circle"></i>&nbsp;Tambah Reviewer</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                    <hr style="width:80%; text-align:center;">
+                                </div>
+                                <div class="col-md-12" style="margin-top:5px;">
+                                    <table class="table table-bordered table-striped" id="table">
+                                        <thead>
+                                            <tr>
+                                                <th style="text-align:center">No</th>
+                                                <th style="text-align:center">Nip Anggota</th>
+                                                <th style="text-align:center">Nama Anggota</th>
+                                                <th style="text-align:center">Prodi Anggota</th>
+                                                <th style="text-align:center">Fakultas Anggota</th>
+                                                <th style="text-align:center">Aksi</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @php
+                                                $no=1;
+                                            @endphp
+                                            @foreach ($reviewers as $reviewer)
+                                                <tr>
+                                                    <td style="text-align:center;"> {{ $no++ }} </td>
+                                                    <td style="text-align:center"> {{ $reviewer->reviewer_nip }} </td>
+                                                    <td style="text-align:center"> {{ $reviewer->reviewer_nama }} </td>
+                                                    <td style="text-align:center"> {{ $reviewer->reviewer_prodi_nama }} </td>
+                                                    <td style="text-align:center"> {{ $reviewer->reviewer_fakultas_nama }} </td>
+                                                    <td style="text-align:center">
+                                                        <a onclick="hapusReviewer({{ $reviewer->id }})" class="btn btn-danger btn-sm" style="color:white; cursor:pointer;"><i class="fa fa-trash"></i></a>
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
-                    </form>
-                    <hr style="width:80%; text-align:center;">
-                </div>
-                <div class="col-md-12" style="margin-top:5px;">
-                    <table class="table table-bordered table-striped" id="table">
-                        <thead>
-                            <tr>
-                                <th style="text-align:center">No</th>
-                                <th style="text-align:center">Nip Anggota</th>
-                                <th style="text-align:center">Nama Anggota</th>
-                                <th style="text-align:center">Prodi Anggota</th>
-                                <th style="text-align:center">Fakultas Anggota</th>
-                                <th style="text-align:center">Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @php
-                                $no=1;
-                            @endphp
-                            @foreach ($reviewers as $reviewer)
-                                <tr>
-                                    <td style="text-align:center;"> {{ $no++ }} </td>
-                                    <td style="text-align:center"> {{ $reviewer->reviewer_nip }} </td>
-                                    <td style="text-align:center"> {{ $reviewer->reviewer_nama }} </td>
-                                    <td style="text-align:center"> {{ $reviewer->reviewer_prodi_nama }} </td>
-                                    <td style="text-align:center"> {{ $reviewer->reviewer_fakultas_nama }} </td>
-                                    <td style="text-align:center">
-                                        <a onclick="hapusReviewer({{ $reviewer->id }})" class="btn btn-danger btn-sm" style="color:white; cursor:pointer;"><i class="fa fa-trash"></i></a>
-                                    </td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
+                        <div class="tab-pane fade show" id="nav-eksternal" role="tabpanel" aria-labelledby="nav-honor-tab">
+                            <a href=" {{ route('operator.laporan_kemajuan') }} " class="btn btn-danger btn-sm" style="color:white;"><i class="fa fa-arrow-left"></i>&nbsp; Kembali</a>
+                            @if ($jumlah >= 2)
+                                <button disabled class="btn btn-primary btn-sm" style="color:white;cursor:pointer;"><i class="fa fa-user-plus" style="font-size:12px;"></i>&nbsp; Tambah Reviewer</button>
+                                @else
+                                <a onclick="tambahReviewerEksternal({{ $id_usulan }})" class="btn btn-primary btn-sm" style="color:white;cursor:pointer;"><i class="fa fa-user-plus" style="font-size:12px;"></i>&nbsp; Tambah Reviewer</a>
+                            @endif
+                            <hr style="width:80%; text-align:center;">
+                            <div class="row">
+                                <div class="col-md-12" id="form-tambah-eksternal" style="display:none;">
+                                    <div class="alert alert-success alert-block" style="display:none;" id="sudah">
+                                        <button type="button" class="close" data-dismiss="alert">×</button>
+                                        <strong><i class="fa fa-check-circle"></i>&nbsp;Nama Berhasil Ditemukan  </strong>
+                                    </div>
+                                    <form action=" {{ route('operator.laporan_kemajuan.reviewer_eksternal_post') }} " method="POST">
+                                        {{ csrf_field() }} {{ method_field('POST') }}
+                                        <input type="hidden" name="usulan_id_reviewer_eksternal" id="usulan_id_reviewer_eksternal">
+                                        <div class="row">
+                                            <div class="form-group col-md-6">
+                                                <label for="exampleInputEmail1">Nama Reviewer</label>
+                                                <input type="text" name="nm_reviewer" id="nm_reviewer_eksternal" class="form-control" required>
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <label for="exampleInputEmail1">Nip/Nik Reviewer</label>
+                                                <input type="number" name="nip_reviewer" id="nip_reviewer_eksternal" class="form-control">
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <label for="exampleInputEmail1">Nidn Reviewer</label>
+                                                <input type="number" name="nip_reviewer" id="nip_reviewer_eksternal" class="form-control" required>
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <label for="exampleInputEmail1">Prodi Reviewer</label>
+                                                <input type="text" name="prodi_reviewer" id="prodi_reviewer_eksternal" class="form-control" required>
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <label for="exampleInputEmail1">Fakultas Reviewer</label>
+                                                <input type="text" name="fakultas_reviewer" id="fakultas_reviewer_eksternal" class="form-control" required>
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <label for="exampleInputEmail1">Asal Universitas</label>
+                                                <input type="text" name="universitas" id="funiversitas_eksternal" class="form-control" required>
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <label for="exampleInputEmail1">Password Login</label>
+                                                <input type="password" name="password" id="password" class="form-control" required>
+                                            </div>
+                                            <div class="col-md-12" style="text-align:center;">
+                                                <button type="reset" class="btn btn-danger btn-sm" style="font-size:13px;" ><i class="fa fa-refresh"></i>&nbsp;Ulangi</button>
+                                                <button type="submit" style="font-size:13px;" class="btn btn-primary btn-sm" id="btn-submit-eksternal" disabled><i class="fa fa-check-circle"></i>&nbsp;Tambah Reviewer</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                    <hr style="width:80%; text-align:center;">
+                                </div>
+                                <div class="col-md-12" style="margin-top:5px;">
+                                    <table class="table table-bordered table-striped" id="table" style="width:100%;">
+                                        <thead>
+                                            <tr>
+                                                <th style="text-align:center">No</th>
+                                                <th style="text-align:center">Nip Anggota</th>
+                                                <th style="text-align:center">Nama Anggota</th>
+                                                <th style="text-align:center">Prodi Anggota</th>
+                                                <th style="text-align:center">Fakultas Anggota</th>
+                                                <th style="text-align:center">Aksi</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @php
+                                                $no=1;
+                                            @endphp
+                                            @foreach ($reviewer_eksternals as $reviewer)
+                                                <tr>
+                                                    <td style="text-align:center;"> {{ $no++ }} </td>
+                                                    <td style="text-align:center"> {{ $reviewer->reviewer_nip }} </td>
+                                                    <td style="text-align:center"> {{ $reviewer->reviewer_nama }} </td>
+                                                    <td style="text-align:center"> {{ $reviewer->reviewer_prodi_nama }} </td>
+                                                    <td style="text-align:center"> {{ $reviewer->reviewer_fakultas_nama }} </td>
+                                                    <td style="text-align:center">
+                                                        <a onclick="hapusReviewerEksternal({{ $reviewer->id }})" class="btn btn-danger btn-sm" style="color:white; cursor:pointer;"><i class="fa fa-trash"></i></a>
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                        <!-- Modal Hapus -->
+                                        <div class="modal modal-danger fade" id="modalhapuseksternal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header modal-header-danger">
+                                                    <p style="font-size:15px;" class="modal-title" id="exampleModalLabel"><i class="fa fa-user"></i>&nbsp;Form Konfirmasi Hapus Data Reviewer</p>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                Apakah anda yakin akan menghapus reviewer ?
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-outline-light btn-sm " style="color:white;" data-dismiss="modal"><i class="fa fa-close"></i>&nbsp;Close</button>
+                                                    <form method="POST" action="{{ route('operator.laporan_kemajuan.detail_reviewer_eksternal.hapus') }}">
+                                                        {{ csrf_field() }}
+                                                        {{ method_field('DELETE') }}
+                                                        <input type="hidden" name="id" id="id_reviewer_eksternal">
+                                                        <input type="hidden" name="id_usulan" value="{{ $id_usulan }}">
+                                                        <button type="submit" class="btn btn-outline-light btn-sm" style="color:white;"><i class="fa fa-check-circle"></i>&nbsp; Ya, Hapus Data !</button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                            </div>
+                                        </div>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -167,7 +291,7 @@
 @push('scripts')
     <script>
         $(document).ready(function() {
-            $('#table').DataTable({
+            $("table[id^='table']").DataTable({
                 responsive : true,
             });
         } );
@@ -177,18 +301,23 @@
             $('#usulan_id_reviewer').val(id);
         }
 
+        function tambahReviewerEksternal(id){
+            $('#form-tambah-eksternal').show(300);
+            $('#usulan_id_reviewer_eksternal').val(id);
+        }
+
         $(document).ready(function(){
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
-            $("#nm_reviewer").keyup(function(){
-            var nm_reviewer = $("#nm_reviewer").val();
+            $("#nip_reviewer").keyup(function(){
+            var nip_reviewer = $("#nip_reviewer").val();
             url = "{{ url('operator/usulan_dosen/menunggu_disetujui/cari_reviewer') }}";
             $.ajax({
                 url :url,
-                data : {nm_reviewer:nm_reviewer},
+                data : {nip_reviewer:nip_reviewer},
                 method :"get",
                 success:function(data){
                     if(data['jumlah'] == 1){
@@ -220,9 +349,36 @@
         })
     })
 
+    $(document).ready(function(){
+        $('#nip_reviewer_eksternal').keyup(function(){
+            nip = $('#nip_reviewer_eksternal').val()
+            if(nip != null || nip != ""){
+                $('#btn-submit-eksternal').prop('disabled',false);
+            }
+            else{
+                $('#btn-submit-eksternal').prop('disabled',true);
+            }
+        });
+    });
+
     function hapusReviewer(id){
         $('#modalhapus').modal('show');
         $('#id_reviewer').val(id);
     }
+
+    function hapusReviewerEksternal(id){
+        $('#modalhapuseksternal').modal('show');
+        $('#id_reviewer_eksternal').val(id);
+    }
+
+        $(document).ready(function(){
+            $('a[data-toggle="tab"]').on('shown.bs.tab', function(e) {
+                localStorage.setItem('activeTab', $(e.target).attr('href'));
+            });
+            var activeTab = localStorage.getItem('activeTab');
+            if(activeTab){
+                $('#myTab a[href="' + activeTab + '"]').tab('show');
+            }
+        });
     </script>
 @endpush

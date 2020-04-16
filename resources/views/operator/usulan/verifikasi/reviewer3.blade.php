@@ -79,7 +79,7 @@
                             </tr>
                             <tr>
                                 <td colspan="4" style="text-align:center;">
-                                    <a href="{{ route('reviewer.menunggu') }}" class="btn btn-info btn-sm"><i class="fa fa-arrow-left" style="font-size:12px; color:white;"></i>&nbsp; Kembali</a>
+                                    <a href="{{ route('operator.verifikasi') }}" class="btn btn-info btn-sm"><i class="fa fa-arrow-left" style="font-size:12px; color:white;"></i>&nbsp; Kembali</a>
                                     <button type="reset" class="btn btn-danger btn-sm"><i class="fa fa-refresh"></i>&nbsp; Reset</button>
                                     <button type="submit" class="btn btn-primary btn-sm"><i class="fa fa-save"></i>&nbsp; Simpan</button>
                                 </td>

@@ -766,4 +766,9 @@ class UsulanController extends Controller
             return response()->json($data);
         }
     }
+
+    public function cariSkim(Request $request){
+        $skims = Skim::where('j_kegiatan', $request->jenis_kegiatan)->get();
+        return $skims;
+    }
 }
