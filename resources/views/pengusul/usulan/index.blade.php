@@ -40,15 +40,22 @@
                             <strong><i class="fa fa-info-circle"></i>&nbsp;Berhasil: </strong> {{ $message }}
                         </div>
                         @else
-                        @if ($now >= $jadwal->tanggal_awal && $now <= $jadwal->tanggal_akhir)
-                        <div class="alert alert-danger alert-block" id="keterangan">
-                            <button type="button" class="close" data-dismiss="alert">×</button>
-                            <strong><i class="fa fa-info-circle"></i>&nbsp;Perhatian: </strong> Silahkan tambahkan usulan kegiatan anda, harap melengkapi data terlebih dahulu sebelum anda mengusulkan kegiatan !!
-                        </div>
+                        @if (count($jadwal) > 0)
+                            @if ($now >= $jadwal[0]->tanggal_awal && $now <= $jadwal[0]->tanggal_akhir)
+                                <div class="alert alert-danger alert-block" id="keterangan">
+                                    <button type="button" class="close" data-dismiss="alert">×</button>
+                                    <strong><i class="fa fa-info-circle"></i>&nbsp;Perhatian: </strong> Silahkan tambahkan usulan kegiatan anda, harap melengkapi data terlebih dahulu sebelum anda mengusulkan kegiatan !!
+                                </div>
+                                @else
+                                <div class="alert alert-danger alert-block" id="keterangan">
+                                    <button type="button" class="close" data-dismiss="alert">×</button>
+                                    <strong><i class="fa fa-info-circle"></i>&nbsp;Perhatian: </strong> Saat Ini Bukan Masa Upload Usulan Kegiatan !!
+                                </div>
+                            @endif
                             @else
                             <div class="alert alert-danger alert-block" id="keterangan">
                                 <button type="button" class="close" data-dismiss="alert">×</button>
-                                <strong><i class="fa fa-info-circle"></i>&nbsp;Perhatian: </strong> Saat Ini Bukan Masa Upload Usulan Kegiatan !!
+                                <strong><i class="fa fa-info-circle"></i>&nbsp;Perhatian: </strong> Jadwal Upload Usulan Kegiatan Belum Diatur !!
                             </div>
                         @endif
                     @endif
@@ -69,10 +76,16 @@
                 </div>
 
                 <div class="col-md-12" style="margin-bottom:5px;">
-                    @if ($now >= $jadwal->tanggal_awal && $now <= $jadwal->tanggal_akhir)
-                        <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#exampleModal">
-                            <i class="fa fa-plus" style="font-size:12px;"></i>&nbsp;Tambah Usulan
-                        </button>
+                    @if (count($jadwal) > 0)
+                        @if ($now >= $jadwal[0]->tanggal_awal && $now <= $jadwal[0]->tanggal_akhir)
+                            <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#exampleModal">
+                                <i class="fa fa-plus" style="font-size:12px;"></i>&nbsp;Tambah Usulan
+                            </button>
+                            @else
+                            <button type="button" class="btn btn-primary btn-sm disabled">
+                                <i class="fa fa-plus" style="font-size:12px;"></i>&nbsp;Tambah Usulan
+                            </button>
+                        @endif
                         @else
                         <button type="button" class="btn btn-primary btn-sm disabled">
                             <i class="fa fa-plus" style="font-size:12px;"></i>&nbsp;Tambah Usulan

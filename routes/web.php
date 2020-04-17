@@ -200,6 +200,22 @@ Route::group(['prefix'  => 'operator/manajemen_operator'],function(){
     Route::patch('/ubah_password','Operator\OperatorController@updatePassword')->name('operator.operator.update_password');
 });
 
+Route::group(['prefix'  => 'operator/manajemen_jadwal_input_usulan'],function(){
+    Route::get('/','Operator\JadwalUsulanController@index')->name('operator.jadwal_usulan');
+    Route::post('/','Operator\JadwalUsulanController@post')->name('operator.jadwal_usulan.add');
+    Route::delete('/','Operator\JadwalUsulanController@delete')->name('operator.jadwal_usulan.delete');
+    Route::patch('/aktifkan_status/{id}','Operator\JadwalUsulanController@aktifkanStatus')->name('operator.jadwal_usulan.aktifkan_status');
+    Route::patch('/nonaktifkan_status/{id}','Operator\JadwalUsulanController@nonAktifkanStatus')->name('operator.jadwal_usulan.nonaktifkan_status');
+});
+
+Route::group(['prefix'  => 'operator/manajemen_jadwal_review_usulan'],function(){
+    Route::get('/','Operator\JadwalReviewUsulanController@index')->name('operator.jadwal_review_usulan');
+    Route::post('/','Operator\JadwalReviewUsulanController@post')->name('operator.jadwal_review_usulan.add');
+    Route::delete('/','Operator\JadwalReviewUsulanController@delete')->name('operator.jadwal_review_usulan.delete');
+    Route::patch('/aktifkan_status/{id}','Operator\JadwalReviewUsulanController@aktifkanStatus')->name('operator.jadwal_review_usulan.aktifkan_status');
+    Route::patch('/nonaktifkan_status/{id}','Operator\JadwalReviewUsulanController@nonAktifkanStatus')->name('operator.jadwal_review_usulan.nonaktifkan_status');
+});
+
 // Route Pengusul
 Route::group(['prefix'  => 'pengusul/'],function(){
     Route::get('/','Pengusul\DashboardController@index')->name('pengusul.dashboard');

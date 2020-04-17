@@ -37,7 +37,7 @@ class LaporanKemajuanController extends Controller
                                     ->where('reviewer_nip',Session::get('nip'))
                                     ->groupBy('nilai_formulir2s.reviewer_id')
                                     ->get();
-                $jadwal = JadwalReviewUsulan::select('tanggal_awal','tanggal_akhir')->where('status','1')->first();
+                $jadwal = JadwalReviewUsulan::select('tanggal_awal','tanggal_akhir')->where('status','1')->get();
                 $mytime = Carbon\Carbon::now();
                 $now =  $mytime->toDateString();
                 return view('reviewer.usulan.laporan_kemajuan.index', compact('usulans','jadwal','now'));

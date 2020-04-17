@@ -35,10 +35,10 @@ class UsulanMenungguController extends Controller
                                     ->where('reviewer_nip',Session::get('nip'))
                                     ->groupBy('usulans.id')
                                     ->get();
-                $jadwal = JadwalReviewUsulan::select('tanggal_awal','tanggal_akhir')->where('status','1')->first();
+                $jadwal = JadwalReviewUsulan::select('tanggal_awal','tanggal_akhir')->where('status','1')->get();
                 $mytime = Carbon\Carbon::now();
                 $now =  $mytime->toDateString();
-                return view('reviewer.usulan.menunggu.index', compact('usulans','jadwal','now'));
+                return view('reviewer.usulan.menunggu.index', compact('usulans','jadwal','now','jumlah'));
             }
             else{
                 Session::flush();

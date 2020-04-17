@@ -22,17 +22,24 @@
                     </div>
                     @else
                     @php
-                        $jadwal = JadwalReviewUsulan::select('tanggal_awal','tanggal_akhir')->where('status','1')->first();
+                        $jadwal = JadwalReviewUsulan::select('tanggal_awal','tanggal_akhir')->where('status','1')->get();
                         $mytime = Carbon\Carbon::now();
                         $now =  $mytime->toDateString();
                     @endphp
-                    @if ($now >= $jadwal->tanggal_awal && $now <= $jadwal->tanggal_akhir)
-                        <h6>Login Reviewer (Usulan Kegiatan)</h6>
-                        <p style="text-align:center; margin-bottom:20px;">Sistem Informasi Publikasi, Riset dan Pengabdian Kepada Masyarakat</p>
+                    @if (count($jadwal) > 0)
+                        @if ($now >= $jadwal[0]->tanggal_awal && $now <= $jadwal[0]->tanggal_akhir)
+                            <h6>Login Reviewer (Usulan Kegiatan)</h6>
+                            <p style="text-align:center; margin-bottom:20px;">Sistem Informasi Publikasi, Riset dan Pengabdian Kepada Masyarakat</p>
+                            @else
+                            <div class="alert alert-danger alert-block" style="font-size:13px;">
+                                <button type="button" class="close" data-dismiss="alert">×</button>
+                                <strong>Perhatian:</strong> <b>Saat ini bukan masa review usulan kegiatan !!</b>
+                            </div>
+                        @endif
                         @else
                         <div class="alert alert-danger alert-block" style="font-size:13px;">
                             <button type="button" class="close" data-dismiss="alert">×</button>
-                            <strong>Perhatian:</strong> <b>Saat ini bukan masa review usulan kegiatan !!</b>
+                            <strong>Perhatian:</strong> <b>Jadwal review usulan belum diatur !!</b>
                         </div>
                     @endif
                 @endif

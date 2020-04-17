@@ -44,7 +44,7 @@ class UsulanController extends Controller
                                     ->get();
                 $skims  =   Skim::select('id','nm_skim')->where('tahun',date('Y'))->get();
                 $bidangs  =   BidangPenelitian::select('id','nm_bidang')->get();
-                $jadwal = JadwalUsulan::select('tanggal_awal','tanggal_akhir')->where('status','1')->first();
+                $jadwal = JadwalUsulan::select('tanggal_awal','tanggal_akhir')->where('status','1')->get();
                 $mytime = Carbon\Carbon::now();
                 $now =  $mytime->toDateString();
                 return view('pengusul/usulan.index',compact('usulans','skims','bidangs','fakultas','jadwal','now'));

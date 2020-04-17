@@ -85,6 +85,13 @@
     <a href=" {{ route('operator.laporan_akhir') }} "><i class="fa fa-list"></i>Laporan Akhir</a>
 </li>
 
+<li><a><i class="fa fa-check-circle"></i>Manajemen Jadwal<span class="fa fa-chevron-down" ></span></a>
+    <ul class="nav child_menu">
+        <li><a href=" {{ route('operator.jadwal_usulan') }} ">Jadwal Input Usulan</a></li>
+        <li><a href=" {{ route('operator.jadwal_review_usulan') }} ">Jadwal Review Usulan</a></li>
+    </ul>
+</li>
+
 <li>
     <a href=" {{ route('operator.operator') }} "><i class="fa fa-user"></i>Manajemen Operator</a>
 </li>
