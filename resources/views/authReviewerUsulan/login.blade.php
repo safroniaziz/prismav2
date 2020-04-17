@@ -52,7 +52,11 @@
                     <input type="password" name="password" placeholder="••••••">
 
                     @if (count($jadwal) >0)
-                        <button type="submit" name="submit" style="margin-bottom:10px;r"><i class="fa fa-sign-in"></i>&nbsp; Login</button>
+                        @if ($now >= $jadwal[0]->tanggal_awal && $now <= $jadwal[0]->tanggal_akhir)
+                            <button type="submit" name="submit" style="margin-bottom:10px;r"><i class="fa fa-sign-in"></i>&nbsp; Login</button>
+                            @else
+                            <button type="submit" name="submit" style="margin-bottom:10px;r" disabled><i class="fa fa-sign-in"></i>&nbsp; Login</button>
+                        @endif
                         @else
                         <button type="submit" name="submit" style="margin-bottom:10px;r" disabled><i class="fa fa-sign-in"></i>&nbsp; Login</button>
                     @endif
