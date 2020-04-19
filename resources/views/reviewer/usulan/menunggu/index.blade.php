@@ -97,7 +97,7 @@
                                             @php
                                                 $sudah = Usulan::leftJoin('nilai_formulirs','nilai_formulirs.usulan_id','usulans.id')->select('usulans.id')->where('nilai_formulirs.reviewer_id',$usulan->nip_reviewer)->where('usulans.id',$usulan->id)->first();
                                             @endphp
-                                            @if ($sudah['id'] == null)
+                                            @if (empty($sudah['id']))
                                                 <tr>
                                                     <td> {{ $no++ }} </td>
                                                     <td style="width:30% !important;">

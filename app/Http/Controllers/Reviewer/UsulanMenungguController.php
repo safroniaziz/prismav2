@@ -38,7 +38,7 @@ class UsulanMenungguController extends Controller
                 $jadwal = JadwalReviewUsulan::select('tanggal_awal','tanggal_akhir')->where('status','1')->get();
                 $mytime = Carbon\Carbon::now();
                 $now =  $mytime->toDateString();
-                return view('reviewer.usulan.menunggu.index', compact('usulans','jadwal','now','jumlah'));
+                return view('reviewer.usulan.menunggu.index', compact('usulans','jadwal','now'));
             }
             else{
                 Session::flush();
