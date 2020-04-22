@@ -70,6 +70,9 @@
                         <div class="tab-pane fade show active" id="nav-penelitian" role="tabpanel" aria-labelledby="nav-honor-tab">
                             <div class="row">
                                 <div class="col-md-12">
+                                    <a href="{{ route('operator.pending.cetak') }}" target="_blank"  class="btn btn-primary btn-sm"><i class="fa fa-print"></i>&nbsp; Cetak Data</a>
+                                </div>
+                                <div class="col-md-12">
                                     <table class="table table-striped table-bordered" id="table" style="width:100%;">
                                         <thead>
                                             <tr>
@@ -140,6 +143,9 @@
                         </div>
                         <div class="tab-pane fade show" id="nav-pengabdian" role="tabpanel" aria-labelledby="nav-honor-tab">
                             <div class="row">
+                                <div class="col-md-12">
+                                    <a href="{{ route('operator.pending.cetak_pengabdian') }}" target="_blank"  class="btn btn-primary btn-sm"><i class="fa fa-print"></i>&nbsp; Cetak Data</a>
+                                </div>
                                 <div class="col-md-12">
                                     <table class="table table-striped table-bordered" id="table2" style="width:100%;">
                                         <thead>

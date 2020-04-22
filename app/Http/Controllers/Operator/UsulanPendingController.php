@@ -77,4 +77,33 @@ class UsulanPendingController extends Controller
         $pdf->setPaper('a4', 'portrait');
         return $pdf->stream();
     }
+
+    public function cetak(){
+        $penelitians = Usulan::leftJoin('anggota_usulans','anggota_usulans.usulan_id','usulans.id')
+                            ->leftJoin('skims','skims.id','usulans.skim_id')
+                            ->select('usulans.id','judul_kegiatan','jenis_kegiatan',
+                                    'abstrak','kata_kunci','peta_jalan','file_usulan','lembar_pengesahan','biaya_diusulkan','status_usulan','tahun_usulan','ketua_peneliti_prodi_nama','ketua_peneliti_nama as nm_ketua_peneliti',
+                                    DB::raw('group_concat(distinct concat(anggota_usulans.anggota_nama) SEPARATOR "<br>") as "nm_anggota" ')
+                                    )
+                            ->where('usulans.status_usulan','0')
+                            ->where('usulans.jenis_kegiatan','penelitian')
+                            ->groupBy('usulans.id')
+                            ->get();
+                            // return $penelitians;
+        return view('operator/usulan.pending.detail',compact('penelitians'));
+    }
+
+    public function cetakPengabdian(){
+        $pengabdians = Usulan::leftJoin('anggota_usulans','anggota_usulans.usulan_id','usulans.id')
+                            ->leftJoin('skims','skims.id','usulans.skim_id')
+                            ->select('usulans.id','judul_kegiatan','jenis_kegiatan',
+                                    'abstrak','kata_kunci','peta_jalan','file_usulan','lembar_pengesahan','biaya_diusulkan','status_usulan','tahun_usulan','ketua_peneliti_prodi_nama','ketua_peneliti_nama as nm_ketua_peneliti',
+                                    DB::raw('group_concat(distinct concat(anggota_usulans.anggota_nama) SEPARATOR "<br>") as "nm_anggota" ')
+                                    )
+                            ->where('usulans.status_usulan','0')
+                            ->where('usulans.jenis_kegiatan','pengabdian')
+                            ->groupBy('usulans.id')
+                            ->get();
+        return view('operator/usulan.pending.detail_pengabdian',compact('pengabdians'));
+    }
 }

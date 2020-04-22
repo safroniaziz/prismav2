@@ -166,16 +166,16 @@
                                             </div>
                                             <div class="form-group col-md-6">
                                                 <label for="exampleInputEmail1">Nidn Reviewer</label>
-                                                <input type="number" name="nip_reviewer" id="nip_reviewer_eksternal" class="form-control" required>
+                                                <input type="number" name="nidn_reviewer" id="nidn_reviewer_eksternal" class="form-control" required>
                                             </div>
-                                            <div class="form-group col-md-6">
+                                            {{-- <div class="form-group col-md-6">
                                                 <label for="exampleInputEmail1">Prodi Reviewer</label>
                                                 <input type="text" name="prodi_reviewer" id="prodi_reviewer_eksternal" class="form-control" required>
                                             </div>
                                             <div class="form-group col-md-6">
                                                 <label for="exampleInputEmail1">Fakultas Reviewer</label>
                                                 <input type="text" name="fakultas_reviewer" id="fakultas_reviewer_eksternal" class="form-control" required>
-                                            </div>
+                                            </div> --}}
                                             <div class="form-group col-md-6">
                                                 <label for="exampleInputEmail1">Asal Universitas</label>
                                                 <input type="text" name="universitas" id="universitas_eksternal" class="form-control" required>
@@ -197,10 +197,10 @@
                                         <thead>
                                             <tr>
                                                 <th style="text-align:center">No</th>
-                                                <th style="text-align:center">Nip Anggota</th>
-                                                <th style="text-align:center">Nama Anggota</th>
-                                                <th style="text-align:center">Prodi Anggota</th>
-                                                <th style="text-align:center">Fakultas Anggota</th>
+                                                <th style="text-align:center">Nama Reviewer</th>
+                                                <th style="text-align:center">Nip Reviewer</th>
+                                                <th style="text-align:center">Nidn Reviewer</th>
+                                                <th style="text-align:center">Universitas Reviewer</th>
                                                 <th style="text-align:center">Aksi</th>
                                             </tr>
                                         </thead>
@@ -211,10 +211,10 @@
                                             @foreach ($reviewer_eksternals as $reviewer)
                                                 <tr>
                                                     <td style="text-align:center;"> {{ $no++ }} </td>
-                                                    <td style="text-align:center"> {{ $reviewer->reviewer_nip }} </td>
                                                     <td style="text-align:center"> {{ $reviewer->reviewer_nama }} </td>
-                                                    <td style="text-align:center"> {{ $reviewer->reviewer_prodi_nama }} </td>
-                                                    <td style="text-align:center"> {{ $reviewer->reviewer_fakultas_nama }} </td>
+                                                    <td style="text-align:center"> {{ $reviewer->reviewer_nip }} </td>
+                                                    <td style="text-align:center"> {{ $reviewer->ketua_peneliti_nidn }} </td>
+                                                    <td style="text-align:center"> {{ $reviewer->reviewer_universitas }} </td>
                                                     <td style="text-align:center">
                                                         <a onclick="hapusReviewerEksternal({{ $reviewer->id }})" class="btn btn-danger btn-sm" style="color:white; cursor:pointer;"><i class="fa fa-trash"></i></a>
                                                     </td>

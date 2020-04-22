@@ -140,12 +140,12 @@ class UsulanMenungguController extends Controller
                 $reviewer->usulan_id = $request->usulan_id_reviewer_eksternal;
                 $reviewer->reviewer_nip = $request->nip_reviewer;
                 $reviewer->reviewer_nama = $request->nm_reviewer;
-                $reviewer->reviewer_prodi_id = $request->prodi_kode_reviewer;
-                $reviewer->reviewer_prodi_nama = $request->prodi_reviewer;
-                $reviewer->reviewer_fakultas_id = $request->fakultas_kode_reviewer;
-                $reviewer->reviewer_fakultas_nama = $request->fakultas_reviewer;
-                $reviewer->reviewer_jabatan_fungsional = $request->jabatan_reviewer;
-                $reviewer->reviewer_jk = $request->jk_reviewer;
+                $reviewer->ketua_peneliti_nidn = $request->nidn_reviewer;
+                // $reviewer->reviewer_prodi_nama = $request->prodi_reviewer;
+                // $reviewer->reviewer_fakultas_id = $request->fakultas_kode_reviewer;
+                // $reviewer->reviewer_fakultas_nama = $request->fakultas_reviewer;
+                // $reviewer->reviewer_jabatan_fungsional = $request->jabatan_reviewer;
+                // $reviewer->reviewer_jk = $request->jk_reviewer;
                 $reviewer->reviewer_universitas = $request->universitas;
                 $reviewer->jenis_reviewer = "eksternal";
                 $reviewer->password = bcrypt($request->password);
@@ -155,14 +155,16 @@ class UsulanMenungguController extends Controller
                 $reviewer->usulan_id = $request->usulan_id_reviewer_eksternal;
                 $reviewer->reviewer_nip = $request->nip_reviewer;
                 $reviewer->reviewer_nama = $request->nm_reviewer;
-                $reviewer->reviewer_prodi_id = $request->prodi_kode_reviewer;
-                $reviewer->reviewer_prodi_nama = $request->prodi_reviewer;
-                $reviewer->reviewer_fakultas_id = $request->fakultas_kode_reviewer;
-                $reviewer->reviewer_fakultas_nama = $request->fakultas_reviewer;
-                $reviewer->reviewer_jabatan_fungsional = $request->jabatan_reviewer;
-                $reviewer->reviewer_jk = $request->jk_reviewer;
+                $reviewer->ketua_peneliti_nidn = $request->nidn_reviewer;
+                // $reviewer->reviewer_prodi_id = $request->prodi_kode_reviewer;
+                // $reviewer->reviewer_prodi_nama = $request->prodi_reviewer;
+                // $reviewer->reviewer_fakultas_id = $request->fakultas_kode_reviewer;
+                // $reviewer->reviewer_fakultas_nama = $request->fakultas_reviewer;
+                // $reviewer->reviewer_jabatan_fungsional = $request->jabatan_reviewer;
+                // $reviewer->reviewer_jk = $request->jk_reviewer;
                 $reviewer->reviewer_universitas = $request->universitas;
                 $reviewer->jenis_reviewer = "eksternal";
+                $reviewer->password = bcrypt($request->password);
                 $reviewer->save();
                 return redirect()->route('operator.menunggu.detail_reviewer',[$request->usulan_id_reviewer_eksternal])->with(['success' =>  'Reviewer Eksternal berhasil ditambahkan !']);
             }
@@ -208,7 +210,7 @@ class UsulanMenungguController extends Controller
                                     ->where('jenis_reviewer','internal')
                                     ->get();
         $reviewer_eksternals = Reviewer1::join('usulans','usulans.id','reviewer1s.usulan_id')
-                                    ->select('reviewer1s.id','reviewer_nip','reviewer_nama','reviewer_prodi_nama','reviewer_fakultas_nama','judul_kegiatan')
+                                    ->select('reviewer1s.id','reviewer_nip','reviewer_nama','reviewer1s.ketua_peneliti_nidn','reviewer_universitas','judul_kegiatan')
                                     ->where('usulans.id',$id)
                                     ->where('jenis_reviewer','eksternal')
                                     ->get();
@@ -261,5 +263,35 @@ class UsulanMenungguController extends Controller
         ]);
 
         return redirect()->route('operator.menunggu')->with(['success' =>  'Usulan kegiatan sudah dibatalkan!! !']);
+    }
+
+    public function cetak(){
+        $penelitians = Usulan::leftJoin('anggota_usulans','anggota_usulans.usulan_id','usulans.id')
+                            ->leftJoin('skims','skims.id','usulans.skim_id')
+                            ->leftJoin('reviewer1s','reviewer1s.usulan_id','usulans.id')
+                            ->select('usulans.id','judul_kegiatan','jenis_kegiatan',
+                                    'kata_kunci','biaya_diusulkan','status_usulan','tahun_usulan','ketua_peneliti_nama as nm_ketua_peneliti',
+                                    DB::raw('group_concat(distinct concat(anggota_usulans.anggota_nama) SEPARATOR "<br>") as "nm_anggota" ')
+                                    )
+                            ->where('usulans.status_usulan','1')
+                            ->where('usulans.jenis_kegiatan','penelitian')
+                            ->groupBy('usulans.id')
+                            ->get();
+        return view('operator/usulan/menunggu_disetujui.detail',compact('penelitians'));
+    }
+
+    public function cetakPengabdian(){
+        $pengabdians = Usulan::leftJoin('anggota_usulans','anggota_usulans.usulan_id','usulans.id')
+                        ->leftJoin('skims','skims.id','usulans.skim_id')
+                        ->leftJoin('reviewer1s','reviewer1s.usulan_id','usulans.id')
+                        ->select('usulans.id','judul_kegiatan','jenis_kegiatan',
+                                'kata_kunci','biaya_diusulkan','status_usulan','tahun_usulan','ketua_peneliti_nama as nm_ketua_peneliti',
+                                DB::raw('group_concat(distinct concat(anggota_usulans.anggota_nama) SEPARATOR "<br>") as "nm_anggota" ')
+                                )
+                        ->where('usulans.status_usulan','1')
+                        ->where('usulans.jenis_kegiatan','pengabdian')
+                        ->groupBy('usulans.id')
+                        ->get();
+        return view('operator/usulan/menunggu_disetujui.detail_pengabdian',compact('pengabdians'));
     }
 }

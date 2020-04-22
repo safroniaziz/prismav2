@@ -91,6 +91,8 @@ Route::group(['prefix'  => 'operator/usulan_dosen/usulan_pending'],function(){
     Route::get('/{id}/detail','Operator\UsulanPendingController@detail')->name('operator.pending.detail');
     Route::get('/anggaran/{id}/cetak','Operator\UsulanPendingController@anggaranCetak')->name('operator.pending.anggaran.cetak');
     Route::get('/{id}/detail_reviewer','Operator\UsulanPendingController@detailReviewer')->name('operator.pending.detail_reviewer');
+    Route::get('/cetak','Operator\UsulanPendingController@cetak')->name('operator.pending.cetak');
+    Route::get('/cetak_pengabdian','Operator\UsulanPendingController@cetakPengabdian')->name('operator.pending.cetak_pengabdian');
 });
 
 Route::group(['prefix'  => 'operator/usulan_dosen/menunggu_disetujui'],function(){
@@ -100,6 +102,8 @@ Route::group(['prefix'  => 'operator/usulan_dosen/menunggu_disetujui'],function(
     Route::post('/reviewer_eksternal','Operator\UsulanMenungguController@reviewerEksternalPost')->name('operator.usulan.reviewer_eksternal_post');
     Route::get('/{id}/get_reviewer','Operator\UsulanMenungguController@getReviewer')->name('operator.usulan.get_reviewer');
     Route::get('/anggaran/{id}/cetak','Operator\UsulanMenungguController@anggaranCetak')->name('operator.usulan.anggaran.cetak');
+    Route::get('/cetak','Operator\UsulanMenungguController@cetak')->name('operator.menunggu.cetak');
+    Route::get('/cetak_pengabdian','Operator\UsulanMenungguController@cetakPengabdian')->name('operator.menunggu.cetak_pengabdian');
 
     Route::get('/{id}/detail_reviewer','Operator\UsulanMenungguController@detailReviewer')->name('operator.menunggu.detail_reviewer');
     Route::get('/cari_reviewer','Operator\UsulanMenungguController@cariReviewer')->name('operator.menunggu.cari_reviewer');

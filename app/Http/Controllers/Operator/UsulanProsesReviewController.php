@@ -112,7 +112,7 @@ class UsulanProsesReviewController extends Controller
                                     ->where('jenis_reviewer','internal')
                                     ->get();
         $reviewer_eksternals = Reviewer1::join('usulans','usulans.id','reviewer1s.usulan_id')
-                                    ->select('reviewer1s.id','reviewer_nip','reviewer_nama','reviewer_prodi_nama','reviewer_fakultas_nama','judul_kegiatan')
+                                    ->select('reviewer1s.id','reviewer_nip','reviewer_nama','reviewer1s.ketua_peneliti_nidn','reviewer_universitas','judul_kegiatan')
                                     ->where('usulans.id',$id)
                                     ->where('jenis_reviewer','eksternal')
                                     ->get();
@@ -225,12 +225,13 @@ class UsulanProsesReviewController extends Controller
                 $reviewer->usulan_id = $request->usulan_id_reviewer_eksternal;
                 $reviewer->reviewer_nip = $request->nip_reviewer;
                 $reviewer->reviewer_nama = $request->nm_reviewer;
-                $reviewer->reviewer_prodi_id = $request->prodi_kode_reviewer;
-                $reviewer->reviewer_prodi_nama = $request->prodi_reviewer;
-                $reviewer->reviewer_fakultas_id = $request->fakultas_kode_reviewer;
-                $reviewer->reviewer_fakultas_nama = $request->fakultas_reviewer;
-                $reviewer->reviewer_jabatan_fungsional = $request->jabatan_reviewer;
-                $reviewer->reviewer_jk = $request->jk_reviewer;
+                $reviewer->ketua_peneliti_nidn = $request->nidn_reviewer;
+                // $reviewer->reviewer_prodi_id = $request->prodi_kode_reviewer;
+                // $reviewer->reviewer_prodi_nama = $request->prodi_reviewer;
+                // $reviewer->reviewer_fakultas_id = $request->fakultas_kode_reviewer;
+                // $reviewer->reviewer_fakultas_nama = $request->fakultas_reviewer;
+                // $reviewer->reviewer_jabatan_fungsional = $request->jabatan_reviewer;
+                // $reviewer->reviewer_jk = $request->jk_reviewer;
                 $reviewer->reviewer_universitas = $request->universitas;
                 $reviewer->jenis_reviewer = "eksternal";
                 $reviewer->password = bcrypt($request->password);
@@ -240,12 +241,13 @@ class UsulanProsesReviewController extends Controller
                 $reviewer->usulan_id = $request->usulan_id_reviewer_eksternal;
                 $reviewer->reviewer_nip = $request->nip_reviewer;
                 $reviewer->reviewer_nama = $request->nm_reviewer;
-                $reviewer->reviewer_prodi_id = $request->prodi_kode_reviewer;
-                $reviewer->reviewer_prodi_nama = $request->prodi_reviewer;
-                $reviewer->reviewer_fakultas_id = $request->fakultas_kode_reviewer;
-                $reviewer->reviewer_fakultas_nama = $request->fakultas_reviewer;
-                $reviewer->reviewer_jabatan_fungsional = $request->jabatan_reviewer;
-                $reviewer->reviewer_jk = $request->jk_reviewer;
+                $reviewer->ketua_peneliti_nidn = $request->nidn_reviewer;
+                // $reviewer->reviewer_prodi_id = $request->prodi_kode_reviewer;
+                // $reviewer->reviewer_prodi_nama = $request->prodi_reviewer;
+                // $reviewer->reviewer_fakultas_id = $request->fakultas_kode_reviewer;
+                // $reviewer->reviewer_fakultas_nama = $request->fakultas_reviewer;
+                // $reviewer->reviewer_jabatan_fungsional = $request->jabatan_reviewer;
+                // $reviewer->reviewer_jk = $request->jk_reviewer;
                 $reviewer->reviewer_universitas = $request->universitas;
                 $reviewer->jenis_reviewer = "eksternal";
                 $reviewer->save();
