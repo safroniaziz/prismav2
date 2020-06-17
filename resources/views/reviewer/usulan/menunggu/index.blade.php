@@ -85,7 +85,7 @@
                                             <th style="text-align:center;">Judul Kegiatan</th>
                                             <th style="text-align:center;">Anggota Kelompok</th>
                                             <th style="text-align:center;">Biaya Diusulkan</th>
-                                            <th style="text-align:center;">Rancangan Anggaran</th>
+                                            {{-- <th style="text-align:center;">Rancangan Anggaran</th> --}}
                                             <th style="text-align:center;">Review</th>
                                         </tr>
                                     </thead>
@@ -111,6 +111,8 @@
                                                         <hr style="margin-bottom:5px !important; margin-top:5px !important;">
                                                         <a href="{{ asset('upload/file_usulan/'.$usulan->file_usulan) }}" download="{{ $usulan->file_usulan }}"><i class="fa fa-download"></i>&nbsp; download file usulan</a>
                                                         <br>
+                                                        <a href="{{ asset('upload/file_anggaran/'.$usulan->file_anggaran) }}" download="{{ $usulan->file_anggaran }}"><i class="fa fa-download"></i>&nbsp; download file anggaran</a>
+                                                        <br>
                                                         <a href="{{ asset('upload/peta_jalan/'.$usulan->peta_jalan) }}" download="{{ $usulan->peta_jalan }}"><i class="fa fa-download"></i>&nbsp; download file peta jalan</a>
                                                         <br>
                                                         <a href="{{ asset('upload/lembar_pengesahan/'.$usulan->lembar_pengesahan) }}" download="{{ $usulan->lembar_pengesahan }}"><i class="fa fa-download"></i>&nbsp; download file lembar pengesahan</a>
@@ -123,9 +125,9 @@
                                                         @endif
                                                     </td>
                                                     <td style="text-align:center;"> Rp. {{ number_format($usulan->biaya_diusulkan, 2) }} </td>
-                                                    <td style="text-align:center;">
+                                                    {{-- <td style="text-align:center;">
                                                         <a href="{{ route('reviewer.usulan.anggaran.cetak',[$usulan->id]) }}" class="btn btn-primary btn-sm" style="color:white; cursor:pointer;"><i class="fa fa-print"></i></a>
-                                                    </td>
+                                                    </td> --}}
 
                                                     <td style="text-align:center;">
                                                         <a href=" {{ route('reviewer.usulan.review',[$usulan->id, $usulan->skim_id]) }} " class="btn btn-primary btn-sm" style="color:white;"><i class="fa fa-star"></i></a>

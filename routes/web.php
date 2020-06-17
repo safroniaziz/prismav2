@@ -48,6 +48,8 @@ Route::group(['prefix'  => 'operator/manajemen_skim'],function(){
     Route::get('/{id}/edit','Operator\SkimController@edit')->name('operator.skim.edit');
     Route::patch('/','Operator\SkimController@update')->name('operator.skim.update');
     Route::delete('/','Operator\SkimController@delete')->name('operator.skim.delete');
+    Route::patch('/aktifkan_status/{id}','Operator\SkimController@aktifkanStatus')->name('operator.skim.aktifkan_status');
+    Route::patch('/non_aktifkan_status/{id}','Operator\SkimController@nonAktifkanStatus')->name('operator.skim.non_aktifkan_status');
 });
 
 Route::group(['prefix'  => 'operator/jenis_publikasi'],function(){
@@ -151,6 +153,9 @@ Route::group(['prefix'  => 'operator/usulan_dosen/proses_review'],function(){
     Route::post('/reviewer','Operator\UsulanProsesReviewController@reviewerPost')->name('operator.proses_review.reviewer_post');
     Route::post('/reviewer_eksternal','Operator\UsulanProsesReviewController@reviewerEksternalPost')->name('operator.proses_review.reviewer_eksternal_post');
     Route::get('/{id}/get_reviewer','Operator\UsulanProsesReviewController@getReviewer')->name('operator.proses_review.get_reviewer');
+
+    Route::get('/cetak','Operator\UsulanProsesReviewController@cetak')->name('operator.proses_review.cetak');
+    Route::get('/cetak_pengabdian','Operator\UsulanProsesReviewController@cetakPengabdian')->name('operator.proses_review.cetak_pengabdian');
 });
 
 Route::group(['prefix'  => 'operator/usulan_dosen/menunggu_verifikasi'],function(){
@@ -164,6 +169,9 @@ Route::group(['prefix'  => 'operator/usulan_dosen/menunggu_verifikasi'],function
     Route::get('/{id}/komentar','Operator\VerifikasiUsulanController@komentar')->name('operator.verifikasi.komentar');
     Route::get('/{id}/{skim_id}/reviewer3','Operator\VerifikasiUsulanController@reviewerTiga')->name('operator.verifikasi.reviewer3');
     Route::post('reviewer3','Operator\VerifikasiUsulanController@reviewerTigaPost')->name('operator.verifikasi.reviewer3_post');
+
+    Route::get('/cetak','Operator\VerifikasiUsulanController@cetak')->name('operator.verifikasi.cetak');
+    Route::get('/cetak_pengabdian','Operator\VerifikasiUsulanController@cetakPengabdian')->name('operator.verifikasi.cetak_pengabdian');
 });
 
 Route::group(['prefix'  => 'operator/usulan_dosen/laporan_kemajuan/menunggu_verifikasi'],function(){

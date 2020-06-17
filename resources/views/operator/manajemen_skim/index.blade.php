@@ -78,6 +78,8 @@
                                 <th>Nama Skim</th>
                                 <th>Nama Unit</th>
                                 <th>Tahun</th>
+                                <th>Status</th>
+                                <th>Ubah Status</th>
                                 <th>Aksi</th>
                             </tr>
                         </thead>
@@ -99,6 +101,26 @@
                                     <td> {{ $skim->nm_unit }} </td>
                                     <td>
                                         {{ $skim->tahun }}
+                                    </td>
+                                    <td>
+                                        @if ($skim->status == "1")
+                                            <span class="badge badge-primary"><i class="fa fa-check-circle"></i>&nbsp;Aktif</span>
+                                            @else
+                                            <span class="badge badge-danger"><i class="fa fa-close"></i>&nbsp; Tidak Aktif</span>
+                                        @endif
+                                    </td>
+                                    <td style="text-align:center;">
+                                        @if ($skim->status == "1")
+                                            <form action="{{ route('operator.skim.non_aktifkan_status', [$skim->id]) }}" method="POST">
+                                                {{ csrf_field() }} {{ method_field('PATCH') }}
+                                                <button type="submit" class="btn btn-danger btn-sm" style="color:white; cursor:pointer;"><i class="fa fa-thumbs-down"></i></button>
+                                            </form>
+                                            @else
+                                            <form action="{{ route('operator.skim.aktifkan_status', [$skim->id]) }}" method="POST">
+                                                {{ csrf_field() }} {{ method_field('PATCH') }}
+                                                <button type="submit" class="btn btn-primary btn-sm" style="color:white; cursor:pointer;"><i class="fa fa-thumbs-up"></i></button>
+                                            </form>
+                                        @endif
                                     </td>
                                     <td>
                                         <a onclick="hapusSkim( {{ $skim->id }} )" style="color:white; cursor:pointer;" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>

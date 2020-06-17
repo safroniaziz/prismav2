@@ -18,6 +18,7 @@ class CreateSkimsTable extends Migration
             $table->string('nm_skim');
             $table->string('nm_unit');
             $table->string('tahun')->nullable();
+            $table->enum('status',['1','0'])->nullable();
             $table->timestamps();
         });
     }

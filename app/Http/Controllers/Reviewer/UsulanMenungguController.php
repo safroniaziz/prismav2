@@ -27,7 +27,7 @@ class UsulanMenungguController extends Controller
                                     ->leftJoin('skims','skims.id','usulans.skim_id')
                                     ->leftJoin('reviewer1s','reviewer1s.usulan_id','usulans.id')
                                     ->select('usulans.id','judul_kegiatan','jenis_kegiatan','ketua_peneliti_universitas','skims.id as skim_id','ketua_peneliti_prodi_nama',
-                                            'ketua_peneliti_nama as nm_ketua_peneliti','abstrak','tahun_usulan','kata_kunci','peta_jalan','file_usulan','lembar_pengesahan','biaya_diusulkan','status_usulan',
+                                            'ketua_peneliti_nama as nm_ketua_peneliti','abstrak','tahun_usulan','kata_kunci','peta_jalan','file_usulan','file_anggaran','lembar_pengesahan','biaya_diusulkan','status_usulan',
                                             DB::raw('group_concat(distinct concat(anggota_nama) SEPARATOR "<br>") as "nm_anggota" '),
                                             DB::raw('group_concat(distinct concat(reviewer_nama) SEPARATOR "<br>") as "nm_reviewer" '),
                                             DB::raw('group_concat(distinct concat(reviewer_nip) SEPARATOR "<br>") as "nip_reviewer" ')
@@ -138,26 +138,42 @@ class UsulanMenungguController extends Controller
         $mytime = Carbon\Carbon::now();
         $time = $mytime->toDateTimeString();
         $jumlah = $request->jumlah;
-        $formulir = array();
-        for($i=1; $i <= $jumlah; $i++){
-            $formulir[] = array(
-                'usulan_id'     =>  $request->usulan_id,
-                'formulir_id'   =>  $request->nilai.$i,
-                'skor'          =>  $_POST['nilai'.$i],
-                'reviewer_id'          =>  Session::get('nip'),
-                'created_at'    =>  $time,
-                'updated_at'    =>  $time,
-            );
-        }
-        NilaiFormulir::insert($formulir);
+        // $formulir = array();
+        // for($i=1; $i <= $jumlah; $i++){
+        //     $formulir[] = array(
+        //         'usulan_id'     =>  $request->usulan_id,
+        //         'formulir_id'   =>  $request->nilai.$i,
+        //         'skor'          =>  $_POST['nilai'.$i],
+        //         'reviewer_id'          =>  Session::get('nip'),
+        //         'created_at'    =>  $time,
+        //         'updated_at'    =>  $time,
+        //     );
+        // }
+        // NilaiFormulir::insert($formulir);
+        DB::beginTransaction();
 
-        if ($request->komentar != null || $request->komentar != "") {
-            $komentar = new Komentar1;
-            $komentar->usulan_id = $request->usulan_id;
-            $komentar->reviewer_id = Session::get('nip');
-            $komentar->komentar = $request->komentar;
-            $komentar->save();
+        try {
+                $total_skor = new NilaiFormulir;
+                $total_skor->usulan_id = $request->usulan_id;
+                $total_skor->reviewer_id = Session::get('nip');
+                $total_skor->total_skor = $request->total_skor;
+                $total_skor->save();
+            if ($request->komentar != null || $request->komentar != "") {
+                $komentar = new Komentar1;
+                $komentar->usulan_id = $request->usulan_id;
+                $komentar->reviewer_id = Session::get('nip');
+                $komentar->komentar = $request->komentar;
+                $komentar->save();
+            }
+
+            DB::commit();
+            // all good
+        } catch (\Exception $e) {
+            DB::rollback();
+            // something went wrong
         }
+
+        
 
         $sudah = Usulan::leftJoin('reviewer1s','reviewer1s.usulan_id','usulans.id')
                                 ->rightJoin('nilai_formulirs','nilai_formulirs.reviewer_id','reviewer1s.reviewer_nip')

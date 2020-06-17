@@ -33,6 +33,7 @@ class CreateUsulansTable extends Migration
             $table->string('peta_jalan')->nullable();
             $table->string('lembar_pengesahan')->nullable();
             $table->string('file_usulan')->nullable();
+            $table->string('file_anggaran')->nullable();
             $table->text('tujuan')->nullable();
             $table->text('luaran')->nullable();
             $table->string('biaya_diusulkan');

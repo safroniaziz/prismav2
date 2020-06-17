@@ -23,6 +23,7 @@ use App\JadwalUsulan;
 use App\Prodi;
 use App\RancanganAnggaran;
 use Carbon;
+use Illuminate\Support\Str;
 
 if(version_compare(PHP_VERSION, '7.2.0', '>=')) {
     error_reporting(E_ALL ^ E_NOTICE ^ E_WARNING);
@@ -39,10 +40,10 @@ class UsulanController extends Controller
                                     ->groupBy('usulans.id','rancangan_anggarans.id')
                                     ->where('usulans.ketua_peneliti_nip',Session::get('nip'))
                                     ->select('usulans.id','judul_kegiatan','jenis_kegiatan',
-                                            'ketua_peneliti_nama','abstrak','kata_kunci','peta_jalan','file_usulan','biaya_diusulkan','status_usulan','tahun_usulan',
+                                            'ketua_peneliti_nama','abstrak','kata_kunci','peta_jalan','file_usulan','file_anggaran','biaya_diusulkan','status_usulan','tahun_usulan',
                                             DB::raw('group_concat(anggota_usulans.anggota_nama SEPARATOR "<br>") as "nm_anggota" '))
                                     ->get();
-                $skims  =   Skim::select('id','nm_skim')->where('tahun',date('Y'))->get();
+                $skims  =   Skim::select('id','nm_skim')->where('tahun',date('Y'))->where('status','1')->get();
                 $bidangs  =   BidangPenelitian::select('id','nm_bidang')->get();
                 $jadwal = JadwalUsulan::select('tanggal_awal','tanggal_akhir')->where('status','1')->get();
                 $mytime = Carbon\Carbon::now();
@@ -67,17 +68,22 @@ class UsulanController extends Controller
                 $model['peta_jalan'] = null;
                 $model['file_usulan'] = null;
                 if ($request->hasFile('peta_jalan')) {
-                    $model['peta_jalan'] = Session::get('nip').'-'.date('now').$request->skim_id.'-'.$request->tahun_usulan.uniqid().'.'.$request->peta_jalan->getClientOriginalExtension();
+                    $model['peta_jalan'] = Str::slug(Session::get('nm_dosen')).'-'.date('now').$request->skim_id.'-'.$request->tahun_usulan.uniqid().'.'.$request->peta_jalan->getClientOriginalExtension();
                     $request->peta_jalan->move(public_path('/upload/peta_jalan'), $model['peta_jalan']);
                 }
 
                 if ($request->hasFile('file_usulan')) {
-                    $model['file_usulan'] = Session::get('nip').'-'.date('now').$request->skim_id.'-'.$request->tahun_usulan.uniqid().'.'.$request->file_usulan->getClientOriginalExtension();
+                    $model['file_usulan'] = Str::slug(Session::get('nm_dosen')).'-'.date('now').$request->skim_id.'-'.$request->tahun_usulan.uniqid().'.'.$request->file_usulan->getClientOriginalExtension();
                     $request->file_usulan->move(public_path('/upload/file_usulan'), $model['file_usulan']);
                 }
 
+                if ($request->hasFile('file_anggaran')) {
+                    $model['file_anggaran'] = Str::slug(Session::get('nm_dosen')).'-'.date('now').$request->skim_id.'-'.$request->tahun_usulan.uniqid().'.'.$request->file_anggaran->getClientOriginalExtension();
+                    $request->file_anggaran->move(public_path('/upload/file_anggaran'), $model['file_anggaran']);
+                }
+
                 if ($request->hasFile('lembar_pengesahan')) {
-                    $model['lembar_pengesahan'] = Session::get('nip').'-'.date('now').$request->skim_id.'-'.$request->tahun_usulan.uniqid().'.'.$request->lembar_pengesahan->getClientOriginalExtension();
+                    $model['lembar_pengesahan'] = Str::slug(Session::get('nm_dosen')).'-'.date('now').$request->skim_id.'-'.$request->tahun_usulan.uniqid().'.'.$request->lembar_pengesahan->getClientOriginalExtension();
                     $request->lembar_pengesahan->move(public_path('/upload/lembar_pengesahan'), $model['lembar_pengesahan']);
                 }
 
@@ -99,6 +105,7 @@ class UsulanController extends Controller
                 $usulan->kata_kunci =   implode(',',$request->kata_kunci);
                 $usulan->peta_jalan    =   $model['peta_jalan'];
                 $usulan->file_usulan    =   $model['file_usulan'];
+                $usulan->file_anggaran    =   $model['file_anggaran'];
                 $usulan->lembar_pengesahan    =   $model['lembar_pengesahan'];
                 $usulan->tujuan    =   $model['tujuan'];
                 $usulan->luaran    =   $model['luaran'];
@@ -145,7 +152,7 @@ class UsulanController extends Controller
         	if ($usulan->peta_jalan != null) {
         		unlink(public_path('/upload/peta_jalan/'.$usulan->peta_jalan));
         	}
-            $input['peta_jalan'] = Session::get('nip').'-'.date('now').$request->skim_id.'-'.$request->tahun_usulan.uniqid().'.'.$request->peta_jalan->getClientOriginalExtension();
+            $input['peta_jalan'] = Str::slug(Session::get('nm_dosen')).'-'.date('now').$request->skim_id.'-'.$request->tahun_usulan.uniqid().'.'.$request->peta_jalan->getClientOriginalExtension();
         	$request->peta_jalan->move(public_path('/upload/peta_jalan'), $input['peta_jalan']);
         }
 
@@ -155,8 +162,18 @@ class UsulanController extends Controller
         	if ($usulan->file_usulan != null) {
         		unlink(public_path('/upload/file_usulan/'.$usulan->file_usulan));
         	}
-            $input['file_usulan'] = Session::get('nip').'-'.date('now').$request->skim_id.'-'.$request->tahun_usulan.uniqid().'.'.$request->file_usulan->getClientOriginalExtension();
+            $input['file_usulan'] = Str::slug(Session::get('nm_dosen')).'-'.date('now').$request->skim_id.'-'.$request->tahun_usulan.uniqid().'.'.$request->file_usulan->getClientOriginalExtension();
         	$request->file_usulan->move(public_path('/upload/file_usulan'), $input['file_usulan']);
+        }
+
+        $input['file_anggaran'] = $usulan->file_anggaran;
+
+        if ($request->hasFile('file_anggaran')) {
+        	if ($usulan->file_anggaran != null) {
+        		unlink(public_path('/upload/file_anggaran/'.$usulan->file_anggaran));
+        	}
+            $input['file_anggaran'] = Str::slug(Session::get('nm_dosen')).'-'.date('now').$request->skim_id.'-'.$request->tahun_usulan.uniqid().'.'.$request->file_anggaran->getClientOriginalExtension();
+        	$request->file_anggaran->move(public_path('/upload/file_anggaran'), $input['file_anggaran']);
         }
 
         $input['lembar_pengesahan'] = $usulan->lembar_pengesahan;
@@ -165,7 +182,7 @@ class UsulanController extends Controller
         	if ($usulan->lembar_pengesahan != null) {
         		unlink(public_path('/upload/lembar_pengesahan/'.$usulan->lembar_pengesahan));
         	}
-            $input['lembar_pengesahan'] = Session::get('nip').'-'.date('now').$request->skim_id.'-'.$request->tahun_usulan.uniqid().'.'.$request->lembar_pengesahan->getClientOriginalExtension();
+            $input['lembar_pengesahan'] = Str::slug(Session::get('nm_dosen')).'-'.date('now').$request->skim_id.'-'.$request->tahun_usulan.uniqid().'.'.$request->lembar_pengesahan->getClientOriginalExtension();
         	$request->lembar_pengesahan->move(public_path('/upload/lembar_pengesahan'), $input['lembar_pengesahan']);
         }
 
@@ -773,7 +790,7 @@ class UsulanController extends Controller
     }
 
     public function cariSkim(Request $request){
-        $skims = Skim::where('j_kegiatan', $request->jenis_kegiatan)->get();
+        $skims = Skim::where('j_kegiatan', $request->jenis_kegiatan)->where('status','1')->get();
         return $skims;
     }
 }

@@ -101,6 +101,7 @@
                                 <th style="text-align:center;">Anggota Kelompok</th>
                                 <th style="text-align:center;">Biaya Diusulkan</th>
                                 <th style="text-align:center;">File Usulan</th>
+                                <th style="text-align:center;">File Anggaran</th>
                                 <th style="text-align:center;">Peta Jalan</th>
                                 <th style="text-align:center;">Status Usulan</th>
                                 <th style="text-align:center;">Usulkan</th>
@@ -136,12 +137,19 @@
                                     </td>
                                     <td style="width:25%; text-align:center;">
                                         <a>Rp. {{ number_format($usulan->biaya_diusulkan, 2) }}</a>
-                                        <br>
-                                        <hr style="margin-bottom:5px !important; margin-top:5px !important;">
-                                        <a href="{{ route('pengusul.usulan.detail_anggaran',[$usulan->id]) }}" class="btn btn-primary btn-sm" style="color:white; cursor:pointer;"><i class="fa fa-gear"></i>&nbsp; kelola anggaran</a>
+                                        {{-- <br> --}}
+                                        {{-- <hr style="margin-bottom:5px !important; margin-top:5px !important;"> --}}
+                                        {{-- <a href="{{ route('pengusul.usulan.detail_anggaran',[$usulan->id]) }}" class="btn btn-primary btn-sm" style="color:white; cursor:pointer;"><i class="fa fa-gear"></i>&nbsp; kelola anggaran</a> --}}
                                     </td>
                                     <td style="text-align:center">
                                         @if ($usulan->file_usulan == null)
+                                            <label class="badge badge-danger"><i class="fa fa-close" style="padding:5px;"></i></label>
+                                            @else
+                                            <label class="badge badge-success"><i class="fa fa-check-circle" style="padding:5px;"></i></label>
+                                        @endif
+                                    </td>
+                                    <td style="text-align:center">
+                                        @if ($usulan->file_anggaran == null)
                                             <label class="badge badge-danger"><i class="fa fa-close" style="padding:5px;"></i></label>
                                             @else
                                             <label class="badge badge-success"><i class="fa fa-check-circle" style="padding:5px;"></i></label>
@@ -278,6 +286,14 @@
                                                                     </div>
                                                                 </div>
 
+                                                                <div class="form-group col-md-6">
+                                                                    <label for="exampleInputEmail1">File Anggaran : <a style="color:red; font-style:italic; font-size:12px;">Harap masukan file pdf. Max : 5MB</a></label>
+                                                                    <input type="file" name="file_anggaran" id="file_anggaran" accept="application/pdf" class="form-control" style="padding-bottom:30px;">
+                                                                    <div style="color:red;" style="margin-bottom:10px;">
+                                                                        File Lama :<a id="usulan_name"></a>
+                                                                    </div>
+                                                                </div>
+
                                                             </div>
                                                     <div class="modal-footer">
                                                         <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-close"></i>&nbsp;Batalkan</button>
@@ -357,6 +373,11 @@
                                                         <div class="form-group col-md-6">
                                                             <label for="exampleInputEmail1">File Usulan : <a style="color:red; font-style:italic; font-size:12px;">Harap masukan file pdf. Max : 5MB</a></label>
                                                             <input type="file" name="file_usulan" id="file_usulan1" accept="application/pdf" class="form-control" style="padding-bottom:30px;" required>
+                                                        </div>
+
+                                                        <div class="form-group col-md-6">
+                                                            <label for="exampleInputEmail1">File Anggaran : <a style="color:red; font-style:italic; font-size:12px;">Harap masukan file pdf. Max : 1MB</a></label>
+                                                            <input type="file" name="file_anggaran" id="file_anggaran1" accept="application/pdf" class="form-control" style="padding-bottom:30px;" required>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -522,28 +543,28 @@
             });
         }
         function usulkan(id){
-            $.ajax({
-                url: "{{ url('pengusul/manajemen_usulan') }}"+'/'+ id + "/get_anggaran",
-                type: "GET",
-                dataType: "JSON",
-                success: function(data){
+            // $.ajax({
+            //     url: "{{ url('pengusul/manajemen_usulan') }}"+'/'+ id + "/get_anggaran",
+            //     type: "GET",
+            //     dataType: "JSON",
+            //     success: function(data){
                     $('#modalusulan').modal('show');
                     $('#usulan_id_usulkan').val(id);
-                    if (data['habis'][0].jumlah != "0" && data['outputs'][0].jumlah != "0" && data['lainnya'][0].jumlah != "0" && data['penunjangs'][0].jumlah != "0") {
+            //         if (data['habis'][0].jumlah != "0" && data['outputs'][0].jumlah != "0" && data['lainnya'][0].jumlah != "0" && data['penunjangs'][0].jumlah != "0") {
                         $('#usulan-success').show();
                         $('#usulan-danger').hide();
                         $('#btn-submit-usulan').attr("disabled", false);
-                    }
-                    else{
-                        $('#usulan-danger').show();
-                        $('#usulan-success').hide();
-                        $('#btn-submit-usulan').attr("disabled", true);
-                    }
-                },
-                error:function(){
-                    alert("Nothing Data");
-                }
-            });
+                //     }
+                //     else{
+                //         $('#usulan-danger').show();
+                //         $('#usulan-success').hide();
+                //         $('#btn-submit-usulan').attr("disabled", true);
+                //     }
+                // },
+                // error:function(){
+                //     alert("Nothing Data");
+                // }
+            // });
         }
 
         $(document).ready(function(){

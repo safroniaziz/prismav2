@@ -108,6 +108,8 @@
                                                         <hr style="margin-bottom:5px !important; margin-top:5px !important;">
                                                         <a href="{{ asset('upload/file_usulan/'.$penelitian->file_usulan) }}" download="{{ $penelitian->file_usulan }}"><i class="fa fa-download"></i>&nbsp; download file usulan</a>
                                                         <br>
+                                                        <a href="{{ asset('upload/file_anggaran/'.$penelitian->file_anggaran) }}" download="{{ $penelitian->file_anggaran }}"><i class="fa fa-download"></i>&nbsp; download file anggaran</a>
+                                                        <br>
                                                         <a href="{{ asset('upload/peta_jalan/'.$penelitian->peta_jalan) }}" download="{{ $penelitian->peta_jalan }}"><i class="fa fa-download"></i>&nbsp; download file peta jalan</a>
                                                         <br>
                                                         <a href="{{ asset('upload/lembar_pengesahan/'.$penelitian->lembar_pengesahan) }}" download="{{ $penelitian->lembar_pengesahan }}"><i class="fa fa-download"></i>&nbsp; download file lembar pengesahan</a>
@@ -200,6 +202,8 @@
                                                         <span style="font-size:10px !important;" for="" class="badge badge-secondary">{{ $pengabdians->tahun_usulan }}</span>
                                                         <hr style="margin-bottom:5px !important; margin-top:5px !important;">
                                                         <a href="{{ asset('upload/file_usulan/'.$pengabdians->file_usulan) }}" download="{{ $pengabdians->file_usulan }}"><i class="fa fa-download"></i>&nbsp; download file usulan</a>
+                                                        <br>
+                                                        <a href="{{ asset('upload/file_anggaran/'.$pengabdians->file_anggaran) }}" download="{{ $pengabdians->file_anggaran }}"><i class="fa fa-download"></i>&nbsp; download file anggaran</a>
                                                         <br>
                                                         <a href="{{ asset('upload/peta_jalan/'.$pengabdians->peta_jalan) }}" download="{{ $pengabdians->peta_jalan }}"><i class="fa fa-download"></i>&nbsp; download file peta jalan</a>
                                                         <br>

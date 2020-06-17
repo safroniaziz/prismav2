@@ -36,6 +36,7 @@ class DashboardController extends Controller
         $pengabdians = Usulan::join('skims','skims.id','usulans.skim_id')->select('nm_skim',DB::raw('COUNT(jenis_kegiatan) as jumlah'))->where('jenis_kegiatan','pengabdian')->groupBy('skim_id')->get();
         $fa = Usulan::select('ketua_peneliti_fakultas_id as fakultas')->groupBy('ketua_peneliti_fakultas_id')->get();
         $array_penelitian = [];
+        $array_pembinaan = [];
         for ($i=0; $i <count($fa) ; $i++) {
             $unggulan = Usulan::select(DB::raw('COUNT(jenis_kegiatan) as jumlah'))->where('ketua_peneliti_fakultas_id',$fa[$i]->fakultas)->where('skim_id',10)->get();
             $pembinaan = Usulan::select(DB::raw('COUNT(jenis_kegiatan) as jumlah'))->where('ketua_peneliti_fakultas_id',$fa[$i]->fakultas)->where('skim_id',11)->get();
@@ -190,6 +191,9 @@ class DashboardController extends Controller
                     'ppm_ipteks'  =>  $ppm_ipteks,
                     'ppm_riset'  =>  $ppm_riset,
                 ];
+            }
+            else{
+                $array_pembinaan = [];
             }
         }
         $skim = Count(Skim::all());

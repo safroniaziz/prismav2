@@ -23,7 +23,7 @@ class UsulanPendingController extends Controller
         $penelitians = Usulan::leftJoin('anggota_usulans','anggota_usulans.usulan_id','usulans.id')
                             ->leftJoin('skims','skims.id','usulans.skim_id')
                             ->select('usulans.id','judul_kegiatan','jenis_kegiatan',
-                                    'abstrak','kata_kunci','peta_jalan','file_usulan','lembar_pengesahan','biaya_diusulkan','status_usulan','tahun_usulan','ketua_peneliti_prodi_nama','ketua_peneliti_nama as nm_ketua_peneliti',
+                                    'abstrak','kata_kunci','peta_jalan','file_usulan','file_anggaran','lembar_pengesahan','biaya_diusulkan','status_usulan','tahun_usulan','ketua_peneliti_prodi_nama','ketua_peneliti_nama as nm_ketua_peneliti',
                                     DB::raw('group_concat(distinct concat(anggota_usulans.anggota_nama) SEPARATOR "<br>") as "nm_anggota" ')
                                     )
                             ->where('usulans.status_usulan','0')
@@ -33,7 +33,7 @@ class UsulanPendingController extends Controller
         $pengabdians = Usulan::leftJoin('anggota_usulans','anggota_usulans.usulan_id','usulans.id')
                             ->leftJoin('skims','skims.id','usulans.skim_id')
                             ->select('usulans.id','judul_kegiatan','jenis_kegiatan',
-                                    'abstrak','kata_kunci','peta_jalan','file_usulan','lembar_pengesahan','biaya_diusulkan','status_usulan','tahun_usulan','ketua_peneliti_prodi_nama','ketua_peneliti_nama as nm_ketua_peneliti',
+                                    'abstrak','kata_kunci','peta_jalan','file_usulan','file_anggaran','lembar_pengesahan','biaya_diusulkan','status_usulan','tahun_usulan','ketua_peneliti_prodi_nama','ketua_peneliti_nama as nm_ketua_peneliti',
                                     DB::raw('group_concat(distinct concat(anggota_usulans.anggota_nama) SEPARATOR "<br>") as "nm_anggota" ')
                                     )
                             ->where('usulans.status_usulan','0')

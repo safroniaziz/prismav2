@@ -15,7 +15,7 @@ class SkimController extends Controller
     }
 
     public function index(){
-        $skims = Skim::select('id','nm_skim','nm_unit','tahun','j_kegiatan')->orderBy('j_kegiatan','asc')->get();
+        $skims = Skim::select('id','nm_skim','nm_unit','tahun','j_kegiatan','status')->orderBy('j_kegiatan','asc')->get();
         return view('operator/manajemen_skim.index',compact('skims'));
     }
 
@@ -54,5 +54,19 @@ class SkimController extends Controller
         $skim->delete();
 
         return redirect()->route('operator.skim')->with(['success'  =>  'Skim Baru Berhasil Dihapus !!']);
+    }
+
+    public function nonaktifkanStatus($id){
+        Skim::where('id',$id)->update([
+            'status'    =>  '0'
+        ]);
+        return redirect()->route('operator.skim')->with(['success' =>  'Skim Penelitian Berhasil Di Nonaktifkan !!']);
+    }
+
+    public function aktifkanStatus($id){
+        Skim::where('id',$id)->update([
+            'status'    =>  '1'
+        ]);
+        return redirect()->route('operator.skim')->with(['success' =>  'Skim Penelitian Berhasil Di Aktifkan !!']);
     }
 }

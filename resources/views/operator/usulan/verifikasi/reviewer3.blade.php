@@ -48,7 +48,7 @@
                                 <th>No</th>
                                 <th>Kriteria Penilaian</th>
                                 <th>Bobot Penilaian</th>
-                                <th>Skor <a style="color:red;"><i>(1 - 100)</i></a></th>
+                                {{-- <th>Skor <a style="color:red;"><i>(1 - 100)</i></a></th> --}}
                             </tr>
                             @php
                                 $no=1;
@@ -64,11 +64,19 @@
                                     <td> {{ $no++ }} </td>
                                     <td>{{ $formulir->kriteria_penilaian }}</td>
                                     <td>{{ $formulir->bobot }}%</td>
-                                    <th style="padding:5px 20px;">
+                                    {{-- <th style="padding:5px 20px;">
                                         <input type="number" max="100" min="1" name="nilai{{ $nomor }}">
-                                    </th>
+                                    </th> --}}
                                 </tr>
                             @endforeach
+                            <tr>
+                                <td colspan="4">
+                                    <div class="form-group">
+                                        <label for="exampleInputPassword1">Masukan Total Nilai :</label>
+                                        <input type="number" name="total_skor" max="100" min="1" class="form-control" required>
+                                      </div>
+                                </td>
+                            </tr>
                             <tr>
                                 <td colspan="4">
                                     <div class="form-group">

@@ -53,6 +53,9 @@
                         <div class="tab-content" id="nav-tabContent">
                             <div class="tab-pane fade show active" id="nav-penelitian" role="tabpanel" aria-labelledby="nav-honor-tab">
                                 <div class="row">
+                                    <div class="col-md-12" style="margin-top: 5px;">
+                                        <a href="{{ route('operator.proses_review.cetak') }}" target="_blank"  class="btn btn-primary btn-sm"><i class="fa fa-print"></i>&nbsp; Cetak Data</a>
+                                    </div>
                                     <div class="col-md-12" style="margin-top:10px;">
                                         <table class="table table-striped table-bordered" id="table" style="width:100%;">
                                             <thead>
@@ -87,6 +90,8 @@
                                                             <span style="font-size:10px !important;" for="" class="badge badge-secondary">{{ $penelitian->tahun_usulan }}</span>
                                                             <hr style="margin-bottom:5px !important; margin-top:5px !important;">
                                                             <a href="{{ asset('upload/file_usulan/'.$penelitian->file_usulan) }}" download="{{ $penelitian->file_usulan }}"><i class="fa fa-download"></i>&nbsp; download file usulan</a>
+                                                            <br>
+                                                            <a href="{{ asset('upload/file_anggaran/'.$penelitian->file_anggaran) }}" download="{{ $penelitian->file_anggaran }}"><i class="fa fa-download"></i>&nbsp; download file anggaran</a>
                                                             <br>
                                                             <a href="{{ asset('upload/peta_jalan/'.$penelitian->peta_jalan) }}" download="{{ $penelitian->peta_jalan }}"><i class="fa fa-download"></i>&nbsp; download file peta jalan</a>
                                                         </td>
@@ -128,6 +133,9 @@
                             </div>
                             <div class="tab-pane fade show" id="nav-pengabdian" role="tabpanel" aria-labelledby="nav-honor-tab">
                                 <div class="row">
+                                    <div class="col-md-12" style="margin-top: 5px;">
+                                        <a href="{{ route('operator.proses_review.cetak_pengabdian') }}" target="_blank"  class="btn btn-primary btn-sm"><i class="fa fa-print"></i>&nbsp; Cetak Data</a>
+                                    </div>
                                     <div class="col-md-12" style="margin-top:10px;">
                                         <table class="table table-striped table-bordered" id="table" style="width:100%;">
                                             <thead>
@@ -162,6 +170,8 @@
                                                             <span style="font-size:10px !important;" for="" class="badge badge-secondary">{{ $pengabdian->tahun_usulan }}</span>
                                                             <hr style="margin-bottom:5px !important; margin-top:5px !important;">
                                                             <a href="{{ asset('upload/file_usulan/'.$pengabdian->file_usulan) }}" download="{{ $pengabdian->file_usulan }}"><i class="fa fa-download"></i>&nbsp; download file usulan</a>
+                                                            <br>
+                                                            <a href="{{ asset('upload/file_anggaran/'.$pengabdian->file_anggaran) }}" download="{{ $pengabdian->file_anggaran }}"><i class="fa fa-download"></i>&nbsp; download file anggaran</a>
                                                             <br>
                                                             <a href="{{ asset('upload/peta_jalan/'.$pengabdian->peta_jalan) }}" download="{{ $pengabdian->peta_jalan }}"><i class="fa fa-download"></i>&nbsp; download file peta jalan</a>
                                                         </td>

@@ -1,5 +1,6 @@
 @php
     use App\Usulan;
+    use App\NilaiFormulir3;
 @endphp
 @extends('layouts.layout')
 @section('title', 'Dashboard')
@@ -78,6 +79,9 @@
                             <div class="tab-content" id="nav-tabContent">
                                 <div class="tab-pane fade show active" id="nav-penelitian" role="tabpanel" aria-labelledby="nav-honor-tab">
                                     <div class="row">
+                                        <div class="col-md-12" style="margin-top: 5px;">
+                                            <a href="{{ route('operator.verifikasi.cetak') }}" target="_blank"  class="btn btn-primary btn-sm"><i class="fa fa-print"></i>&nbsp; Cetak Data</a>
+                                        </div>
                                         <div class="col-md-12" style="margin-top:10px;">
                                             <table class="table table-striped table-bordered" id="table" style="width:100%; ">
                                                 <thead>
@@ -88,7 +92,7 @@
                                                         <th>No</th>
                                                         <th>Judul Kegiatan</th>
                                                         <th>Total Skor</th>
-                                                        <th>Detail Per Indikator</th>
+                                                        {{-- <th>Detail Per Indikator</th> --}}
                                                         <th>Detail Per Reviewer</th>
                                                         <th style="text-align:center;">Komentar Reviewer</th>
                                                         <th>Reviewer 3</th>
@@ -124,33 +128,45 @@
                                                                     <hr style="margin-bottom:5px !important; margin-top:5px !important;">
                                                                     <a href="{{ asset('upload/file_usulan/'.$penelitan->file_usulan) }}" download="{{ $penelitan->file_usulan }}"><i class="fa fa-download"></i>&nbsp; download file usulan</a>
                                                                     <br>
+                                                                    <a href="{{ asset('upload/file_anggaran/'.$penelitan->file_anggaran) }}" download="{{ $penelitan->file_anggaran }}"><i class="fa fa-download"></i>&nbsp; download file anggaran</a>
+                                                                    <br>
                                                                     <a href="{{ asset('upload/peta_jalan/'.$penelitan->peta_jalan) }}" download="{{ $penelitan->peta_jalan }}"><i class="fa fa-download"></i>&nbsp; download file peta jalan</a>
                                                                 </td>
                                                                 @php
                                                                     $tambah = Usulan::join('nilai_formulir3s','nilai_formulir3s.usulan_id','usulans.id')
-                                                                                ->join('formulirs','formulirs.id','nilai_formulir3s.formulir_id')
-                                                                                ->select(DB::raw('SUM(skor * (bobot/100)) as totalskor'))
+                                                                                // ->join('formulirs','formulirs.id','nilai_formulir3s.formulir_id')
+                                                                                ->select('total_skor')
                                                                                 ->where('status_usulan','2')
                                                                                 ->where('usulans.id',$penelitan->id)
-                                                                                ->get();
+                                                                                ->first();
+                                                                    if (!empty($tambah->total_skor)) {
+                                                                        $new_total = $penelitan->totalskor+$tambah['total_skor'];
+                                                                    }
                                                                 @endphp
-                                                                    @if ($tambah[0]->totalskor == 0 || $tambah[0]->totalskor == null || $tambah[0]->totalskor == "")
-                                                                        <td style="padding:15px 27px;"> {{ number_format(($penelitan->totalskor)/2, 2) }} </td>
+                                                                    @if (empty($tambah->total_skor))
+                                                                        <td style="padding:15px 27px;"> {{ number_format(($penelitan->totalskor), 2) }} </td>
                                                                         @else
-                                                                        <td style="padding:15px 27px;"> {{ number_format(($penelitan->totalskor+$tambah[0]->totalskor)/3, 2) }} </td>
+                                                                        <td style="padding:15px 27px;"> {{ number_format($new_total/2, 2) }} </td>
                                                                     @endif
 
-                                                                <td style="padding:15px 30px;">
+                                                                {{-- <td style="padding:15px 30px;">
                                                                         <a onclick="detail({{ $penelitan->id }})" class="btn btn-primary btn-sm" style="color:white; cursor:pointer;"><i class="fa fa-info-circle"></i></a>
-                                                                    </td>
+                                                                    </td> --}}
                                                                     <td style="padding:15px 30px;">
                                                                         <a onclick="detailReviewer({{ $penelitan->id }})" class="btn btn-primary btn-sm" style="color:white; cursor:pointer;"><i class="fa fa-info-circle"></i></a>
                                                                     </td>
                                                                     <td style="text-align:center;">
                                                                         <a onclick="komentar( {{ $penelitan->id }} )"  class="btn btn-primary btn-sm" style="color:white; cursor:pointer;"> <i class="fa fa-comments"></i></a>
                                                                     </td>
+                                                                    <?php 
+                                                                        $rev3 = NilaiFormulir3::where('usulan_id',$penelitan->id)->first();
+                                                                    ?>
                                                                     <td style="text-align:center;">
-                                                                        <a href="{{ route('operator.verifikasi.reviewer3',[$penelitan->id, $penelitan->skim_id]) }}"  class="btn btn-primary btn-sm" style="color:white; cursor:pointer;"> <i class="fa fa-plus"></i></a>
+                                                                        @if (empty($rev3))
+                                                                            <a href="{{ route('operator.verifikasi.reviewer3',[$penelitan->id, $penelitan->skim_id]) }}"  class="btn btn-primary btn-sm" style="color:white; cursor:pointer;"> <i class="fa fa-plus"></i></a>
+                                                                            @else
+                                                                            <a class="btn btn-primary btn-sm disabled" style="color:white; cursor:pointer;"> <i class="fa fa-plus"></i></a>
+                                                                        @endif
                                                                     </td>
                                                             </tr>
                                                         @endif
@@ -162,6 +178,9 @@
                                 </div>
                                 <div class="tab-pane fade show" id="nav-pengabdian" role="tabpanel" aria-labelledby="nav-honor-tab">
                                     <div class="row">
+                                        <div class="col-md-12" style="margin-top: 5px;">
+                                            <a href="{{ route('operator.verifikasi.cetak_pengabdian') }}" target="_blank"  class="btn btn-primary btn-sm"><i class="fa fa-print"></i>&nbsp; Cetak Data</a>
+                                        </div>
                                         <div class="col-md-12" style="margin-top:10px;">
                                             <table class="table table-striped table-bordered" id="table" style="width:100%; ">
                                                 <thead>
@@ -172,7 +191,7 @@
                                                         <th>No</th>
                                                         <th>Judul Kegiatan</th>
                                                         <th>Total Skor</th>
-                                                        <th>Detail Per Indikator</th>
+                                                        {{-- <th>Detail Per Indikator</th> --}}
                                                         <th>Detail Per Reviewer</th>
                                                         <th style="text-align:center;">Komentar Reviewer</th>
                                                         <th>Reviewer 3</th>
@@ -207,33 +226,46 @@
                                                                     <hr style="margin-bottom:5px !important; margin-top:5px !important;">
                                                                     <a href="{{ asset('upload/file_usulan/'.$pengabdians->file_usulan) }}" download="{{ $pengabdians->file_usulan }}"><i class="fa fa-download"></i>&nbsp; download file usulan</a>
                                                                     <br>
+                                                                    <a href="{{ asset('upload/file_anggaran/'.$pengabdians->file_anggaran) }}" download="{{ $pengabdians->file_anggaran }}"><i class="fa fa-download"></i>&nbsp; download file anggaran</a>
+                                                                    <br>
                                                                     <a href="{{ asset('upload/peta_jalan/'.$pengabdians->peta_jalan) }}" download="{{ $pengabdians->peta_jalan }}"><i class="fa fa-download"></i>&nbsp; download file peta jalan</a>
                                                                 </td>
                                                                 @php
                                                                     $tambah = Usulan::join('nilai_formulir3s','nilai_formulir3s.usulan_id','usulans.id')
-                                                                                ->join('formulirs','formulirs.id','nilai_formulir3s.formulir_id')
-                                                                                ->select(DB::raw('SUM(skor * (bobot/100)) as totalskor'))
+                                                                                // ->join('formulirs','formulirs.id','nilai_formulir3s.formulir_id')
+                                                                                ->select('total_skor')
                                                                                 ->where('status_usulan','2')
                                                                                 ->where('usulans.id',$pengabdians->id)
-                                                                                ->get();
+                                                                                ->first();
+                                                                    if (!empty($tambah->total_skor)) {
+                                                                        $new_total = $pengabdians->totalskor+$tambah['total_skor'];
+                                                                    }
                                                                 @endphp
-                                                                    @if ($tambah[0]->totalskor == 0 || $tambah[0]->totalskor == null || $tambah[0]->totalskor == "")
-                                                                        <td style="padding:15px 27px;"> {{ number_format(($pengabdians->totalskor)/2, 2) }} </td>
+                                                                {{-- {{ $pengabdians->total_skor }} --}}
+                                                                    @if (empty($tambah->total_skor))
+                                                                        <td style="padding:15px 27px;"> {{ number_format(($pengabdians->totalskor), 2) }} </td>
                                                                         @else
-                                                                        <td style="padding:15px 27px;"> {{ number_format(($pengabdians->totalskor+$tambah[0]->totalskor)/3, 2) }} </td>
+                                                                        <td style="padding:15px 27px;"> {{ number_format($new_total/2, 2) }} </td>
                                                                     @endif
 
-                                                                <td style="padding:15px 30px;">
+                                                                {{-- <td style="padding:15px 30px;">
                                                                         <a onclick="detail({{ $pengabdians->id }})" class="btn btn-primary btn-sm" style="color:white; cursor:pointer;"><i class="fa fa-info-circle"></i></a>
-                                                                    </td>
+                                                                    </td> --}}
                                                                     <td style="padding:15px 30px;">
                                                                         <a onclick="detailReviewer({{ $pengabdians->id }})" class="btn btn-primary btn-sm" style="color:white; cursor:pointer;"><i class="fa fa-info-circle"></i></a>
                                                                     </td>
                                                                     <td style="text-align:center;">
                                                                         <a onclick="komentar( {{ $pengabdians->id }} )"  class="btn btn-primary btn-sm" style="color:white; cursor:pointer;"> <i class="fa fa-comments"></i></a>
                                                                     </td>
+                                                                    <?php 
+                                                                        $rev3 = NilaiFormulir3::where('usulan_id',$pengabdians->id)->first();
+                                                                    ?>
                                                                     <td style="text-align:center;">
-                                                                        <a href="{{ route('operator.verifikasi.reviewer3',[$pengabdians->id, $pengabdians->skim_id]) }}"  class="btn btn-primary btn-sm" style="color:white; cursor:pointer;"> <i class="fa fa-plus"></i></a>
+                                                                        @if (empty($rev3))
+                                                                            <a href="{{ route('operator.verifikasi.reviewer3',[$pengabdians->id, $pengabdians->skim_id]) }}"  class="btn btn-primary btn-sm" style="color:white; cursor:pointer;"> <i class="fa fa-plus"></i></a>
+                                                                            @else
+                                                                            <a class="btn btn-primary btn-sm disabled" style="color:white; cursor:pointer;"> <i class="fa fa-plus"></i></a>
+                                                                        @endif
                                                                     </td>
                                                             </tr>
                                                         @endif
@@ -270,7 +302,8 @@
                                                 <thead>
                                                     <tr>
                                                         <td>No</td>
-                                                        <td>Kriteria Penlitian</td>
+                                                        <td>Nama Reviewer</td>
+                                                        {{-- <td>Kriteria Penlitian</td> --}}
                                                         <td>Skor</td>
                                                     </tr>
                                                 </thead>
@@ -310,8 +343,10 @@
                                                 <thead>
                                                     <tr>
                                                         <td>No</td>
-                                                        <td>Reviewer</td>
-                                                        <td>Kriteria Penilaian</td>
+                                                        <td>Nama Reviewer</td>
+                                                        <td>Nip Reviewer</td>
+                                                        <td>Status Reviewer</td>
+                                                        {{-- <td>Kriteria Penilaian</td> --}}
                                                         <td>Skor</td>
                                                     </tr>
                                                 </thead>
@@ -468,8 +503,10 @@
                         '<tr>'+
                             '<td>'+no+++'</td>'+
                             '<td>'+value.reviewer_nama+'</td>'+
-                            '<td>'+value.kriteria_penilaian+'</td>'+
-                            '<td>'+value.skor.toFixed(2)+'</td>'+
+                            '<td>'+value.reviewer_nip+'</td>'+
+                            '<td>'+value.jenis_reviewer+'</td>'+
+                            // '<td>'+value.kriteria_penilaian+'</td>'+
+                            '<td>'+value.total_skor+'</td>'+
                         '</tr>';
                     });
                     $('#detail-reviewer').html(res);

@@ -94,6 +94,8 @@
                                             <hr style="margin-bottom:5px !important; margin-top:5px !important;">
                                             <a href="{{ asset('upload/file_usulan/'.$usulan->file_usulan) }}" download="{{ $usulan->file_usulan }}"><i class="fa fa-download"></i>&nbsp; download file usulan</a>
                                             <br>
+                                            <a href="{{ asset('upload/file_anggaran/'.$usulan->file_anggaran) }}" download="{{ $usulan->file_anggaran }}"><i class="fa fa-download"></i>&nbsp; download file anggaran</a>
+                                            <br>
                                             <a href="{{ asset('upload/peta_jalan/'.$usulan->peta_jalan) }}" download="{{ $usulan->peta_jalan }}"><i class="fa fa-download"></i>&nbsp; download file peta jalan</a>
                                             <br>
                                             <a href="{{ asset('upload/lembar_pengesahan/'.$usulan->lembar_pengesahan) }}" download="{{ $usulan->lembar_pengesahan }}"><i class="fa fa-download"></i>&nbsp; download file lembar pengesahan</a>

@@ -30,9 +30,9 @@ class VerifikasiUsulanController extends Controller
 
     public function index(){
         $penelitians = Usulan::leftJoin('nilai_formulirs','nilai_formulirs.usulan_id','usulans.id')
-                            ->leftJoin('formulirs','formulirs.id','nilai_formulirs.formulir_id')
-                            ->leftJoin('skims','skims.id','formulirs.skim_id')
-                            ->select('usulans.id','jenis_kegiatan','ketua_peneliti_nama','bobot','nm_skim','tahun_usulan','formulirs.skim_id','judul_kegiatan',DB::raw('SUM(skor * (bobot/100)) as totalskor')
+                            // ->leftJoin('formulirs','formulirs.id','nilai_formulirs.formulir_id')
+                            ->leftJoin('skims','skims.id','usulans.skim_id')
+                            ->select('usulans.id','jenis_kegiatan','ketua_peneliti_nama','nm_skim','skim_id','tahun_usulan','judul_kegiatan',DB::raw('SUM(total_skor)/2 as totalskor')
                             )
                             ->groupBy('usulans.id')
                             ->where('status_usulan','2')
@@ -40,13 +40,15 @@ class VerifikasiUsulanController extends Controller
                             ->orderBy('usulans.skim_id')
                             ->get();
         $pengabdians = Usulan::leftJoin('nilai_formulirs','nilai_formulirs.usulan_id','usulans.id')
-                            ->leftJoin('formulirs','formulirs.id','nilai_formulirs.formulir_id')
-                            ->select('usulans.id','jenis_kegiatan','ketua_peneliti_nama','tahun_usulan','formulirs.skim_id','judul_kegiatan',DB::raw('SUM(skor * (bobot/100)) as totalskor')
+                            // ->leftJoin('formulirs','formulirs.id','nilai_formulirs.formulir_id')
+                            ->leftJoin('skims','skims.id','usulans.skim_id')
+                            ->select('usulans.id','jenis_kegiatan','ketua_peneliti_nama','skim_id','tahun_usulan','judul_kegiatan',DB::raw('SUM(total_skor)/2 as totalskor')
                             )
                             ->groupBy('usulans.id')
                             ->where('status_usulan','2')
                             ->where('jenis_kegiatan','pengabdian')
                             ->get();
+                            // return $pengabdians;
         return view('operator/usulan/verifikasi.index',compact('penelitians','pengabdians'));
     }
 
@@ -135,12 +137,12 @@ class VerifikasiUsulanController extends Controller
 
     public function detailReviewer($id){
         $usulan = Usulan::leftJoin('nilai_formulirs','nilai_formulirs.usulan_id','usulans.id')
-                            ->leftJoin('formulirs','formulirs.id','nilai_formulirs.formulir_id')
+                            // ->leftJoin('formulirs','formulirs.id','nilai_formulirs.formulir_id')
                             ->leftJoin('reviewer1s','reviewer1s.reviewer_nip','nilai_formulirs.reviewer_id')
-                            ->select('usulans.id','judul_kegiatan','reviewer_nama','kriteria_penilaian','skor')
+                            ->select('usulans.id','judul_kegiatan','reviewer_nama','total_skor','reviewer_nip','jenis_reviewer')
                             ->where('nilai_formulirs.usulan_id',$id)
                             ->orderBy('reviewer1s.reviewer_nip','desc')
-                            ->orderBy('formulirs.id','asc')
+                            // ->orderBy('formulirs.id','asc')
                             ->get();
         return $usulan;
     }
@@ -154,30 +156,81 @@ class VerifikasiUsulanController extends Controller
     }
 
     public function reviewerTigaPost(Request $request){
+        // return $request->all();
         $mytime = Carbon\Carbon::now();
         $time = $mytime->toDateTimeString();
-        $jumlah = $request->jumlah;
-        $formulir = array();
-        for($i=1; $i <= $jumlah; $i++){
-            $formulir[] = array(
-                'usulan_id'     =>  $request->usulan_id,
-                'formulir_id'   =>  $request->nilai.$i,
-                'skor'          =>  $_POST['nilai'.$i],
-                'reviewer_id'          =>  Auth::user()->id,
-                'created_at'    =>  $time,
-                'updated_at'    =>  $time,
-            );
-        }
-        NilaiFormulir3::insert($formulir);
+        // $jumlah = $request->jumlah;
+        // $formulir = array();
+        // for($i=1; $i <= $jumlah; $i++){
+        //     $formulir[] = array(
+        //         'usulan_id'     =>  $request->usulan_id,
+        //         'formulir_id'   =>  $request->nilai.$i,
+        //         'skor'          =>  $_POST['nilai'.$i],
+        //         'reviewer_id'          =>  Auth::user()->id,
+        //         'created_at'    =>  $time,
+        //         'updated_at'    =>  $time,
+        //     );
+        // }
+        // NilaiFormulir3::insert($formulir);
 
-        if ($request->komentar != null || $request->komentar != "") {
-            $komentar = new Komentar3;
-            $komentar->usulan_id = $request->usulan_id;
-            $komentar->reviewer_id = Auth::user()->id;
-            $komentar->komentar = $request->komentar;
-            $komentar->save();
+        // if ($request->komentar != null || $request->komentar != "") {
+        //     $komentar = new Komentar3;
+        //     $komentar->usulan_id = $request->usulan_id;
+        //     $komentar->reviewer_id = Auth::user()->id;
+        //     $komentar->komentar = $request->komentar;
+        //     $komentar->save();
+        // }
+        DB::beginTransaction();
+
+        try {
+                $total_skor = new NilaiFormulir3;
+                $total_skor->usulan_id = $request->usulan_id;
+                $total_skor->reviewer_id = Auth::user()->id;
+                $total_skor->total_skor = $request->total_skor;
+                $total_skor->save();
+            if ($request->komentar != null || $request->komentar != "") {
+                $komentar = new Komentar3;
+                $komentar->usulan_id = $request->usulan_id;
+                $komentar->reviewer_id = Auth::user()->id;
+                $komentar->komentar = $request->komentar;
+                $komentar->save();
+            }
+
+            DB::commit();
+            // all good
+        } catch (\Exception $e) {
+            DB::rollback();
+            // something went wrong
         }
         return redirect()->route('operator.verifikasi')->with(['success' => 'Reviewer Ketiga sudah ditambahkan !!']);
+    }
 
+    public function cetak(){
+        $penelitians = Usulan::leftJoin('anggota_usulans','anggota_usulans.usulan_id','usulans.id')
+                            ->leftJoin('skims','skims.id','usulans.skim_id')
+                            ->select('usulans.id','judul_kegiatan','jenis_kegiatan',
+                                    'abstrak','kata_kunci','peta_jalan','file_usulan','lembar_pengesahan','biaya_diusulkan','status_usulan','tahun_usulan','ketua_peneliti_prodi_nama','ketua_peneliti_nama as nm_ketua_peneliti',
+                                    DB::raw('group_concat(distinct concat(anggota_usulans.anggota_nama) SEPARATOR "<br>") as "nm_anggota" ')
+                                    )
+                            ->where('usulans.status_usulan','2')
+                            ->where('usulans.jenis_kegiatan','penelitian')
+                            ->groupBy('usulans.id')
+                            ->get();
+                            // return $penelitians;
+        return view('operator/usulan.verifikasi.detail',compact('penelitians'));
+    }
+
+    public function cetakPengabdian(){
+        $pengabdians = Usulan::leftJoin('anggota_usulans','anggota_usulans.usulan_id','usulans.id')
+                            ->leftJoin('skims','skims.id','usulans.skim_id')
+                            ->select('usulans.id','judul_kegiatan','jenis_kegiatan',
+                                    'abstrak','kata_kunci','peta_jalan','file_usulan','lembar_pengesahan','biaya_diusulkan','status_usulan','tahun_usulan','ketua_peneliti_prodi_nama','ketua_peneliti_nama as nm_ketua_peneliti',
+                                    DB::raw('group_concat(distinct concat(anggota_usulans.anggota_nama) SEPARATOR "<br>") as "nm_anggota" ')
+                                    )
+                            ->where('usulans.status_usulan','2')
+                            ->where('usulans.jenis_kegiatan','pengabdian')
+                            ->groupBy('usulans.id')
+                            ->get();
+        return view('operator/usulan.verifikasi.detail_pengabdian',compact('pengabdians'));
     }
 }
