@@ -7,6 +7,12 @@
     class="current-page"
         @elseif(Route::current()->getName() == "pengusul.usulan.detail_anggota")
             class="current-page"
+            @elseif(Route::current()->getName() == "pengusul.usulan.create")
+            class="current-page"
+            @elseif(Route::current()->getName() == "pengusul.usulan.edit")
+            class="current-page"
+            @elseif(Route::current()->getName() == "pengusul.usulan.detail")
+            class="current-page"
     @endif
 >
     <a href=" {{ route('pengusul.usulan') }} "><i class="fa fa-newspaper-o"></i>Usulan Baru</a>

@@ -29,11 +29,11 @@ class UsulanProsesReviewController extends Controller
         $penelitians = Usulan::leftJoin('anggota_usulans','anggota_usulans.usulan_id','usulans.id')
                             ->leftJoin('skims','skims.id','usulans.skim_id')
                             ->leftJoin('reviewer1s','reviewer1s.usulan_id','usulans.id')
+                            ->leftJoin('reviewers','reviewers.nip','reviewer1s.reviewer_nip')
                             ->select('usulans.id','judul_kegiatan','jenis_kegiatan',
-                                    'abstrak','kata_kunci','file_usulan','peta_jalan','biaya_diusulkan','tahun_usulan','status_usulan','ketua_peneliti_prodi_nama','ketua_peneliti_nama as nm_ketua_peneliti',
+                                    'abstrak','kata_kunci','file_usulan','nm_skim','biaya_diusulkan','usulans.created_at','tahun_usulan','status_usulan','ketua_peneliti_prodi_nama','ketua_peneliti_nama as nm_ketua_peneliti',
                                     DB::raw('group_concat(distinct concat(anggota_usulans.anggota_nama) SEPARATOR "<br>") as "nm_anggota" '),
-                                    DB::raw('group_concat(distinct concat(reviewer1s.reviewer_nama) SEPARATOR "&nbsp;|&nbsp;") as "nm_reviewer" '),
-                                    DB::raw('SUM(reviewer_nip) as jumlah')
+                                    DB::raw('group_concat(distinct concat(reviewers.nama) SEPARATOR "<br>") as "nm_reviewer" '),
                                     )
                             ->where('usulans.status_usulan','1')
                             ->where('usulans.jenis_kegiatan','penelitian')
@@ -42,11 +42,11 @@ class UsulanProsesReviewController extends Controller
         $pengabdians = Usulan::leftJoin('anggota_usulans','anggota_usulans.usulan_id','usulans.id')
                             ->leftJoin('skims','skims.id','usulans.skim_id')
                             ->leftJoin('reviewer1s','reviewer1s.usulan_id','usulans.id')
+                            ->leftJoin('reviewers','reviewers.nip','reviewer1s.reviewer_nip')
                             ->select('usulans.id','judul_kegiatan','jenis_kegiatan',
-                                    'abstrak','kata_kunci','file_usulan','peta_jalan','biaya_diusulkan','tahun_usulan','status_usulan','ketua_peneliti_prodi_nama','ketua_peneliti_nama as nm_ketua_peneliti',
+                                    'abstrak','kata_kunci','file_usulan','nm_skim','biaya_diusulkan','usulans.created_at','tahun_usulan','status_usulan','ketua_peneliti_prodi_nama','ketua_peneliti_nama as nm_ketua_peneliti',
                                     DB::raw('group_concat(distinct concat(anggota_usulans.anggota_nama) SEPARATOR "<br>") as "nm_anggota" '),
-                                    DB::raw('group_concat(distinct concat(reviewer1s.reviewer_nama) SEPARATOR "&nbsp;|&nbsp;") as "nm_reviewer" '),
-                                    DB::raw('SUM(reviewer_nip) as jumlah')
+                                    DB::raw('group_concat(distinct concat(reviewers.nama) SEPARATOR "<br>") as "nm_reviewer" '),
                                     )
                             ->where('usulans.status_usulan','1')
                             ->where('usulans.jenis_kegiatan','pengabdian')
@@ -57,20 +57,32 @@ class UsulanProsesReviewController extends Controller
     }
 
     public function detail($id){
-        $usulan = Usulan::leftJoin('anggota_usulans','anggota_usulans.usulan_id','usulans.id')
-                        ->leftJoin('skims','skims.id','usulans.skim_id')
-                        ->select('usulans.id','judul_kegiatan','jenis_kegiatan','ketua_peneliti_fakultas_nama','ketua_peneliti_prodi_nama','tahun_usulan',
-                                'ketua_peneliti_nama as nm_ketua_peneliti','ketua_peneliti_nip as nip','kata_kunci','nm_skim','abstrak','kata_kunci')
+        $detail = Usulan::leftJoin('skims','skims.id','usulans.skim_id')
+                        ->select('usulans.id','judul_kegiatan','jenis_kegiatan','nm_skim','usulans.created_at','tujuan','luaran',
+                        'ketua_peneliti_nama','ketua_peneliti_nip','abstrak','file_usulan','kata_kunci','biaya_diusulkan','status_usulan','tahun_usulan')
                         ->where('usulans.id',$id)
                         ->first();
-        $anggotas = AnggotaUsulan::select('anggota_nama as nm_anggota','anggota_prodi_nama','anggota_fakultas_nama','anggota_nip')
-                                    ->where('usulan_id',$id)
+        $anggota_internal = Usulan::join('anggota_usulans','anggota_usulans.usulan_id','usulans.id')
+                                    ->select('anggota_nip','anggota_nama','anggota_prodi_nama','anggota_fakultas_nama','anggota_universitas')
+                                    ->groupBy('anggota_usulans.id')
+                                    ->where('usulans.id',$id)
                                     ->get();
-        $data = [
-            'usulan'        => $usulan,
-            'anggotas'      => $anggotas,
-        ];
-        return $data;
+        $anggota_eksternal = Usulan::join('anggota_eksternals','anggota_eksternals.usulan_id','usulans.id')
+                                    ->select('anggota_nip','anggota_nama','anggota_universitas')
+                                    ->groupBy('anggota_eksternals.id')
+                                    ->where('usulans.id',$id)
+                                    ->get();
+        $anggota_mahasiswa = Usulan::join('anggota_mahasiswas','anggota_mahasiswas.usulan_id','usulans.id')
+                                    ->select('anggota_npm','anggota_nama','anggota_prodi_nama','anggota_fakultas_nama')
+                                    ->groupBy('anggota_mahasiswas.id')
+                                    ->where('usulans.id',$id)
+                                    ->get();
+        $anggota_alumni = Usulan::join('anggota_alumnis','anggota_alumnis.usulan_id','usulans.id')
+                                    ->select('anggota_nama','jabatan')
+                                    ->groupBy('anggota_alumnis.id')
+                                    ->where('usulans.id',$id)
+                                    ->get();
+        return view('operator/usulan/proses_review.detail_penelitian',compact('detail','anggota_internal','anggota_eksternal','anggota_mahasiswa','anggota_alumni'));
     }
 
     public function getReviewer($id){
@@ -107,15 +119,18 @@ class UsulanProsesReviewController extends Controller
 
     public function detailReviewer($id){
         $reviewers = Reviewer1::join('usulans','usulans.id','reviewer1s.usulan_id')
-                                    ->select('reviewer1s.id','reviewer_nip','reviewer_nama','reviewer_prodi_nama','reviewer_fakultas_nama','judul_kegiatan')
-                                    ->where('usulans.id',$id)
-                                    ->where('jenis_reviewer','internal')
-                                    ->get();
+                                ->join('reviewers','reviewers.nip','reviewer1s.reviewer_nip')
+                                ->select('reviewer1s.id','reviewer_nip','nama','prodi_nama','fakultas_nama','judul_kegiatan')
+                                ->where('usulans.id',$id)
+                                ->where('reviewer1s.jenis_reviewer','internal')
+                                ->groupBy('reviewer1s.id')
+                                ->get();
         $reviewer_eksternals = Reviewer1::join('usulans','usulans.id','reviewer1s.usulan_id')
-                                    ->select('reviewer1s.id','reviewer_nip','reviewer_nama','reviewer1s.ketua_peneliti_nidn','reviewer_universitas','judul_kegiatan')
-                                    ->where('usulans.id',$id)
-                                    ->where('jenis_reviewer','eksternal')
-                                    ->get();
+                                ->join('reviewers','reviewers.nip','reviewer1s.reviewer_nip')
+                                ->select('reviewer1s.id','reviewer_nip','nama','universitas','jabatan_fungsional')
+                                ->where('usulans.id',$id)
+                                ->where('reviewer1s.jenis_reviewer','eksternal')
+                                ->get();
         $id_usulan = $id;
         $a = count($reviewers);
         $b = count($reviewer_eksternals);
@@ -274,12 +289,13 @@ class UsulanProsesReviewController extends Controller
         $penelitians = Usulan::leftJoin('anggota_usulans','anggota_usulans.usulan_id','usulans.id')
                             ->leftJoin('skims','skims.id','usulans.skim_id')
                             ->select('usulans.id','judul_kegiatan','jenis_kegiatan',
-                                    'abstrak','kata_kunci','peta_jalan','file_usulan','lembar_pengesahan','biaya_diusulkan','status_usulan','tahun_usulan','ketua_peneliti_prodi_nama','ketua_peneliti_nama as nm_ketua_peneliti',
+                                    'abstrak','kata_kunci','nm_skim','peta_jalan','file_usulan','lembar_pengesahan','biaya_diusulkan','status_usulan','tahun_usulan','ketua_peneliti_prodi_nama','ketua_peneliti_nama as nm_ketua_peneliti',
                                     DB::raw('group_concat(distinct concat(anggota_usulans.anggota_nama) SEPARATOR "<br>") as "nm_anggota" ')
                                     )
                             ->where('usulans.status_usulan','1')
                             ->where('usulans.jenis_kegiatan','penelitian')
                             ->groupBy('usulans.id')
+                            ->orderBy('skims.id')
                             ->get();
                             // return $penelitians;
         return view('operator/usulan.proses_review.detail',compact('penelitians'));
@@ -289,12 +305,13 @@ class UsulanProsesReviewController extends Controller
         $pengabdians = Usulan::leftJoin('anggota_usulans','anggota_usulans.usulan_id','usulans.id')
                             ->leftJoin('skims','skims.id','usulans.skim_id')
                             ->select('usulans.id','judul_kegiatan','jenis_kegiatan',
-                                    'abstrak','kata_kunci','peta_jalan','file_usulan','lembar_pengesahan','biaya_diusulkan','status_usulan','tahun_usulan','ketua_peneliti_prodi_nama','ketua_peneliti_nama as nm_ketua_peneliti',
+                                    'abstrak','kata_kunci','nm_skim','peta_jalan','file_usulan','lembar_pengesahan','biaya_diusulkan','status_usulan','tahun_usulan','ketua_peneliti_prodi_nama','ketua_peneliti_nama as nm_ketua_peneliti',
                                     DB::raw('group_concat(distinct concat(anggota_usulans.anggota_nama) SEPARATOR "<br>") as "nm_anggota" ')
                                     )
                             ->where('usulans.status_usulan','1')
                             ->where('usulans.jenis_kegiatan','pengabdian')
                             ->groupBy('usulans.id')
+                            ->orderBy('skims.id')
                             ->get();
         return view('operator/usulan.proses_review.detail_pengabdian',compact('pengabdians'));
     }

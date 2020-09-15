@@ -16,6 +16,7 @@
     <thead>
         <th>No</th>
         <th>Judul Penelitian</th>
+        <th>Skim Penelitian</th>
         <th>Tahun Penelitian</th>
         <th>Jenis Penelitian</th>
         <th>Ketua Penelitian</th>
@@ -32,6 +33,7 @@
             <tr>
                 <td>{{ $no++ }}</td>
                 <td>{{ $penelitian->judul_kegiatan }}</td>
+                <td>{{ $penelitian->nm_skim }}</td>
                 <td>{{ $penelitian->tahun_usulan }}</td>
                 <td>{{ $penelitian->jenis_kegiatan }}</td>
                 <td>{{ $penelitian->nm_ketua_peneliti }}</td>

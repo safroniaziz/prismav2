@@ -57,8 +57,11 @@
     </ul>
 </li>
 
+<li>
+    <a href=" {{ route('operator.laporan_kemajuan') }} "><i class="fa fa-list"></i>Laporan Kemajuan</a>
+</li>
 
-<li><a><i class="fa fa-upload"></i>Laporan Kemajuan <span class="fa fa-chevron-down" ></span></a>
+{{-- <li><a><i class="fa fa-upload"></i>Laporan Kemajuan <span class="fa fa-chevron-down" ></span></a>
     <ul class="nav child_menu"
         @if (Route::current()->getName() == "operator.laporan_kemajuan.detail_reviewer")
             style="display:block !important;"
@@ -79,7 +82,7 @@
         <li><a href=" {{ route('operator.laporan_kemajuan_diterima') }} ">Laporan Kemajuan Disetujui</a></li>
         <li><a href=" {{ route('operator.laporan_kemajuan_ditolak') }} ">Laporan Kemajuan Tidak Disetujui</a></li>
     </ul>
-</li>
+</li> --}}
 
 <li>
     <a href=" {{ route('operator.laporan_akhir') }} "><i class="fa fa-list"></i>Laporan Akhir</a>
@@ -89,6 +92,13 @@
     <ul class="nav child_menu">
         <li><a href=" {{ route('operator.jadwal_usulan') }} ">Jadwal Input Usulan</a></li>
         <li><a href=" {{ route('operator.jadwal_review_usulan') }} ">Jadwal Review Usulan</a></li>
+    </ul>
+</li>
+
+<li><a><i class="fa fa-users"></i>Manajemen Reviewer<span class="fa fa-chevron-down" ></span></a>
+    <ul class="nav child_menu">
+        <li><a href=" {{ route('operator.reviewer') }} ">Reviewer Internal</a></li>
+        <li><a href=" {{ route('operator.reviewer_eksternal') }} ">Reviewer Eksternal</a></li>
     </ul>
 </li>
 

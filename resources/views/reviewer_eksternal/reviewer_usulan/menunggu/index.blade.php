@@ -44,20 +44,34 @@
                 <div class="col-md-12">
                     @if ($message = Session::get('success'))
                         <div class="alert alert-success alert-block" id="berhasil">
-                            <button type="button" class="close" data-dismiss="alert">×</button>
+                            
                             <strong><i class="fa fa-info-circle"></i>&nbsp;Berhasil: </strong> {{ $message }}
                         </div>
                     @endif
-                    @if (count($usulans)>0)
-                        <div class="alert alert-danger alert-block" id="keterangan">
-                            <button type="button" class="close" data-dismiss="alert">×</button>
-                            <strong><i class="fa fa-info-circle"></i>&nbsp;Perhatian: </strong> Berikut adalah usulan kegiatan yang akan anda review, silakan review semua usulan penelitian !!
-                        </div>
-                        @else
+                    @if (count($jadwal) > 0)
+                        @if ($now >= $jadwal[0]->tanggal_awal && $now <= $jadwal[0]->tanggal_akhir)
+                            @if (count($usulans)>0)
+                                <div class="alert alert-danger alert-block" id="keterangan">
+                                    
+                                    <strong><i class="fa fa-info-circle"></i>&nbsp;Perhatian: </strong> Berikut adalah usulan kegiatan yang akan anda review, silakan review semua usulan penelitian !!
+                                </div>
+                                @else
+                                    <div class="alert alert-danger alert-block" id="keterangan">
+                                        
+                                        <strong><i class="fa fa-info-circle"></i>&nbsp;Perhatian: </strong> Anda tidak memiliki usulan kegiatan untuk di review !!
+                                    </div>
+                            @endif
+                            @else
                             <div class="alert alert-danger alert-block" id="keterangan">
-                                <button type="button" class="close" data-dismiss="alert">×</button>
-                                <strong><i class="fa fa-info-circle"></i>&nbsp;Perhatian: </strong> Anda tidak memiliki usulan kegiatan untuk di review !!
+                                
+                                <strong><i class="fa fa-info-circle"></i>&nbsp;Perhatian: </strong> Saat Ini Bukan Masa Review Usulan Kegiatan !!
                             </div>
+                        @endif
+                        @else
+                        <div class="alert alert-danger alert-block" id="keterangan">
+                            
+                            <strong><i class="fa fa-info-circle"></i>&nbsp;Perhatian: </strong> Jadwal Review Usulan Belum Diatur !!
+                        </div>
                     @endif
                 </div>
                 <div class="col-md-12">
@@ -65,10 +79,11 @@
                         <thead>
                             <tr>
                                 <th style="text-align:center;">No</th>
-                                <th style="text-align:center;">Judul Kegiatan</th>
+                                <th style="text-align:center;">Judul Usulan</th>
+                                <th style="text-align:center;">File Usulan</th>
                                 <th style="text-align:center;">Anggota Kelompok</th>
                                 <th style="text-align:center;">Biaya Diusulkan</th>
-                                <th style="text-align:center;">Rancangan Anggaran</th>
+                                {{-- <th style="text-align:center;">Rancangan Anggaran</th> --}}
                                 <th style="text-align:center;">Review</th>
                             </tr>
                         </thead>
@@ -80,25 +95,23 @@
                                 @php
                                     $sudah = Usulan::leftJoin('nilai_formulirs','nilai_formulirs.usulan_id','usulans.id')->select('usulans.id')->where('nilai_formulirs.reviewer_id',$usulan->nip_reviewer)->where('usulans.id',$usulan->id)->first();
                                 @endphp
+
                                 @if (empty($sudah['id']))
                                     <tr>
                                         <td> {{ $no++ }} </td>
                                         <td style="width:30% !important;">
                                             {!! $usulan->shortJudul !!}
-                                            <a onclick="detail({{ $usulan->id }})" id="selengkapnya">selengkapnya</a>
+                                            <a href="{{ route('reviewer_eksternal.menunggu.detail',[$usulan->id,\Illuminate\Support\Str::slug($usulan->judul_kegiatan)]) }}" id="selengkapnya">selengkapnya</a>
                                             <br>
                                             <hr style="margin-bottom:5px !important; margin-top:5px !important;">
-                                            <span style="font-size:10px !important; text-transform:capitalize;" for="" class="badge badge-info">{{ $usulan->jenis_kegiatan }}</span>
+                                            <span style="font-size:10px !important; text-transform:capitalize;" for="" class="badge badge-info">{{ $usulan->nm_skim }}</span>
+                                            <span style="font-size:10px !important; text-transform:capitalize;" for="" class="badge badge-success">{{ $usulan->jenis_kegiatan }}</span>
                                             <span style="font-size:10px !important;" for="" class="badge badge-danger">{{ $usulan->nm_ketua_peneliti }}</span>
-                                            <span style="font-size:10px !important;" for="" class="badge badge-secondary">{{ $usulan->tahun_usulan }}</span>
-                                            <hr style="margin-bottom:5px !important; margin-top:5px !important;">
-                                            <a href="{{ asset('upload/file_usulan/'.$usulan->file_usulan) }}" download="{{ $usulan->file_usulan }}"><i class="fa fa-download"></i>&nbsp; download file usulan</a>
-                                            <br>
-                                            <a href="{{ asset('upload/file_anggaran/'.$usulan->file_anggaran) }}" download="{{ $usulan->file_anggaran }}"><i class="fa fa-download"></i>&nbsp; download file anggaran</a>
-                                            <br>
-                                            <a href="{{ asset('upload/peta_jalan/'.$usulan->peta_jalan) }}" download="{{ $usulan->peta_jalan }}"><i class="fa fa-download"></i>&nbsp; download file peta jalan</a>
-                                            <br>
-                                            <a href="{{ asset('upload/lembar_pengesahan/'.$usulan->lembar_pengesahan) }}" download="{{ $usulan->lembar_pengesahan }}"><i class="fa fa-download"></i>&nbsp; download file lembar pengesahan</a>
+                                            <span style="font-size:10px !important;" for="" class="badge badge-secondary">{{ $usulan->tahun_usulan }}</span> <br>
+                                            Diusulkan {{ $usulan->created_at ? $usulan->created_at->diffForHumans() : '-' }} ({{ \Carbon\Carbon::parse($usulan->created_at)->format('j F Y H:i') }})
+                                        </td>
+                                        <td class="text-center">
+                                            <a href="{{ asset('storage/'.$usulan->file_usulan) }}" download="{{ $usulan->file_usulan }}" class="btn btn-primary btn-sm"><i class="fa fa-download"></i></a>
                                         </td>
                                         <td style="text-align:center;">
                                             @if ($usulan->nm_anggota == null)
@@ -108,12 +121,12 @@
                                             @endif
                                         </td>
                                         <td style="text-align:center;"> Rp. {{ number_format($usulan->biaya_diusulkan, 2) }} </td>
-                                        <td style="text-align:center;">
-                                            <a href="{{ route('reviewer_usulan.usulan.anggaran.cetak',[$usulan->id]) }}" class="btn btn-primary btn-sm" style="color:white; cursor:pointer;"><i class="fa fa-print"></i></a>
-                                        </td>
+                                        {{-- <td style="text-align:center;">
+                                            <a href="{{ route('reviewer.usulan.anggaran.cetak',[$usulan->id]) }}" class="btn btn-primary btn-sm" style="color:white; cursor:pointer;"><i class="fa fa-print"></i></a>
+                                        </td> --}}
 
                                         <td style="text-align:center;">
-                                            <a href=" {{ route('reviewer_usulan.usulan.review',[$usulan->id, $usulan->skim_id]) }} " class="btn btn-primary btn-sm" style="color:white;"><i class="fa fa-star"></i></a>
+                                            <a href=" {{ route('reviewer_usulan.usulan.review',[$usulan->id, $usulan->skim_id,\Illuminate\Support\Str::slug($usulan->jenis_kegiatan),\Illuminate\Support\Str::slug($usulan->judul_kegiatan)]) }} " class="btn btn-primary btn-sm" style="color:white;"><i class="fa fa-star"></i></a>
                                         </td>
                                     </tr>
                                 @endif
@@ -136,7 +149,7 @@
                                 <div class="row">
                                     <div class="col-md-12">
                                         <div class="alert alert-success alert-block" id="berhasil">
-                                            <button type="button" class="close" data-dismiss="alert">×</button>
+                                            
                                             <strong><i class="fa fa-info-circle"></i>&nbsp;Data Detail Usulan Penelitian Dosen Universitas Bengkulu</strong>
                                         </div>
                                     </div>

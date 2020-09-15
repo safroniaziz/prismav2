@@ -10,6 +10,7 @@ use App\Usulan;
 use App\LaporanAkhir;
 use App\LuaranKegiatan;
 use GuzzleHttp\Client;
+use Illuminate\Support\Str;
 
 class LaporanAkhirController extends Controller
 {
@@ -24,7 +25,7 @@ class LaporanAkhirController extends Controller
                                             DB::raw('COUNT(luaran_kegiatans.judul_luaran) as judul_luaran')
                                     )
                                     ->where('usulans.ketua_peneliti_nip',Session::get('nip'))
-                                    ->where('status_usulan','6')
+                                    ->where('status_usulan','4')
                                     ->groupBy('usulans.id')
                                     ->get();
                 return view('pengusul/usulan/laporan_akhir.index',compact('usulans'));
@@ -43,16 +44,26 @@ class LaporanAkhirController extends Controller
         $sesi = Session::get('akses');
         if(Session::get('login') && Session::get('login',1) && Session::get('akses',1)){
             if($sesi == 1){
-                $model = $request->all();
-                $model['laporan_akhir'] = null;
-                if ($request->hasFile('laporan_akhir')) {
-                    $model['laporan_akhir'] = Session::get('nip').'-'.date('now').$request->id_usulan.'-'.$request->id_usulan.uniqid().'.'.$request->laporan_akhir->getClientOriginalExtension();
-                    $request->laporan_akhir->move(public_path('/upload/laporan_akhir'), $model['laporan_akhir']);
-                }
-                $laporan = new LaporanAkhir;
-                $laporan->usulan_id = $request->id_usulan;
-                $laporan->file_akhir = $model['laporan_akhir'];
-                $laporan->save();
+                $slug = Str::slug(Session::get('nm_dosen'));
+                // $model = $request->all();
+                // $model['laporan_akhir'] = null;
+                // if ($request->hasFile('laporan_akhir')) {
+                //     $model['laporan_akhir'] = Session::get('nip').'-'.date('now').$request->id_usulan.'-'.$request->id_usulan.uniqid().'.'.$request->laporan_akhir->getClientOriginalExtension();
+                //     $request->laporan_akhir->move(public_path('/upload/laporan_akhir'), $model['laporan_akhir']);
+                // }
+                // $laporan = new LaporanAkhir;
+                // $laporan->usulan_id = $request->id_usulan;
+                // $laporan->file_akhir = $model['laporan_akhir'];
+                // $laporan->save();
+
+                $laporan_akhir = $request->file('laporan_akhir');
+                $laporan_akhirUrl = $laporan_akhir->store('laporan_akhir/'.$slug.'-'.Session::get('nip'));
+                
+                LaporanAkhir::create([
+                    'usulan_id' =>  $request->id_usulan,
+                    'file_akhir' =>  $laporan_akhirUrl,
+                ]);
+
                 return redirect()->route('pengusul.laporan_akhir')->with(['success'  =>  'File Laporan Akhir Berhasil Diupload !!']);
             }
             else{
@@ -71,10 +82,21 @@ class LaporanAkhirController extends Controller
     }
 
     public function konfirmasi(Request $request){
-        $konfirmasi = LaporanAkhir::where('usulan_id', $request->id_usulan)->update([
-            'status'    =>  '1',
-        ]);
-        return redirect()->route('pengusul.laporan_akhir')->with(['success' =>  'Laporan Akhir dan Luaran Berhasil di Konfirmasi !!']);
+        DB::beginTransaction();
+        try {
+            LaporanAkhir::where('usulan_id', $request->id_usulan)->update([
+                'status'    =>  '1',
+            ]);
+            Usulan::where('id',$request->id_usulan)->update([
+                'status_usulan' =>  '5',
+            ]);
+            DB::commit();
+            return redirect()->route('pengusul.laporan_akhir')->with(['success' =>  'Laporan Akhir dan Luaran Berhasil di Konfirmasi !!']);
+            
+        } catch (Exception $e) {
+            DB::rollback();
+            return redirect()->route('pengusul.laporan_akhir')->with(['success' =>  'Laporan Akhir dan Luaran Berhasil di Konfirmasi !!']);
+        }
     }
 
     public function luaran($id){

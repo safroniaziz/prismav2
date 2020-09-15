@@ -37,12 +37,12 @@ class LoginController extends Controller
     public function login(Request $request)
     {
         $request->validate([
-            'reviewer_nip' => 'required',
+            'nip' => 'required',
             'password' => 'required|min:6'
         ]);
 
         $credential = [
-            'reviewer_nip' => $request->reviewer_nip,
+            'nip' => $request->nip,
             'password' => $request->password
         ];
 
@@ -50,14 +50,15 @@ class LoginController extends Controller
         if (Auth::guard('reviewerusulan')->attempt($credential, $request->member)){
             // If login succesful, then redirect to their intended location
             return redirect()->intended(route('reviewer_usulan.menunggu'));
+            // return 'a';
         }
 
         // If Unsuccessful, then redirect back to the login with the form data
-        return redirect()->back()->withInput($request->only('reviewer_nip', 'remember'));
+        return redirect()->back()->withInput($request->only('nip', 'remember'));
     }
 
     public function username()
     {
-        return 'reviewer_nip';
+        return 'nip';
     }
 }

@@ -24,32 +24,32 @@
                 <div class="col-md-12">
                     @if ($jumlah >0)
                         <div class="alert alert-danger alert-block" id="keterangan">
-                            <button type="button" class="close" data-dismiss="alert">×</button>
+                            
                             <strong><i class="fa fa-info-circle"></i>&nbsp;Perhatian: </strong> Berikut adalah reviewer kegiatan untuk judul kegiaan : <a style="font-style:italic;">{{ $judul_kegiatan->judul_kegiatan }}</a>
                             <p style="margin-top:10px;">Silahkan Masukan Nama Lengkap Reviewer Kegiatan, Lalu Klik Simpan. Jika Anda Sudah Mencari Nama Reviewer dan Ternyata Salah, Silahkan Reload dan Cari Kembali Nama Reviewer Yang Benar !!</p>
                         </div>
                         @else
                         <div class="alert alert-danger alert-block" id="keterangan">
-                            <button type="button" class="close" data-dismiss="alert">×</button>
+                            
                             <strong><i class="fa fa-info-circle"></i>&nbsp;Perhatian: </strong> Anda belum menambahkan reviewer kegiatan !!</a>
                             <p style="margin-top:10px;">Silahkan Masukan Nama Lengkap Reviewer Kegiatan, Lalu Klik Simpan. Jika Anda Sudah Mencari Nama Reviewer dan Ternyata Salah, Silahkan Reload dan Cari Kembali Nama Anggota Yang Benar !!</p>
                         </div>
                     @endif
                     @if ($message = Session::get('error'))
                         <div class="alert alert-danger alert-block" id="error">
-                            <button type="button" class="close" data-dismiss="alert">×</button>
+                            
                             <strong><i class="fa fa-info-circle"></i>&nbsp;Gagal: </strong> {{ $message }}
                         </div>
                     @endif
                     @if ($message = Session::get('success'))
                         <div class="alert alert-success alert-block" id="error">
-                            <button type="button" class="close" data-dismiss="alert">×</button>
+                            
                             <strong><i class="fa fa-info-circle"></i>&nbsp;Berhasil: </strong> {{ $message }}
                         </div>
                     @endif
                     @if ($jumlah >= 2)
                         <div class="alert alert-danger alert-block" id="error">
-                            <button type="button" class="close" data-dismiss="alert">×</button>
+                            
                             <strong><i class="fa fa-info-circle"></i>&nbsp;Perhatian: </strong> Anda hanya dapat menambahkan maksimal 2 reviewer, anda tidak lagi dapat menambahkan reviewer yang lain, data usulan akan masuk ke dalam menu <b>Dalam Proses Review</b> Dan akan hilang dari menu <b>Tambah Reviewer</b> !!
                         </div>
                     @endif
@@ -74,7 +74,7 @@
                             <div class="row">
                                 <div class="col-md-12" id="form-tambah" style="display:none;">
                                     <div class="alert alert-success alert-block" style="display:none;" id="sudah">
-                                        <button type="button" class="close" data-dismiss="alert">×</button>
+                                        
                                         <strong><i class="fa fa-check-circle"></i>&nbsp;Nama Berhasil Ditemukan  </strong>
                                     </div>
                                     <form action=" {{ route('operator.laporan_kemajuan.reviewer_post') }} " method="POST">
@@ -153,7 +153,7 @@
                             <div class="row">
                                 <div class="col-md-12" id="form-tambah-eksternal" style="display:none;">
                                     <div class="alert alert-success alert-block" style="display:none;" id="sudah">
-                                        <button type="button" class="close" data-dismiss="alert">×</button>
+                                        
                                         <strong><i class="fa fa-check-circle"></i>&nbsp;Nama Berhasil Ditemukan  </strong>
                                     </div>
                                     <form action=" {{ route('operator.laporan_kemajuan.reviewer_eksternal_post') }} " method="POST">

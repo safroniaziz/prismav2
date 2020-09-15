@@ -41,21 +41,21 @@
                 <div class="col-md-12">
                     @if ($message = Session::get('success'))
                         <div class="alert alert-success alert-block" id="berhasil">
-                            <button type="button" class="close" data-dismiss="alert">×</button>
+                            
                             <strong><i class="fa fa-info-circle"></i>&nbsp;Berhasil: </strong> {{ $message }}
                         </div>
                         @else
                         <div class="alert alert-danger alert-block" id="keterangan">
-                            <button type="button" class="close" data-dismiss="alert">×</button>
+                            
                             <strong><i class="fa fa-info-circle"></i>&nbsp;Perhatian: </strong> Berikut adalah semua usulan kegiatan penelitian & pengabdian yang menunggu verifikasi, silahkan tambahkan 2 orang reviewer untuk memverifikasi usulan kegiatan. Jika reviewer kegiatan sudah ditambahkan maka usulan akan hilang dan pindah ke menu dalam proses review !!
                         </div>
                     @endif
                     <div class="alert alert-success alert-block" style="display:none;" id="usulan-berhasil">
-                        <button type="button" class="close" data-dismiss="alert">×</button>
+                        
                         <i class="fa fa-success-circle"></i><strong>Berhasil :</strong> Penelitian anda sudah diusulkan !!
                     </div>
                     <div class="alert alert-danger alert-block" style="display:none;" id="gagal">
-                        <button type="button" class="close" data-dismiss="alert">×</button>
+                        
                         <i class="fa fa-close"></i><strong>&nbsp;Gagal :</strong> Proses pengusulan gagal !!
                     </div>
                 </div>
@@ -78,6 +78,7 @@
                                             <tr>
                                                 <th style="text-align:center;">No</th>
                                                 <th style="text-align:center;">Judul Kegiatan</th>
+                                                <th style="text-align:center;">File Usulan</th>
                                                 <th style="text-align:center;">Anggota Kelompok</th>
                                                 <th style="text-align:center;">Biaya Diusulkan</th>
                                                 <th style="text-align:center;">Status Usulan</th>
@@ -99,20 +100,16 @@
                                                     <td> {{ $no++ }} </td>
                                                     <td style="width:40% !important;">
                                                         {!! $penelitian->shortJudul !!}
-                                                        <a onclick="detail({{ $penelitian->id }})" id="selengkapnya">selengkapnya</a>
+                                                        <a href="{{ route('operator.menunggu.detail',[$penelitian->id,\Illuminate\Support\Str::slug($penelitian->judul_kegiatan)]) }}" id="selengkapnya">selengkapnya</a>
                                                         <br>
                                                         <hr style="margin-bottom:5px !important; margin-top:5px !important;">
-                                                        <span style="font-size:10px !important; text-transform:capitalize;" for="" class="badge badge-info">{{ $penelitian->jenis_kegiatan }}</span>
+                                                        <span style="font-size:10px !important; text-transform:capitalize;" for="" class="badge badge-info">{{ $penelitian->nm_skim }}</span>
                                                         <span style="font-size:10px !important;" for="" class="badge badge-danger">{{ $penelitian->nm_ketua_peneliti }}</span>
-                                                        <span style="font-size:10px !important;" for="" class="badge badge-secondary">{{ $penelitian->tahun_usulan }}</span>
-                                                        <hr style="margin-bottom:5px !important; margin-top:5px !important;">
-                                                        <a href="{{ asset('upload/file_usulan/'.$penelitian->file_usulan) }}" download="{{ $penelitian->file_usulan }}"><i class="fa fa-download"></i>&nbsp; download file usulan</a>
-                                                        <br>
-                                                        <a href="{{ asset('upload/file_anggaran/'.$penelitian->file_anggaran) }}" download="{{ $penelitian->file_anggaran }}"><i class="fa fa-download"></i>&nbsp; download file anggaran</a>
-                                                        <br>
-                                                        <a href="{{ asset('upload/peta_jalan/'.$penelitian->peta_jalan) }}" download="{{ $penelitian->peta_jalan }}"><i class="fa fa-download"></i>&nbsp; download file peta jalan</a>
-                                                        <br>
-                                                        <a href="{{ asset('upload/lembar_pengesahan/'.$penelitian->lembar_pengesahan) }}" download="{{ $penelitian->lembar_pengesahan }}"><i class="fa fa-download"></i>&nbsp; download file lembar pengesahan</a>
+                                                        <span style="font-size:10px !important;" for="" class="badge badge-secondary">{{ $penelitian->tahun_usulan }}</span> <br>
+                                                        Diusulkan {{ $penelitian->created_at ? $penelitian->created_at->diffForHumans() : '-' }} ({{ \Carbon\Carbon::parse($penelitian->created_at)->format('j F Y H:i') }})
+                                                   </td>
+                                                   <td class="text-center">
+                                                        <a href="{{ asset('storage/'.$penelitian->file_usulan) }}" download="{{ $penelitian->file_usulan }}" class="btn btn-primary btn-sm"><i class="fa fa-download"></i></a>
                                                    </td>
                                                     <td style="text-align:center;">
                                                         @if ($penelitian->nm_anggota == null)
@@ -123,9 +120,6 @@
                                                     </td>
                                                     <td style="width:30%; text-align:center;">
                                                         <a>Rp. {{ number_format($penelitian->biaya_diusulkan, 2) }}</a>
-                                                        <br>
-                                                        <hr style="margin-bottom:5px !important; margin-top:5px !important;">
-                                                        <a href="{{ route('operator.usulan.anggaran.cetak',[$penelitian->id]) }}" class="btn btn-primary btn-sm" style="color:white; cursor:pointer;"><i class="fa fa-print"></i>&nbsp; Cetak</a>
                                                     </td>
                                                     <td style="text-align:center;">
                                                         @if ($penelitian->status_usulan == '0')
@@ -149,7 +143,7 @@
                                                         <a href=" {{ route('operator.menunggu.detail_reviewer',[$penelitian->id]) }} " class="btn btn-primary btn-sm" style="color:white; cursor:pointer;"><i class="fa fa-user-plus"></i></a>
                                                     </td>
                                                     <td style="text-align:center;">
-                                                        <form action="{{ route('operator.menunggu.batalkan',[$penelitian->id]) }}" method="POST">
+                                                        <form action="{{ route('operator.menunggu.batalkan',[$penelitian->id,]) }}" method="POST">
                                                             {{ csrf_field() }} {{ method_field('PATCH') }}
                                                             <button type="submit" class="btn btn-danger btn-sm" style="color:white; cursor:pointer;"><i class="fa fa-arrow-left"></i></button>
                                                         </form>
@@ -194,20 +188,13 @@
                                                     <td> {{ $no++ }} </td>
                                                     <td style="width:40% !important;">
                                                         {!! $pengabdians->shortJudul !!}
-                                                        <a onclick="detail({{ $pengabdians->id }})" id="selengkapnya">selengkapnya</a>
+                                                        <a href="{{ route('operator.menunggu.detail',[$pengabdians->id,\Illuminate\Support\Str::slug($pengabdians->judul_kegiatan)]) }}" id="selengkapnya">selengkapnya</a>
                                                         <br>
                                                         <hr style="margin-bottom:5px !important; margin-top:5px !important;">
-                                                        <span style="font-size:10px !important; text-transform:capitalize;" for="" class="badge badge-info">{{ $pengabdians->jenis_kegiatan }}</span>
+                                                        <span style="font-size:10px !important; text-transform:capitalize;" for="" class="badge badge-info">{{ $pengabdians->nm_skim }}</span>
                                                         <span style="font-size:10px !important;" for="" class="badge badge-danger">{{ $pengabdians->nm_ketua_peneliti }}</span>
-                                                        <span style="font-size:10px !important;" for="" class="badge badge-secondary">{{ $pengabdians->tahun_usulan }}</span>
-                                                        <hr style="margin-bottom:5px !important; margin-top:5px !important;">
-                                                        <a href="{{ asset('upload/file_usulan/'.$pengabdians->file_usulan) }}" download="{{ $pengabdians->file_usulan }}"><i class="fa fa-download"></i>&nbsp; download file usulan</a>
-                                                        <br>
-                                                        <a href="{{ asset('upload/file_anggaran/'.$pengabdians->file_anggaran) }}" download="{{ $pengabdians->file_anggaran }}"><i class="fa fa-download"></i>&nbsp; download file anggaran</a>
-                                                        <br>
-                                                        <a href="{{ asset('upload/peta_jalan/'.$pengabdians->peta_jalan) }}" download="{{ $pengabdians->peta_jalan }}"><i class="fa fa-download"></i>&nbsp; download file peta jalan</a>
-                                                        <br>
-                                                        <a href="{{ asset('upload/lembar_pengesahan/'.$pengabdians->lembar_pengesahan) }}" download="{{ $pengabdians->lembar_pengesahan }}"><i class="fa fa-download"></i>&nbsp; download file lembar pengesahan</a>
+                                                        <span style="font-size:10px !important;" for="" class="badge badge-secondary">{{ $pengabdians->tahun_usulan }}</span> <br>
+                                                        Diusulkan {{ $pengabdians->created_at ? $pengabdians->created_at->diffForHumans() : '-' }} ({{ \Carbon\Carbon::parse($pengabdians->created_at)->format('j F Y H:i') }})
                                                    </td>
                                                     <td style="text-align:center;">
                                                         @if ($pengabdians->nm_anggota == null)
@@ -218,9 +205,6 @@
                                                     </td>
                                                     <td style="width:30%; text-align:center;">
                                                         <a>Rp. {{ number_format($pengabdians->biaya_diusulkan, 2) }}</a>
-                                                        <br>
-                                                        <hr style="margin-bottom:5px !important; margin-top:5px !important;">
-                                                        <a href="{{ route('operator.usulan.anggaran.cetak',[$pengabdians->id]) }}" class="btn btn-primary btn-sm" style="color:white; cursor:pointer;"><i class="fa fa-print"></i>&nbsp; Cetak</a>
                                                     </td>
                                                     <td style="text-align:center;">
                                                         @if ($pengabdians->status_usulan == '0')
@@ -274,7 +258,7 @@
                                 <div class="row">
                                     <div class="col-md-12">
                                         <div class="alert alert-success alert-block" id="berhasil">
-                                            <button type="button" class="close" data-dismiss="alert">×</button>
+                                            
                                             <strong><i class="fa fa-info-circle"></i>&nbsp;Data Detail Usulan Penelitian Dosen Universitas Bengkulu</strong>
                                         </div>
                                     </div>

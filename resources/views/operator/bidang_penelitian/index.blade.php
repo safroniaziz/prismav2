@@ -24,12 +24,12 @@
                 <div class="col-md-12">
                     @if ($message = Session::get('success'))
                         <div class="alert alert-success alert-block" id="berhasil">
-                            <button type="button" class="close" data-dismiss="alert">×</button>
+                            
                             <strong><i class="fa fa-info-circle"></i>&nbsp;Berhasil: </strong> {{ $message }}
                         </div>
                         @else
                         <div class="alert alert-success alert-block" id="keterangan">
-                            <button type="button" class="close" data-dismiss="alert">×</button>
+                            
                             <strong><i class="fa fa-info-circle"></i>&nbsp;Perhatian: </strong> Berikut adalah semua bidang penelitian anda yang tersedia, silahkan tambahkan bidang penelitian baru jika diperlukan !!
                         </div>
                     @endif

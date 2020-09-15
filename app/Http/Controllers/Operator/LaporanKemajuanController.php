@@ -26,25 +26,23 @@ class LaporanKemajuanController extends Controller
     public function index(){
         $panda = new UserLoginController();
         $penelitians = Usulan::leftJoin('anggota_usulans','anggota_usulans.usulan_id','usulans.id')
-                                    ->leftJoin('reviewer2s','reviewer2s.usulan_id','usulans.id')
+                                    ->leftJoin('skims','skims.id','usulans.skim_id')
                                     ->join('laporan_kemajuans','laporan_kemajuans.usulan_id','usulans.id')
-                                    ->select('usulans.id','judul_kegiatan','ketua_peneliti_nama','file_kemajuan','file_perbaikan','status_usulan','jenis_kegiatan','tahun_usulan',
+                                    ->select('usulans.id','judul_kegiatan','ketua_peneliti_nama','usulans.created_at','nm_skim','tahun_usulan','file_kemajuan','file_perbaikan','status_usulan','jenis_kegiatan','tahun_usulan',
                                     DB::raw('group_concat(distinct concat(anggota_usulans.anggota_nama) SEPARATOR "<br>") as "nm_anggota" '),
-                                    DB::raw('group_concat(distinct concat(reviewer2s.reviewer_nama) SEPARATOR "&nbsp;|&nbsp;") as "nm_reviewer" ')
                                     )
                                     ->groupBy('usulans.id')
-                                    ->where('usulans.status_usulan','3')
+                                    ->whereNotNull('file_kemajuan')
                                     ->where('jenis_kegiatan','penelitian')
                                     ->get();
         $pengabdians = Usulan::leftJoin('anggota_usulans','anggota_usulans.usulan_id','usulans.id')
-                                    ->leftJoin('reviewer2s','reviewer2s.usulan_id','usulans.id')
+                                    ->leftJoin('skims','skims.id','usulans.skim_id')
                                     ->join('laporan_kemajuans','laporan_kemajuans.usulan_id','usulans.id')
-                                    ->select('usulans.id','judul_kegiatan','ketua_peneliti_nama','file_kemajuan','file_perbaikan','status_usulan','jenis_kegiatan','tahun_usulan',
+                                    ->select('usulans.id','judul_kegiatan','ketua_peneliti_nama','usulans.created_at','nm_skim','tahun_usulan','file_kemajuan','file_perbaikan','status_usulan','jenis_kegiatan','tahun_usulan',
                                     DB::raw('group_concat(distinct concat(anggota_usulans.anggota_nama) SEPARATOR "<br>") as "nm_anggota" '),
-                                    DB::raw('group_concat(distinct concat(reviewer2s.reviewer_nama) SEPARATOR "&nbsp;|&nbsp;") as "nm_reviewer" ')
                                     )
                                     ->groupBy('usulans.id')
-                                    ->where('usulans.status_usulan','3')
+                                    ->whereNotNull('file_kemajuan')
                                     ->where('jenis_kegiatan','pengabdian')
                                     ->get();
         return view('operator/laporan_kemajuan/reviewer.index',compact('penelitians','pengabdians','fakultas','dosens'));

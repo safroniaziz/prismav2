@@ -41,18 +41,18 @@
                 <div class="col-md-12">
                     @if ($message = Session::get('success'))
                         <div class="alert alert-success alert-block" id="berhasil">
-                            <button type="button" class="close" data-dismiss="alert">×</button>
+                            
                             <strong><i class="fa fa-info-circle"></i>&nbsp;Berhasil: </strong> {{ $message }}
                         </div>
                     @endif
                     @if (count($usulans)>0)
                         <div class="alert alert-danger alert-block" id="keterangan">
-                            <button type="button" class="close" data-dismiss="alert">×</button>
+                            
                             <strong><i class="fa fa-info-circle"></i>&nbsp;Perhatian: </strong> Berikut adalah semua usulan yang telah mengupload laporan kemajuan, silahkan tambahakn reviewer laporan kemajuan !!
                         </div>
                         @else
                             <div class="alert alert-danger alert-block" id="keterangan">
-                                <button type="button" class="close" data-dismiss="alert">×</button>
+                                
                                 <strong><i class="fa fa-info-circle"></i>&nbsp;Perhatian: </strong> Belum ada usulan yang mengupload laporan kemajuan !!
                             </div>
                     @endif
@@ -73,9 +73,7 @@
                                             <tr>
                                                 <th>No</th>
                                                 <th style="text-align:center;">Judul Kegiatan</th>
-                                                <th style="text-align:center;">Anggota Kegiatan</th>
-                                                <th style="text-align:center;">Reviewer Laporan Kemajuan</th>
-                                                <th style="text-align:center;">Tambah Reviewer</th>
+                                                <th style="text-align:center;">Anggota Kegiatan Internal</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -91,31 +89,19 @@
                                                         <td> {{ $no++ }} </td>
                                                         <td style="width:40% !important;">
                                                             {!! $penelitian->shortJudul !!}
-                                                            <a onclick="selengkapnya({{ $penelitian->id }})" id="selengkapnya">selengkapnya</a>
+                                                            <a href="{{ route('operator.pending.detail',[$penelitian->id,\Illuminate\Support\Str::slug($penelitian->judul_kegiatan)]) }}" id="selengkapnya">selengkapnya</a>
                                                             <br>
                                                             <hr style="margin-bottom:5px !important; margin-top:5px !important;">
-                                                            <span style="font-size:10px !important; text-transform:capitalize;" for="" class="badge badge-info">{{ $penelitian->jenis_kegiatan }}</span>
+                                                            <span style="font-size:10px !important; text-transform:capitalize;" for="" class="badge badge-info">{{ $penelitian->nm_skim }}</span>
                                                             <span style="font-size:10px !important;" for="" class="badge badge-danger">{{ $penelitian->ketua_peneliti_nama }}</span>
-                                                            <span style="font-size:10px !important;" for="" class="badge badge-secondary">{{ $penelitian->tahun_usulan }}</span>
-                                                            <hr style="margin-bottom:5px !important; margin-top:5px !important;">
-                                                            <a href="{{ asset('upload/laporan_perbaikan/'.$penelitian->file_perbaikan) }}" download="{{ $penelitian->file_perbaikan }}"><i class="fa fa-download"></i>&nbsp; download file laporan perbaikan</a>
-                                                            <br>
-                                                            <a href="{{ asset('upload/laporan_kemajuan/'.$penelitian->file_kemajuan) }}" download="{{ $penelitian->file_kemajuan }}"><i class="fa fa-download"></i>&nbsp; download file laporan kemajuan</a>
+                                                            <span style="font-size:10px !important;" for="" class="badge badge-secondary">{{ $penelitian->tahun_usulan }}</span> <br>
+                                                            Diusulkan {{ $penelitian->created_at ? $penelitian->created_at->diffForHumans() : '-' }} ({{ \Carbon\Carbon::parse($penelitian->created_at)->format('j F Y H:i') }})
 
                                                         </td>
                                                         <td style="font-weight:bold; text-align:center;">
                                                                 {!! $penelitian->nm_anggota !!}
                                                         </td>
-                                                        <td style="text-align:center;">
-                                                            @if ($penelitian->nm_reviewer == null || $penelitian->nm_reviewer == "")
-                                                                <label class="badge badge-danger" style="padding:5px;">-</label>
-                                                                @else
-                                                                <label class="badge" style="font-size:12px;">&nbsp;{!! $penelitian->nm_reviewer !!}</label>
-                                                            @endif
-                                                        </td>
-                                                        <td style="text-align:center;">
-                                                            <a href=" {{ route('operator.laporan_kemajuan.detail_reviewer',[$penelitian->id]) }} " class="btn btn-primary btn-sm" style="color:white; cursor:pointer;"><i class="fa fa-user-plus"></i></a>
-                                                        </td>
+                                                        
                                                     </tr>
                                                 @endif
                                             @endforeach
@@ -132,7 +118,7 @@
                                             <tr>
                                                 <th>No</th>
                                                 <th style="text-align:center;">Judul Kegiatan</th>
-                                                <th style="text-align:center;">Anggota Kegiatan</th>
+                                                <th style="text-align:center;">Anggota Kegiatan Internal</th>
                                                 <th style="text-align:center;">Reviewer Laporan Kemajuan</th>
                                                 <th style="text-align:center;">Tambah Reviewer</th>
                                             </tr>

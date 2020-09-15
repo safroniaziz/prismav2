@@ -1,6 +1,6 @@
 @php
     use App\Usulan;
-    use App\NilaiFormulir3;
+    use App\TotalSkor;
 @endphp
 @extends('layouts.layout')
 @section('title', 'Dashboard')
@@ -46,17 +46,17 @@
                     <div class="col-md-12">
                         @if ($message = Session::get('success'))
                             <div class="alert alert-success alert-block" id="berhasil">
-                                <button type="button" class="close" data-dismiss="alert">×</button>
+                                
                                 <strong><i class="fa fa-info-circle"></i>&nbsp;Berhasil: </strong> {{ $message }}
                             </div>
                             @elseif ($message2 = Session::get('error'))
                                 <div class="alert alert-danger alert-block" id="berhasil">
-                                    <button type="button" class="close" data-dismiss="alert">×</button>
+                                    
                                     <strong><i class="fa fa-info-circle"></i>&nbsp;Gagal: </strong> {{ $message2 }}
                                 </div>
                                 @else
                                 <div class="alert alert-danger alert-block" id="keterangan">
-                                    <button type="button" class="close" data-dismiss="alert">×</button>
+                                    
                                     <strong><i class="fa fa-info-circle"></i>&nbsp;Perhatian: </strong> Berikut adalah semua usulan yang siap di verifikasi anda yang tersedia, silahkan verifikasi usulan yang anda disetujui !!
                                 </div>
                         @endif
@@ -92,9 +92,7 @@
                                                         <th>No</th>
                                                         <th>Judul Kegiatan</th>
                                                         <th>Total Skor</th>
-                                                        {{-- <th>Detail Per Indikator</th> --}}
-                                                        <th>Detail Per Reviewer</th>
-                                                        <th style="text-align:center;">Komentar Reviewer</th>
+                                                        <th style="text-align:center;">Detail Penilaian</th>
                                                         <th>Reviewer 3</th>
 
                                                     </tr>
@@ -105,71 +103,43 @@
                                                     @endphp
                                                     @foreach ($penelitians as $penelitan)
                                                         @php
-                                                            $jumlah = Usulan::join('reviewer1s','reviewer1s.usulan_id','usulans.id')->select(DB::raw('group_concat(distinct concat(reviewer1s.reviewer_nama) SEPARATOR "&nbsp;|&nbsp;") as "nm_reviewer" '))->where('usulans.id',$penelitan->id)->first();
-                                                            $jumlah2 = count(explode('&nbsp;|&nbsp;',$jumlah->nm_reviewer));
+                                                            $total_skor = TotalSkor::where('usulan_id',$penelitan->id)->select('reviewer_id',DB::raw('SUM(total_skor)/2 as total_skor'))->first();
+                                                            $jumlah = count(TotalSkor::where('usulan_id',$penelitan->id)->select('reviewer_id')->get());
                                                         @endphp
-                                                        @if ($jumlah2 == 2)
-                                                            <tr>
+                                                        <tr>
+                                                            <td style="text-align:center;">
+                                                                @if($penelitan->status_usulan != "3" && $penelitan->status_usulan != "4")
+                                                                <input type="checkbox" name="ids[]" class="selectbox" value="{{ $penelitan->id }}">
+                                                                @endif
+                                                            </td>
+                                                            <td> {{ $no++ }} </td>
+                                                            <td style="width:40% !important;">
+                                                                {!! $penelitan->shortJudul !!}
+                                                                <a href="{{ route('operator.menunggu.detail',[$penelitan->id,\Illuminate\Support\Str::slug($penelitan->judul_kegiatan)]) }}" id="selengkapnya">selengkapnya</a>
+                                                                <br>
+                                                                <hr style="margin-bottom:5px !important; margin-top:5px !important;">
+                                                                <span style="font-size:10px !important; text-transform:capitalize;" for="" class="badge badge-info">{{ $penelitan->nm_skim }}</span>
+                                                                <span style="font-size:10px !important; text-transform:capitalize;" for="" class="badge badge-success">{{ $penelitan->jenis_kegiatan }}</span>
+                                                                <span style="font-size:10px !important;" for="" class="badge badge-danger">{{ $penelitan->nm_ketua_peneliti }}</span>
+                                                                <span style="font-size:10px !important;" for="" class="badge badge-secondary">{{ $penelitan->tahun_usulan }}</span> <br>
+                                                                Diusulkan {{ $penelitan->created_at ? $penelitan->created_at->diffForHumans() : '-' }} ({{ \Carbon\Carbon::parse($penelitan->created_at)->format('j F Y H:i') }})
+                                                            </td>
+                                                            
+                                                                <td style="padding:15px 27px;"> {{ $total_skor->total_skor }} </td>
+                                                            {{-- <td style="padding:15px 30px;">
+                                                                    <a onclick="detail({{ $penelitan->id }})" class="btn btn-primary btn-sm" style="color:white; cursor:pointer;"><i class="fa fa-info-circle"></i></a>
+                                                                </td> --}}
+                                                                <td class="text-center">
+                                                                    <a href="{{ route('operator.verifikasi.detail_penilaian',[$penelitan->id, $penelitan->skim_id,\Illuminate\Support\Str::slug($penelitan->judul_kegiatan)]) }}"  class="btn btn-primary btn-sm" style="color:white; cursor:pointer;">Lihat detail</a>
+                                                                </td>
                                                                 <td style="text-align:center;">
-                                                                    @if($penelitan->status_usulan != "3" && $penelitan->status_usulan != "4")
-                                                                    <input type="checkbox" name="ids[]" class="selectbox" value="{{ $penelitan->id }}">
-                                                                    @endif
-                                                                </td>
-                                                                <td> {{ $no++ }} </td>
-                                                                <td style="width:40% !important;">
-                                                                    {!! $penelitan->shortJudul !!}
-                                                                    <a onclick="selengkapnya({{ $penelitan->id }})" id="selengkapnya">selengkapnya</a>
-                                                                    <br>
-                                                                    <hr style="margin-bottom:5px !important; margin-top:5px !important;">
-                                                                    <span style="font-size:10px !important; text-transform:capitalize;" for="" class="badge badge-info">{{ $penelitan->jenis_kegiatan }}</span>
-                                                                    <span style="font-size:10px !important;" for="" class="badge badge-danger">{{ $penelitan->ketua_peneliti_nama }}</span>
-                                                                    <span style="font-size:10px !important;" for="" class="badge badge-secondary">{{ $penelitan->tahun_usulan }}</span>
-                                                                    <span style="font-size:10px !important;" for="" class="badge badge-success">{{ $penelitan->nm_skim }}</span>
-                                                                    <hr style="margin-bottom:5px !important; margin-top:5px !important;">
-                                                                    <a href="{{ asset('upload/file_usulan/'.$penelitan->file_usulan) }}" download="{{ $penelitan->file_usulan }}"><i class="fa fa-download"></i>&nbsp; download file usulan</a>
-                                                                    <br>
-                                                                    <a href="{{ asset('upload/file_anggaran/'.$penelitan->file_anggaran) }}" download="{{ $penelitan->file_anggaran }}"><i class="fa fa-download"></i>&nbsp; download file anggaran</a>
-                                                                    <br>
-                                                                    <a href="{{ asset('upload/peta_jalan/'.$penelitan->peta_jalan) }}" download="{{ $penelitan->peta_jalan }}"><i class="fa fa-download"></i>&nbsp; download file peta jalan</a>
-                                                                </td>
-                                                                @php
-                                                                    $tambah = Usulan::join('nilai_formulir3s','nilai_formulir3s.usulan_id','usulans.id')
-                                                                                // ->join('formulirs','formulirs.id','nilai_formulir3s.formulir_id')
-                                                                                ->select('total_skor')
-                                                                                ->where('status_usulan','2')
-                                                                                ->where('usulans.id',$penelitan->id)
-                                                                                ->first();
-                                                                    if (!empty($tambah->total_skor)) {
-                                                                        $new_total = $penelitan->totalskor+$tambah['total_skor'];
-                                                                    }
-                                                                @endphp
-                                                                    @if (empty($tambah->total_skor))
-                                                                        <td style="padding:15px 27px;"> {{ number_format(($penelitan->totalskor), 2) }} </td>
+                                                                    @if ($jumlah > 2)
+                                                                        <a style="color: red">sudah ditambahkan</a>
                                                                         @else
-                                                                        <td style="padding:15px 27px;"> {{ number_format($new_total/2, 2) }} </td>
+                                                                        <a href="{{ route('operator.verifikasi.reviewer3',[$penelitan->id, $penelitan->skim_id,\Illuminate\Support\Str::slug($penelitan->judul_kegiatan)]) }}"  class="btn btn-primary btn-sm" style="color:white; cursor:pointer;"> <i class="fa fa-plus"></i></a>
                                                                     @endif
-
-                                                                {{-- <td style="padding:15px 30px;">
-                                                                        <a onclick="detail({{ $penelitan->id }})" class="btn btn-primary btn-sm" style="color:white; cursor:pointer;"><i class="fa fa-info-circle"></i></a>
-                                                                    </td> --}}
-                                                                    <td style="padding:15px 30px;">
-                                                                        <a onclick="detailReviewer({{ $penelitan->id }})" class="btn btn-primary btn-sm" style="color:white; cursor:pointer;"><i class="fa fa-info-circle"></i></a>
-                                                                    </td>
-                                                                    <td style="text-align:center;">
-                                                                        <a onclick="komentar( {{ $penelitan->id }} )"  class="btn btn-primary btn-sm" style="color:white; cursor:pointer;"> <i class="fa fa-comments"></i></a>
-                                                                    </td>
-                                                                    <?php 
-                                                                        $rev3 = NilaiFormulir3::where('usulan_id',$penelitan->id)->first();
-                                                                    ?>
-                                                                    <td style="text-align:center;">
-                                                                        @if (empty($rev3))
-                                                                            <a href="{{ route('operator.verifikasi.reviewer3',[$penelitan->id, $penelitan->skim_id]) }}"  class="btn btn-primary btn-sm" style="color:white; cursor:pointer;"> <i class="fa fa-plus"></i></a>
-                                                                            @else
-                                                                            <a class="btn btn-primary btn-sm disabled" style="color:white; cursor:pointer;"> <i class="fa fa-plus"></i></a>
-                                                                        @endif
-                                                                    </td>
-                                                            </tr>
-                                                        @endif
+                                                                </td>
+                                                        </tr>
                                                     @endforeach
                                                 </tbody>
                                             </table>
@@ -203,11 +173,6 @@
                                                         $no=1;
                                                     @endphp
                                                     @foreach ($pengabdians as $pengabdians)
-                                                        @php
-                                                            $jumlah = Usulan::join('reviewer1s','reviewer1s.usulan_id','usulans.id')->select(DB::raw('group_concat(distinct concat(reviewer1s.reviewer_nama) SEPARATOR "&nbsp;|&nbsp;") as "nm_reviewer" '))->where('usulans.id',$pengabdians->id)->first();
-                                                            $jumlah2 = count(explode('&nbsp;|&nbsp;',$jumlah->nm_reviewer));
-                                                        @endphp
-                                                        @if ($jumlah2 == 2)
                                                             <tr>
                                                                 <td style="text-align:center;">
                                                                     @if($pengabdians->status_usulan != "3" && $pengabdians->status_usulan != "4")
@@ -268,7 +233,6 @@
                                                                         @endif
                                                                     </td>
                                                             </tr>
-                                                        @endif
                                                     @endforeach
                                                 </tbody>
                                             </table>
@@ -293,7 +257,7 @@
                                     <div class="row">
                                         <div class="col-md-12">
                                             <div class="alert alert-success alert-block" id="berhasil">
-                                                <button type="button" class="close" data-dismiss="alert">×</button>
+                                                
                                                 <strong><i class="fa fa-info-circle"></i>&nbsp;Data Detail Skor Per Kriteria Penilaian</strong>
                                             </div>
                                         </div>
@@ -334,7 +298,7 @@
                                     <div class="row">
                                         <div class="col-md-12">
                                             <div class="alert alert-success alert-block" id="berhasil">
-                                                <button type="button" class="close" data-dismiss="alert">×</button>
+                                                
                                                 <strong><i class="fa fa-info-circle"></i>&nbsp;Data Detail Skor Per Kriteria Penilaian & Reviewer</strong>
                                             </div>
                                         </div>

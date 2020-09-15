@@ -23,106 +23,79 @@
             <div class="row" style="margin-right:-15px; margin-left:-15px;">
                 <div class="col-md-12">
                     @if ($jumlah >0)
-                        <div class="alert alert-danger alert-block" id="keterangan">
-                            <button type="button" class="close" data-dismiss="alert">×</button>
-                            <strong><i class="fa fa-info-circle"></i>&nbsp;Perhatian: </strong> Berikut adalah anggota kelompok untuk judul kegiaan : <a style="font-style:italic;">{{ $judul_kegiatan->judul_kegiatan }}</a>
-                            <p style="margin-top:10px;">Silahkan Masukan Nama Lengkap Anggota Anda, Lalu Klik Simpan. Jika Anda Sudah Mencari Nama Anggota dan Ternyata Salah, Silahkan Reload dan Cari Kembali Nama Anggota Yang Benar !!</p>
+                        <div class="alert alert-primary alert-block text-center" id="keterangan">
+                            
+                            <strong><i class="fa fa-info-circle"></i>&nbsp;PERHATIAN : </strong> Berikut adalah anggota kelompok untuk judul kegiaan : "<a style="font-style:italic;">{{ $judul_kegiatan->judul_kegiatan }}"</a>
+                            <p style="margin-top:10px;">
+                                <ol>
+                                    <li>Pilih fakultas anggota anda</li>
+                                    <li>Setelah fakultas dipilih, maka silahkan pilih program study dari anggota anda</li>
+                                    <li>Setelah itu daftar dosen akan muncul di field dosen dan anda dapat memilih dosen yang menjadi anggota anda</li>
+                                    <li>Selanjutnya silahkan klik tombol simpan anggota</li>
+                                    <li>Ulangi langkah diatas jika ingin menambahkan dosen lainnya sebagai anggota</li>
+                                </ol>
+                            </p>
                         </div>
                         @else
-                        <div class="alert alert-danger alert-block" id="keterangan">
-                            <button type="button" class="close" data-dismiss="alert">×</button>
-                            <strong><i class="fa fa-info-circle"></i>&nbsp;Perhatian: </strong> Anda belum menambahkan anggota kegiatan !!</a>
-                            <p style="margin-top:10px;">Silahkan Masukan Nama Lengkap Anggota Anda, Lalu Klik Simpan. Jika Anda Sudah Mencari Nama Anggota dan Ternyata Salah, Silahkan Reload dan Cari Kembali Nama Anggota Yang Benar !!</p>
+                        <div class="alert alert-primary alert-block text-center" id="keterangan">
+                            
+                            <strong><i class="fa fa-info-circle"></i>&nbsp;PERHATIAN : </strong> Anda belum menambahkan anggota kegiatan, anda wajib memiliki minimal 1 anggota kelompok internal !!</a>
+                            <p style="margin-top:10px;">
+                                Silahkan cari anggota kelompok dengan mengikuti langkah-langkah berikut ini:
+                                <ol>
+                                    <li>Pilih fakultas anggota anda</li>
+                                    <li>Setelah fakultas dipilih, maka silahkan pilih program study dari anggota anda</li>
+                                    <li>Setelah itu daftar dosen akan muncul di field dosen dan anda dapat memilih dosen yang menjadi anggota anda</li>
+                                    <li>Selanjutnya silahkan klik tombol simpan anggota</li>
+                                    <li>Ulangi langkah diatas jika ingin menambahkan dosen lainnya sebagai anggota</li>
+                                </ol>
+                            </p>
                         </div>
                     @endif
                     @if ($message = Session::get('error'))
                         <div class="alert alert-danger alert-block" id="error">
-                            <button type="button" class="close" data-dismiss="alert">×</button>
+                            
                             <strong><i class="fa fa-info-circle"></i>&nbsp;Gagal: </strong> {{ $message }}
                         </div>
                     @endif
                     @if ($message = Session::get('success'))
                         <div class="alert alert-success alert-block" id="error">
-                            <button type="button" class="close" data-dismiss="alert">×</button>
+                            
                             <strong><i class="fa fa-info-circle"></i>&nbsp;Berhasil: </strong> {{ $message }}
                         </div>
                     @endif
                 </div>
-                <hr style="width:80%; text-align:center;">
                 <div class="col-md-12">
-                    <a href=" {{ route('pengusul.usulan',[$id_usulan]) }} " class="btn btn-danger btn-sm" style="color:white;"><i class="fa fa-arrow-left"></i>&nbsp; Kembali</a>
-                    <a onclick="tambahAnggota({{ $id_usulan }})" class="btn btn-primary btn-sm" style="color:white;cursor:pointer;"><i class="fa fa-plus" style="font-size:12px;"></i>&nbsp; Tambah Anggota</a>
+                    <p style="text-align:center;font-size:17px !important; font-weight:bold;"> FORM TAMBAH ANGGOTA KEGIATAN PENELITIAN DAN PENGABDIAN</p>
                     <hr style="width:80%; text-align:center;">
-                </div>
-
-                <div class="col-md-12" id="form-tambah" style="display:none;">
-                    <div class="alert alert-success alert-block" style="display:none;" id="sudah">
-                        <button type="button" class="close" data-dismiss="alert">×</button>
-                        <strong><i class="fa fa-check-circle"></i>&nbsp;Nip/Nik Portal Akademik (PAK) Dosen Berhasil Ditemukan  </strong>
-                    </div>
-                    <form action=" {{ route('pengusul.usulan.anggota_post') }} " method="POST">
-                        {{ csrf_field() }} {{ method_field('POST') }}
-                        <input type="hidden" name="usulan_id_anggaran" id="usulan_id_anggaran">
-                        <div class="row">
-                            <input type="hidden" name="prodi_kode_anggota" id="prodi_kode_anggota">
-                            <input type="hidden" name="fakultas_kode_anggota" id="fakultas_kode_anggota">
-                            <input type="hidden" name="jk_anggota" id="jk_anggota">
-                            <input type="hidden" name="jabatan_anggota" id="jabatan_anggota">
-                            <div class="form-group col-md-6">
-                                <label for="exampleInputEmail1">Nip/Nik Portal Akademik (PAK)</label>
-                                <input type="text" name="nip_anggota" id="nip_anggota" class="form-control" required >
-                            </div>
-                            <div class="form-group col-md-6">
-                                <label for="exampleInputEmail1">Nama Anggota</label>
-                                <input type="text" name="nm_anggota" id="nm_anggota" class="form-control" required readonly>
-                            </div>
-                            <div class="form-group col-md-6">
-                                <label for="exampleInputEmail1">Prodi Anggota</label>
-                                <input type="text" name="prodi_anggota" id="prodi_anggota" class="form-control" readonly required>
-                            </div>
-                            <div class="form-group col-md-6">
-                                <label for="exampleInputEmail1">Fakultas Anggota</label>
-                                <input type="text" name="fakultas_anggota" id="fakultas_anggota" class="form-control" readonly required>
-                            </div>
-                            <div class="col-md-12" style="text-align:center;">
-                                <a href=" {{ route('pengusul.usulan',[$id_usulan]) }} " class="btn btn-warning btn-sm" style="color:white;"><i class="fa fa-arrow-left"></i>&nbsp; Kembali</a>
-                                <button type="reset" class="btn btn-danger btn-sm" style="font-size:13px;" ><i class="fa fa-refresh"></i>&nbsp;Ulangi</button>
-                                <button type="submit" style="font-size:13px;" class="btn btn-primary btn-sm" id="btn-submit" disabled><i class="fa fa-check-circle"></i>&nbsp;Tambah Anggota</button>
+                    <ul class="nav nav-tabs" id="myTab">
+                        <li class="active"><a class="nav-item nav-link active" data-toggle="tab" href="#nav-internal"><i class="fa fa-book"></i>&nbsp;Anggota Internal</a></li>
+                        <li><a class="nav-item nav-link" data-toggle="tab" href="#nav-eksternal "><i class="fa fa-list-alt"></i>&nbsp;Anggota Eksternal</a></li>
+                        <li><a class="nav-item nav-link" data-toggle="tab" href="#nav-mahasiswa "><i class="fa fa-list-alt"></i>&nbsp;Mahasiswa Terlibat</a></li>
+                        <li><a class="nav-item nav-link" data-toggle="tab" href="#nav-alumni "><i class="fa fa-list-alt"></i>&nbsp;Staf Pendukung Terlibat / Alumni</a></li>
+                    </ul>
+                    <div class="tab-content" id="nav-tabContent">
+                        <div class="tab-pane fade show active" id="nav-internal" role="tabpanel" aria-labelledby="nav-honor-tab">
+                            <div class="row">
+                                @include('pengusul/usulan/anggota_detail/anggota_internal')
                             </div>
                         </div>
-                    </form>
-                    <hr style="width:80%; text-align:center;">
-                </div>
-                <div class="col-md-12" style="margin-top:5px;">
-                    <table class="table table-bordered table-striped" id="table">
-                        <thead>
-                            <tr>
-                                <th style="text-align:center">No</th>
-                                <th style="text-align:center">Nip Anggota</th>
-                                <th style="text-align:center">Nama Anggota</th>
-                                <th style="text-align:center">Prodi Anggota</th>
-                                <th style="text-align:center">Fakultas Anggota</th>
-                                <th style="text-align:center">Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @php
-                                $no=1;
-                            @endphp
-                            @foreach ($anggotas as $anggota)
-                                <tr>
-                                    <td style="text-align:center;"> {{ $no++ }} </td>
-                                    <td style="text-align:center"> {{ $anggota->anggota_nip }} </td>
-                                    <td style="text-align:center"> {{ $anggota->anggota_nama }} </td>
-                                    <td style="text-align:center"> {{ $anggota->anggota_prodi_nama }} </td>
-                                    <td style="text-align:center"> {{ $anggota->anggota_fakultas_nama }} </td>
-                                    <td style="text-align:center">
-                                        <a onclick="hapusAnggota({{ $anggota->id }})" class="btn btn-danger btn-sm" style="color:white; cursor:pointer;"><i class="fa fa-trash"></i></a>
-                                    </td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
+                        <div class="tab-pane fade show" id="nav-eksternal" role="tabpanel" aria-labelledby="nav-honor-tab">
+                            <div class="row">
+                                @include('pengusul/usulan/anggota_detail/anggota_eksternal')
+                            </div>
+                        </div>
+                        <div class="tab-pane fade show" id="nav-mahasiswa" role="tabpanel" aria-labelledby="nav-honor-tab">
+                            <div class="row">
+                                @include('pengusul/usulan/anggota_detail/anggota_mahasiswa')
+                            </div>
+                        </div>
+                        <div class="tab-pane fade show" id="nav-alumni" role="tabpanel" aria-labelledby="nav-honor-tab">
+                            <div class="row">
+                                @include('pengusul/usulan/anggota_detail/anggota_alumni')
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -131,13 +104,13 @@
             <div class="modal-dialog" role="document">
               <div class="modal-content">
                 <div class="modal-header modal-header-danger">
-                    <p style="font-size:15px;" class="modal-title" id="exampleModalLabel"><i class="fa fa-user"></i>&nbsp;Form Konfirmasi Hapus Data Operator</p>
+                    <p style="font-size:15px;" class="modal-title" id="exampleModalLabel"><i class="fa fa-user"></i>&nbsp;Form Konfirmasi Hapus Data Anggota</p>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                  Apakah anda yakin akan menghapus data usulan ?
+                  Apakah anda yakin akan menghapus anggota kegiatan ?
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline-light btn-sm " style="color:white;" data-dismiss="modal"><i class="fa fa-close"></i>&nbsp;Close</button>
@@ -215,5 +188,30 @@
         $('#modalhapus').modal('show');
         $('#id_anggota').val(id);
     }
+    // $('#myTab a').click(function(e) {
+    //     e.preventDefault();
+    //     $(this).tab('show');
+    // });
+
+// store the currently selected tab in the hash value
+//     $("ul.nav-tabs > li > a").on("shown.bs.tab", function(e) {
+//         var id = $(e.target).attr("href").substr(1);
+//         window.location.hash = id;
+//     });
+
+// // on load of the page: switch to the currently selected tab
+//     var hash = window.location.hash;
+//     $('#myTab a[href="' + hash + '"]').tab('show');
+    $(document).ready(function(){
+            $('a[data-toggle="tab"]').on('shown.bs.tab', function(e) {
+                localStorage.setItem('activeTab', $(e.target).attr('href'));
+            });
+            var activeTab = localStorage.getItem('activeTab');
+            if(activeTab){
+                $('#myTab a[href="' + activeTab + '"]').tab('show');
+            }
+        });
     </script>
+
+    
 @endpush

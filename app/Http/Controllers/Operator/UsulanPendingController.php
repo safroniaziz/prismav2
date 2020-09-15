@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Operator;
 
+use App\AnggotaUsulan;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\UserLoginController;
@@ -9,6 +10,7 @@ use DB;
 use Session;
 use App\Usulan;
 use App\RancanganAnggaran;
+use Illuminate\Support\Facades\DB as FacadesDB;
 use PDF;
 
 class UsulanPendingController extends Controller
@@ -23,7 +25,7 @@ class UsulanPendingController extends Controller
         $penelitians = Usulan::leftJoin('anggota_usulans','anggota_usulans.usulan_id','usulans.id')
                             ->leftJoin('skims','skims.id','usulans.skim_id')
                             ->select('usulans.id','judul_kegiatan','jenis_kegiatan',
-                                    'abstrak','kata_kunci','peta_jalan','file_usulan','file_anggaran','lembar_pengesahan','biaya_diusulkan','status_usulan','tahun_usulan','ketua_peneliti_prodi_nama','ketua_peneliti_nama as nm_ketua_peneliti',
+                                    'abstrak','kata_kunci','file_usulan','nm_skim','usulans.created_at','biaya_diusulkan','status_usulan','tahun_usulan','ketua_peneliti_prodi_nama','ketua_peneliti_nama as nm_ketua_peneliti',
                                     DB::raw('group_concat(distinct concat(anggota_usulans.anggota_nama) SEPARATOR "<br>") as "nm_anggota" ')
                                     )
                             ->where('usulans.status_usulan','0')
@@ -33,7 +35,7 @@ class UsulanPendingController extends Controller
         $pengabdians = Usulan::leftJoin('anggota_usulans','anggota_usulans.usulan_id','usulans.id')
                             ->leftJoin('skims','skims.id','usulans.skim_id')
                             ->select('usulans.id','judul_kegiatan','jenis_kegiatan',
-                                    'abstrak','kata_kunci','peta_jalan','file_usulan','file_anggaran','lembar_pengesahan','biaya_diusulkan','status_usulan','tahun_usulan','ketua_peneliti_prodi_nama','ketua_peneliti_nama as nm_ketua_peneliti',
+                                    'abstrak','kata_kunci','file_usulan','nm_skim','biaya_diusulkan','status_usulan','tahun_usulan','ketua_peneliti_prodi_nama','ketua_peneliti_nama as nm_ketua_peneliti',
                                     DB::raw('group_concat(distinct concat(anggota_usulans.anggota_nama) SEPARATOR "<br>") as "nm_anggota" ')
                                     )
                             ->where('usulans.status_usulan','0')
@@ -44,20 +46,32 @@ class UsulanPendingController extends Controller
     }
 
     public function detail($id){
-        $usulan = Usulan::leftJoin('anggota_usulans','anggota_usulans.usulan_id','usulans.id')
-                        ->leftJoin('skims','skims.id','usulans.skim_id')
-                        ->select('usulans.id','judul_kegiatan','tujuan','luaran','abstrak','jenis_kegiatan','ketua_peneliti_fakultas_nama as fakultas','ketua_peneliti_prodi_nama as prodi',
-                                'ketua_peneliti_nama as nm_ketua_peneliti','ketua_peneliti_nip as nip','kata_kunci','nm_skim','abstrak','kata_kunci')
+        $detail = Usulan::leftJoin('skims','skims.id','usulans.skim_id')
+                        ->select('usulans.id','judul_kegiatan','jenis_kegiatan','nm_skim','usulans.created_at','tujuan','luaran',
+                        'ketua_peneliti_nama','ketua_peneliti_nip','abstrak','file_usulan','kata_kunci','biaya_diusulkan','status_usulan','tahun_usulan')
                         ->where('usulans.id',$id)
                         ->first();
-        $anggotas = AnggotaUsulan::select('anggota_nama as nm_anggota','anggota_prodi_nama as prodi','anggota_fakultas_nama as fakultas','anggota_nip as nip')
-                                    ->where('usulan_id',$id)
+        $anggota_internal = Usulan::join('anggota_usulans','anggota_usulans.usulan_id','usulans.id')
+                                    ->select('anggota_nip','anggota_nama','anggota_prodi_nama','anggota_fakultas_nama','anggota_universitas')
+                                    ->groupBy('anggota_usulans.id')
+                                    ->where('usulans.id',$id)
                                     ->get();
-        $data = [
-            'usulan'        => $usulan,
-            'anggotas'      => $anggotas,
-        ];
-        return $data;
+        $anggota_eksternal = Usulan::join('anggota_eksternals','anggota_eksternals.usulan_id','usulans.id')
+                                    ->select('anggota_nip','anggota_nama','anggota_universitas')
+                                    ->groupBy('anggota_eksternals.id')
+                                    ->where('usulans.id',$id)
+                                    ->get();
+        $anggota_mahasiswa = Usulan::join('anggota_mahasiswas','anggota_mahasiswas.usulan_id','usulans.id')
+                                    ->select('anggota_npm','anggota_nama','anggota_prodi_nama','anggota_fakultas_nama')
+                                    ->groupBy('anggota_mahasiswas.id')
+                                    ->where('usulans.id',$id)
+                                    ->get();
+        $anggota_alumni = Usulan::join('anggota_alumnis','anggota_alumnis.usulan_id','usulans.id')
+                                    ->select('anggota_nama','jabatan')
+                                    ->groupBy('anggota_alumnis.id')
+                                    ->where('usulans.id',$id)
+                                    ->get();
+        return view('operator/usulan/pending.detail_penelitian',compact('detail','anggota_internal','anggota_eksternal','anggota_mahasiswa','anggota_alumni'));
     }
 
     public function anggaranCetak($id){
@@ -82,12 +96,13 @@ class UsulanPendingController extends Controller
         $penelitians = Usulan::leftJoin('anggota_usulans','anggota_usulans.usulan_id','usulans.id')
                             ->leftJoin('skims','skims.id','usulans.skim_id')
                             ->select('usulans.id','judul_kegiatan','jenis_kegiatan',
-                                    'abstrak','kata_kunci','peta_jalan','file_usulan','lembar_pengesahan','biaya_diusulkan','status_usulan','tahun_usulan','ketua_peneliti_prodi_nama','ketua_peneliti_nama as nm_ketua_peneliti',
-                                    DB::raw('group_concat(distinct concat(anggota_usulans.anggota_nama) SEPARATOR "<br>") as "nm_anggota" ')
+                                    'abstrak','kata_kunci','peta_jalan','nm_skim','file_usulan','lembar_pengesahan','biaya_diusulkan','status_usulan','tahun_usulan','ketua_peneliti_prodi_nama','ketua_peneliti_nama as nm_ketua_peneliti',
+                                    FacadesDB::raw('group_concat(distinct concat(anggota_usulans.anggota_nama) SEPARATOR "<br>") as "nm_anggota" ')
                                     )
                             ->where('usulans.status_usulan','0')
                             ->where('usulans.jenis_kegiatan','penelitian')
                             ->groupBy('usulans.id')
+                            ->orderBy('skims.id')
                             ->get();
                             // return $penelitians;
         return view('operator/usulan.pending.detail',compact('penelitians'));
@@ -97,12 +112,13 @@ class UsulanPendingController extends Controller
         $pengabdians = Usulan::leftJoin('anggota_usulans','anggota_usulans.usulan_id','usulans.id')
                             ->leftJoin('skims','skims.id','usulans.skim_id')
                             ->select('usulans.id','judul_kegiatan','jenis_kegiatan',
-                                    'abstrak','kata_kunci','peta_jalan','file_usulan','lembar_pengesahan','biaya_diusulkan','status_usulan','tahun_usulan','ketua_peneliti_prodi_nama','ketua_peneliti_nama as nm_ketua_peneliti',
-                                    DB::raw('group_concat(distinct concat(anggota_usulans.anggota_nama) SEPARATOR "<br>") as "nm_anggota" ')
+                                    'abstrak','kata_kunci','peta_jalan','nm_skim','file_usulan','lembar_pengesahan','biaya_diusulkan','status_usulan','tahun_usulan','ketua_peneliti_prodi_nama','ketua_peneliti_nama as nm_ketua_peneliti',
+                                    FacadesDB::raw('group_concat(distinct concat(anggota_usulans.anggota_nama) SEPARATOR "<br>") as "nm_anggota" ')
                                     )
                             ->where('usulans.status_usulan','0')
                             ->where('usulans.jenis_kegiatan','pengabdian')
                             ->groupBy('usulans.id')
+                            ->orderBy('skims.id')
                             ->get();
         return view('operator/usulan.pending.detail_pengabdian',compact('pengabdians'));
     }

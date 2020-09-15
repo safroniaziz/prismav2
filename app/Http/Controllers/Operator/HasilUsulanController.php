@@ -22,10 +22,7 @@ class HasilUsulanController extends Controller
                                             'ketua_peneliti_nama as nm_ketua_peneliti',
                                             DB::raw('group_concat(distinct concat(anggota_usulans.anggota_nama) SEPARATOR "<br>") as "nm_anggota" ')
                                             )
-                                    ->where(function($query) {
-                                        $query->where('status_usulan','3')
-                                        ->orWhere('status_usulan','6');
-                                    })
+                                    ->where('status_usulan','>','2')
                                     ->where('jenis_kegiatan','penelitian')
                                     ->groupBy('usulans.id')
                                     ->get();
@@ -35,10 +32,7 @@ class HasilUsulanController extends Controller
                                             'ketua_peneliti_nama as nm_ketua_peneliti',
                                             DB::raw('group_concat(distinct concat(anggota_usulans.anggota_nama) SEPARATOR "<br>") as "nm_anggota" ')
                                             )
-                                    ->where(function($query) {
-                                        $query->where('status_usulan','3')
-                                        ->orWhere('status_usulan','6');
-                                    })
+                                    ->where('status_usulan','>','2')
                                     ->where('jenis_kegiatan','pengabdian')
                                     ->groupBy('usulans.id')
                                     ->get();

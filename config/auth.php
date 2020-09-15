@@ -82,7 +82,7 @@ return [
 
         'reviewer1s' => [
             'driver' => 'eloquent',
-            'model' => App\Reviewer1::class,
+            'model' => App\Reviewer::class,
         ],
 
         // 'users' => [

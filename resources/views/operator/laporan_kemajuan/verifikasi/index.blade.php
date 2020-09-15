@@ -43,23 +43,23 @@
                     <div class="col-md-12">
                         @if ($message = Session::get('success'))
                             <div class="alert alert-success alert-block" id="berhasil">
-                                <button type="button" class="close" data-dismiss="alert">×</button>
+                                
                                 <strong><i class="fa fa-info-circle"></i>&nbsp;Berhasil: </strong> {{ $message }}
                             </div>
                             @elseif ($message2 = Session::get('error'))
                                 <div class="alert alert-danger alert-block" id="berhasil">
-                                    <button type="button" class="close" data-dismiss="alert">×</button>
+                                    
                                     <strong><i class="fa fa-info-circle"></i>&nbsp;Gagal: </strong> {{ $message2 }}
                                 </div>
                         @endif
                         @if (count($usulans)>0)
                             <div class="alert alert-danger alert-block" id="keterangan">
-                                <button type="button" class="close" data-dismiss="alert">×</button>
+                                
                                 <strong><i class="fa fa-info-circle"></i>&nbsp;Perhatian: </strong> Berikut adalah semua usulan yang siap di verifikasi anda yang tersedia, silahkan verifikasi usulan yang anda disetujui !!
                             </div>
                         @else
                             <div class="alert alert-danger alert-block" id="keterangan">
-                                <button type="button" class="close" data-dismiss="alert">×</button>
+                                
                                 <strong><i class="fa fa-info-circle"></i>&nbsp;Perhatian: </strong> Belum ada laporan kemajuan yang siap di verifikasi !!
                             </div>
                         @endif
@@ -138,7 +138,7 @@
                                         <div class="row">
                                             <div class="col-md-12">
                                                 <div class="alert alert-success alert-block" id="berhasil">
-                                                    <button type="button" class="close" data-dismiss="alert">×</button>
+                                                    
                                                     <strong><i class="fa fa-info-circle"></i>&nbsp;Data Detail Skor Per Kriteria Penilaian</strong>
                                                 </div>
                                             </div>

@@ -28,17 +28,17 @@
                 <div class="col-md-12">
                     @if ($message = Session::get('success'))
                         <div class="alert alert-success alert-block" id="berhasil">
-                            <button type="button" class="close" data-dismiss="alert">×</button>
+                            
                             <strong><i class="fa fa-info-circle"></i>&nbsp;Berhasil: </strong> {{ $message }}
                         </div>
                         @else
                         <div class="alert alert-success alert-block" id="keterangan">
-                            <button type="button" class="close" data-dismiss="alert">×</button>
+                            
                             <strong><i class="fa fa-info-circle"></i>&nbsp;Perhatian: </strong> Berikut adalah semua data program studi yang diambil dari pangkalan data universitas bengkulu, silahkan klik <b>update data</b> untuk memperbarui data program studi !!
                         </div>
                     @endif
                     <div class="alert alert-warning alert-block" id="proses" style="display:none;">
-                        <button type="button" class="close" data-dismiss="alert">×</button>
+                        
                         <strong><i class="fa fa-info-circle"></i>&nbsp;Perhatian: </strong> Proses generate membutuhkan beberapa waktu, harap tunggu !
                     </div>
                 </div>

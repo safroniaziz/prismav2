@@ -41,17 +41,17 @@
                 <div class="col-md-12">
                     @if ($message = Session::get('success'))
                         <div class="alert alert-success alert-block" id="berhasil">
-                            <button type="button" class="close" data-dismiss="alert">×</button>
+                            
                             <strong><i class="fa fa-info-circle"></i>&nbsp;Berhasil: </strong> {{ $message }}
                         </div>
                         @elseif(count($usulans)<1)
                         <div class="alert alert-danger alert-block" id="keterangan">
-                            <button type="button" class="close" data-dismiss="alert">×</button>
+                            
                             <strong><i class="fa fa-info-circle"></i>&nbsp;Perhatian: </strong> Belum Ada Usulan Yang Sampai Tahap Laporan Akhir Yang Disetujui!!
                         </div>
                         @else
                         <div class="alert alert-danger alert-block" id="keterangan">
-                            <button type="button" class="close" data-dismiss="alert">×</button>
+                            
                             <strong><i class="fa fa-info-circle"></i>&nbsp;Perhatian: </strong> Silahkan Upload Laporan Akhir & Luaran Kegiatan Anda !!
                         </div>
                     @endif
@@ -163,7 +163,7 @@
                                     <input type="hidden" name="id_usulan" id="id_usulan_upload">
                                     <div class="modal-body">
                                         <div class="alert alert-primary alert-block" id="berhasil">
-                                            <button type="button" class="close" data-dismiss="alert">×</button>
+                                            
                                             <strong><i class="fa fa-info-circle"></i>&nbsp;Perhatian: </strong> Silahkan Upload Laporan akhir Usulan Penelitian Anda !!
                                         </div>
                                         <div class="form-group col-md-12">

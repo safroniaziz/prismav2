@@ -8,6 +8,7 @@ class LaporanKemajuan extends Model
 {
     protected $fillable = [
         'usulan_id',
-        'file_kemajuan'
+        'file_kemajuan',
+        'file_perbaikan'
     ];
 }

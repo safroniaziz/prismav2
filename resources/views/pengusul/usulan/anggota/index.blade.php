@@ -35,7 +35,7 @@
             <div class="row" style="margin-right:-15px; margin-left:-15px;">
                 <div class="col-md-12">
                     <div class="alert alert-success alert-block" id="keterangan">
-                        <button type="button" class="close" data-dismiss="alert">×</button>
+                        
                         <strong><i class="fa fa-info-circle"></i>&nbsp;Perhatian: </strong> Berikut adalah kegiatan anda sebagai anggota kegiatan !!
                     </div>
                 </div>

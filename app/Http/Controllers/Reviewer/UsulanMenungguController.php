@@ -16,6 +16,7 @@ use App\Komentar1;
 use App\NilaiFormulir;
 use App\Reviewer1;
 use App\RancanganAnggaran;
+use App\TotalSkor;
 
 class UsulanMenungguController extends Controller
 {
@@ -26,10 +27,9 @@ class UsulanMenungguController extends Controller
                 $usulans = Usulan::leftJoin('anggota_usulans','anggota_usulans.usulan_id','usulans.id')
                                     ->leftJoin('skims','skims.id','usulans.skim_id')
                                     ->leftJoin('reviewer1s','reviewer1s.usulan_id','usulans.id')
-                                    ->select('usulans.id','judul_kegiatan','jenis_kegiatan','ketua_peneliti_universitas','skims.id as skim_id','ketua_peneliti_prodi_nama',
-                                            'ketua_peneliti_nama as nm_ketua_peneliti','abstrak','tahun_usulan','kata_kunci','peta_jalan','file_usulan','file_anggaran','lembar_pengesahan','biaya_diusulkan','status_usulan',
+                                    ->select('usulans.id','judul_kegiatan','usulans.created_at','nm_skim','jenis_kegiatan','ketua_peneliti_universitas','skims.id as skim_id','ketua_peneliti_prodi_nama',
+                                            'ketua_peneliti_nama as nm_ketua_peneliti','abstrak','tahun_usulan','kata_kunci','file_usulan','biaya_diusulkan',
                                             DB::raw('group_concat(distinct concat(anggota_nama) SEPARATOR "<br>") as "nm_anggota" '),
-                                            DB::raw('group_concat(distinct concat(reviewer_nama) SEPARATOR "<br>") as "nm_reviewer" '),
                                             DB::raw('group_concat(distinct concat(reviewer_nip) SEPARATOR "<br>") as "nip_reviewer" ')
                                             )
                                     ->where('reviewer_nip',Session::get('nip'))
@@ -54,24 +54,32 @@ class UsulanMenungguController extends Controller
         $sesi = Session::get('akses');
         if(Session::get('login') && Session::get('login',1) && Session::get('akses',2)){
             if($sesi == 2){
-                $usulan = Usulan::leftJoin('anggota_usulans','anggota_usulans.usulan_id','usulans.id')
-                                ->leftJoin('skims','skims.id','usulans.skim_id')
-                                ->select('usulans.id','judul_kegiatan','jenis_kegiatan','tujuan','luaran','ketua_peneliti_fakultas_nama','ketua_peneliti_prodi_nama',
-                                        'ketua_peneliti_nama as nm_ketua_peneliti','ketua_peneliti_nip','kata_kunci','nm_skim','abstrak','kata_kunci','peta_jalan','biaya_diusulkan','tahun_usulan')
-                                ->where('usulans.id',$id)
-                                ->first();
-                $anggotas = AnggotaUsulan::select('anggota_nama as nm_anggota','anggota_prodi_nama','anggota_fakultas_nama','anggota_nip')
-                                            ->where('usulan_id',$id)
+                $detail = Usulan::leftJoin('skims','skims.id','usulans.skim_id')
+                        ->select('usulans.id','judul_kegiatan','jenis_kegiatan','nm_skim','usulans.created_at','tujuan','luaran',
+                        'ketua_peneliti_nama','ketua_peneliti_nip','abstrak','file_usulan','kata_kunci','biaya_diusulkan','status_usulan','tahun_usulan')
+                        ->where('usulans.id',$id)
+                        ->first();
+                $anggota_internal = Usulan::join('anggota_usulans','anggota_usulans.usulan_id','usulans.id')
+                                            ->select('anggota_nip','anggota_nama','anggota_prodi_nama','anggota_fakultas_nama','anggota_universitas')
+                                            ->groupBy('anggota_usulans.id')
+                                            ->where('usulans.id',$id)
                                             ->get();
-                $reviewers = Reviewer1::select('reviewer_nama as nm_anggota','reviewer_prodi_nama','reviewer_fakultas_nama','reviewer_nip')
-                                            ->where('usulan_id',$id)
+                $anggota_eksternal = Usulan::join('anggota_eksternals','anggota_eksternals.usulan_id','usulans.id')
+                                            ->select('anggota_nip','anggota_nama','anggota_universitas')
+                                            ->groupBy('anggota_eksternals.id')
+                                            ->where('usulans.id',$id)
                                             ->get();
-                $data = [
-                    'usulan'        => $usulan,
-                    'anggotas'      => $anggotas,
-                    'reviewers'      => $reviewers,
-                ];
-                return $data;
+                $anggota_mahasiswa = Usulan::join('anggota_mahasiswas','anggota_mahasiswas.usulan_id','usulans.id')
+                                            ->select('anggota_npm','anggota_nama','anggota_prodi_nama','anggota_fakultas_nama')
+                                            ->groupBy('anggota_mahasiswas.id')
+                                            ->where('usulans.id',$id)
+                                            ->get();
+                $anggota_alumni = Usulan::join('anggota_alumnis','anggota_alumnis.usulan_id','usulans.id')
+                                            ->select('anggota_nama','jabatan')
+                                            ->groupBy('anggota_alumnis.id')
+                                            ->where('usulans.id',$id)
+                                            ->get();
+                return view('reviewer/usulan/menunggu.detail_penelitian',compact('detail','anggota_internal','anggota_eksternal','anggota_mahasiswa','anggota_alumni'));
             }
             else{
                 Session::flush();
@@ -135,61 +143,61 @@ class UsulanMenungguController extends Controller
     }
 
     public function reviewPost(Request $request){
+        $this->validate($request,[
+            'total_nilai'    =>  'required',
+        ]);
         $mytime = Carbon\Carbon::now();
         $time = $mytime->toDateTimeString();
         $jumlah = $request->jumlah;
-        // $formulir = array();
-        // for($i=1; $i <= $jumlah; $i++){
-        //     $formulir[] = array(
-        //         'usulan_id'     =>  $request->usulan_id,
-        //         'formulir_id'   =>  $request->nilai.$i,
-        //         'skor'          =>  $_POST['nilai'.$i],
-        //         'reviewer_id'          =>  Session::get('nip'),
-        //         'created_at'    =>  $time,
-        //         'updated_at'    =>  $time,
-        //     );
-        // }
-        // NilaiFormulir::insert($formulir);
         DB::beginTransaction();
-
         try {
-                $total_skor = new NilaiFormulir;
-                $total_skor->usulan_id = $request->usulan_id;
-                $total_skor->reviewer_id = Session::get('nip');
-                $total_skor->total_skor = $request->total_skor;
-                $total_skor->save();
-            if ($request->komentar != null || $request->komentar != "") {
-                $komentar = new Komentar1;
-                $komentar->usulan_id = $request->usulan_id;
-                $komentar->reviewer_id = Session::get('nip');
-                $komentar->komentar = $request->komentar;
-                $komentar->save();
+            $formulir = array();
+            for($i=1; $i <= $jumlah; $i++){
+                $formulir[] = array(
+                    'usulan_id'     =>  $request->usulan_id,
+                    'formulir_id'   =>  $_POST['formulir_id'.$i],
+                    'skor'          =>  $_POST['nilai'.$i],
+                    'total_skor'          =>  floatval($_POST['total'.$i]),
+                    'reviewer_id'          =>  Session::get('nip'),
+                    'created_at'    =>  $time,
+                    'updated_at'    =>  $time,
+                );
             }
+            NilaiFormulir::insert($formulir);
+            
+            $komentar = new Komentar1;
+            $komentar->usulan_id = $request->usulan_id;
+            $komentar->reviewer_id = Session::get('nip');
+            $komentar->komentar = $request->komentar;
+            $komentar->komentar_anggaran = $request->komentar_anggaran;
+            $komentar->save();
 
+            TotalSkor::create([
+                'usulan_id'     =>  $request->usulan_id,
+                'total_skor'    =>  $request->total_nilai,
+                'reviewer_id'   =>  Session::get('nip'),
+            ]);
+            
             DB::commit();
+            $sudah = Usulan::leftJoin('reviewer1s','reviewer1s.usulan_id','usulans.id')
+                                ->rightJoin('total_skors','total_skors.reviewer_id','reviewer1s.reviewer_nip')
+                                ->select('total_skors.reviewer_id')
+                                ->where('total_skors.usulan_id',$request->usulan_id)
+                                ->groupBy('total_skors.reviewer_id')
+                                ->get();
+            if (count($sudah) > 1) {
+                Usulan::where('id',$request->usulan_id)->update([
+                    'status_usulan' => '2',
+                ]);
+                return redirect()->route('reviewer.menunggu')->with(['success' => 'Usulan Penelitian sudah di review']);
+            }
             // all good
+            return redirect()->route('reviewer.menunggu')->with(['success'  =>  'Usulan kegiatan berhasil direview']);
         } catch (\Exception $e) {
             DB::rollback();
             // something went wrong
+            return redirect()->route('reviewer.menunggu')->with(['error'  =>  'Usulan kegiatan gagal direview']);
         }
-
-        
-
-        $sudah = Usulan::leftJoin('reviewer1s','reviewer1s.usulan_id','usulans.id')
-                                ->rightJoin('nilai_formulirs','nilai_formulirs.reviewer_id','reviewer1s.reviewer_nip')
-                                ->select('nilai_formulirs.reviewer_id')
-                                ->where('nilai_formulirs.usulan_id',$request->usulan_id)
-                                ->groupBy('nilai_formulirs.reviewer_id')
-                                ->get();
-        if (count($sudah) == 2) {
-            $status = '2';
-            $usulan = Usulan::find($request->usulan_id);
-            $usulan->status_usulan = $status;
-            $usulan->update();
-        }
-
-        return redirect()->route('reviewer.menunggu')->with(['success' => 'Usulan Penelitian sudah di review']);
-
     }
 
 }

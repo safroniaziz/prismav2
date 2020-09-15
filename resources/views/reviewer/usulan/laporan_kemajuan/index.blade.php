@@ -41,7 +41,7 @@
                 <div class="col-md-12">
                     @if ($message = Session::get('success'))
                         <div class="alert alert-success alert-block" id="berhasil">
-                            <button type="button" class="close" data-dismiss="alert">×</button>
+                            
                             <strong><i class="fa fa-info-circle"></i>&nbsp;Berhasil: </strong> {{ $message }}
                         </div>
                         @else
@@ -49,34 +49,34 @@
                             @if ($now >= $jadwal[0]->tanggal_awal && $now <= $jadwal[0]->tanggal_akhir)
                                 @if (count($usulans)>0)
                                     <div class="alert alert-danger alert-block" id="keterangan">
-                                        <button type="button" class="close" data-dismiss="alert">×</button>
+                                        
                                         <strong><i class="fa fa-info-circle"></i>&nbsp;Perhatian: </strong> Berikut adalah usulan kegiatan yang akan anda review, silakan review semua usulan penelitian !!
                                     </div>
                                     @else
                                         <div class="alert alert-danger alert-block" id="keterangan">
-                                            <button type="button" class="close" data-dismiss="alert">×</button>
+                                            
                                             <strong><i class="fa fa-info-circle"></i>&nbsp;Perhatian: </strong> Anda tidak memiliki usulan kegiatan untuk di review !!
                                         </div>
                                 @endif
                                 @else
                                 <div class="alert alert-danger alert-block" id="keterangan">
-                                    <button type="button" class="close" data-dismiss="alert">×</button>
+                                    
                                     <strong><i class="fa fa-info-circle"></i>&nbsp;Perhatian: </strong> Saat Ini Bukan Masa Review Usulan Kegiatan !!
                                 </div>
                             @endif
                             @else
                             <div class="alert alert-danger alert-block" id="keterangan">
-                                <button type="button" class="close" data-dismiss="alert">×</button>
+                                
                                 <strong><i class="fa fa-info-circle"></i>&nbsp;Perhatian: </strong> Jadwal Review Usulan Belum Diatur !!
                             </div>
                         @endif
                     @endif
                     <div class="alert alert-success alert-block" style="display:none;" id="usulan-berhasil">
-                        <button type="button" class="close" data-dismiss="alert">×</button>
+                        
                         <i class="fa fa-success-circle"></i><strong>Berhasil :</strong> Penelitian anda sudah diusulkan !!
                     </div>
                     <div class="alert alert-danger alert-block" style="display:none;" id="gagal">
-                        <button type="button" class="close" data-dismiss="alert">×</button>
+                        
                         <i class="fa fa-close"></i><strong>&nbsp;Gagal :</strong> Proses pengusulan gagal !!
                     </div>
                 </div>
@@ -147,7 +147,7 @@
                                 <div class="row">
                                     <div class="col-md-12">
                                         <div class="alert alert-success alert-block" id="berhasil">
-                                            <button type="button" class="close" data-dismiss="alert">×</button>
+                                            
                                             <strong><i class="fa fa-info-circle"></i>&nbsp;Data Detail Usulan Penelitian Dosen Universitas Bengkulu</strong>
                                         </div>
                                     </div>

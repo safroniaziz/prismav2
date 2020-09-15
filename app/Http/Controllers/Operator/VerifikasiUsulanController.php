@@ -18,9 +18,14 @@ use App\UsulanDisetujui;
 use App\Formulir;
 use App\NilaiFormulir3;
 use App\Komentar3;
+use App\NilaiFormulir;
+use App\TotalSkor;
 use PDF;
 use Auth;
-
+use Illuminate\Support\Facades\Auth as FacadesAuth;
+if(version_compare(PHP_VERSION, '7.2.0', '>=')) {
+    error_reporting(E_ALL ^ E_NOTICE ^ E_WARNING);
+}
 class VerifikasiUsulanController extends Controller
 {
     public function __construct()
@@ -30,7 +35,6 @@ class VerifikasiUsulanController extends Controller
 
     public function index(){
         $penelitians = Usulan::leftJoin('nilai_formulirs','nilai_formulirs.usulan_id','usulans.id')
-                            // ->leftJoin('formulirs','formulirs.id','nilai_formulirs.formulir_id')
                             ->leftJoin('skims','skims.id','usulans.skim_id')
                             ->select('usulans.id','jenis_kegiatan','ketua_peneliti_nama','nm_skim','skim_id','tahun_usulan','judul_kegiatan',DB::raw('SUM(total_skor)/2 as totalskor')
                             )
@@ -40,7 +44,6 @@ class VerifikasiUsulanController extends Controller
                             ->orderBy('usulans.skim_id')
                             ->get();
         $pengabdians = Usulan::leftJoin('nilai_formulirs','nilai_formulirs.usulan_id','usulans.id')
-                            // ->leftJoin('formulirs','formulirs.id','nilai_formulirs.formulir_id')
                             ->leftJoin('skims','skims.id','usulans.skim_id')
                             ->select('usulans.id','jenis_kegiatan','ketua_peneliti_nama','skim_id','tahun_usulan','judul_kegiatan',DB::raw('SUM(total_skor)/2 as totalskor')
                             )
@@ -156,53 +159,49 @@ class VerifikasiUsulanController extends Controller
     }
 
     public function reviewerTigaPost(Request $request){
-        // return $request->all();
+        $this->validate($request,[
+            'total_nilai'    =>  'required',
+        ]);
         $mytime = Carbon\Carbon::now();
         $time = $mytime->toDateTimeString();
-        // $jumlah = $request->jumlah;
-        // $formulir = array();
-        // for($i=1; $i <= $jumlah; $i++){
-        //     $formulir[] = array(
-        //         'usulan_id'     =>  $request->usulan_id,
-        //         'formulir_id'   =>  $request->nilai.$i,
-        //         'skor'          =>  $_POST['nilai'.$i],
-        //         'reviewer_id'          =>  Auth::user()->id,
-        //         'created_at'    =>  $time,
-        //         'updated_at'    =>  $time,
-        //     );
-        // }
-        // NilaiFormulir3::insert($formulir);
-
-        // if ($request->komentar != null || $request->komentar != "") {
-        //     $komentar = new Komentar3;
-        //     $komentar->usulan_id = $request->usulan_id;
-        //     $komentar->reviewer_id = Auth::user()->id;
-        //     $komentar->komentar = $request->komentar;
-        //     $komentar->save();
-        // }
+        $jumlah = $request->jumlah;
         DB::beginTransaction();
-
         try {
-                $total_skor = new NilaiFormulir3;
-                $total_skor->usulan_id = $request->usulan_id;
-                $total_skor->reviewer_id = Auth::user()->id;
-                $total_skor->total_skor = $request->total_skor;
-                $total_skor->save();
-            if ($request->komentar != null || $request->komentar != "") {
-                $komentar = new Komentar3;
-                $komentar->usulan_id = $request->usulan_id;
-                $komentar->reviewer_id = Auth::user()->id;
-                $komentar->komentar = $request->komentar;
-                $komentar->save();
+            $formulir = array();
+            for($i=1; $i <= $jumlah; $i++){
+                $formulir[] = array(
+                    'usulan_id'     =>  $request->usulan_id,
+                    'formulir_id'   =>  $_POST['formulir_id'.$i],
+                    'skor'          =>  $_POST['nilai'.$i],
+                    'total_skor'          =>  floatval($_POST['total'.$i]),
+                    'reviewer_id'          =>  FacadesAuth::user()->id,
+                    'created_at'    =>  $time,
+                    'updated_at'    =>  $time,
+                );
             }
+            NilaiFormulir::insert($formulir);
+            
+            $komentar = new Komentar1;
+            $komentar->usulan_id = $request->usulan_id;
+            $komentar->reviewer_id = FacadesAuth::user()->id;
+            $komentar->komentar = $request->komentar;
+            $komentar->komentar_anggaran = $request->komentar_anggaran;
+            $komentar->save();
 
+            TotalSkor::create([
+                'usulan_id'     =>  $request->usulan_id,
+                'total_skor'    =>  $request->total_nilai,
+                'reviewer_id'   =>  FacadesAuth::user()->id,
+            ]);
+            
             DB::commit();
             // all good
+            return redirect()->route('operator.verifikasi')->with(['success'  =>  'Usulan kegiatan berhasil direview']);
         } catch (\Exception $e) {
             DB::rollback();
             // something went wrong
+            return redirect()->route('operator.verifikasi')->with(['error'  =>  'Usulan kegiatan gagal direview']);
         }
-        return redirect()->route('operator.verifikasi')->with(['success' => 'Reviewer Ketiga sudah ditambahkan !!']);
     }
 
     public function cetak(){
@@ -232,5 +231,39 @@ class VerifikasiUsulanController extends Controller
                             ->groupBy('usulans.id')
                             ->get();
         return view('operator/usulan.verifikasi.detail_pengabdian',compact('pengabdians'));
+    }
+
+    public function detailPenilaian($id){
+        $per_dosen = Usulan::join('nilai_formulirs','nilai_formulirs.usulan_id','usulans.id')
+                            ->join('reviewers','reviewers.nip','nilai_formulirs.reviewer_id')
+                            ->join('skims','skims.id','usulans.skim_id')
+                            ->select('nip','nama','total_skor','jenis_reviewer')
+                            ->groupBy('nilai_formulirs.id')
+                            ->get();
+        $review3 = Usulan::join('nilai_formulirs','nilai_formulirs.usulan_id','usulans.id')
+                            ->join('users','users.id','nilai_formulirs.reviewer_id')
+                            ->join('skims','skims.id','usulans.skim_id')
+                            ->select('nm_user','total_skor')
+                            ->groupBy('nilai_formulirs.id')
+                            ->get();
+        $komentars = Usulan::leftJoin('komentar1s','komentar1s.usulan_id','usulans.id')
+                            ->join('reviewers','reviewers.nip','komentar1s.reviewer_id')
+                            ->select('komentar1s.komentar','nama','komentar_anggaran','nip')
+                            ->get();
+        $komentar_operator = Usulan::leftJoin('komentar1s','komentar1s.usulan_id','usulans.id')
+                            ->join('users','users.id','komentar1s.reviewer_id')
+                            ->select('komentar1s.komentar','nm_user','komentar_anggaran')
+                            ->get();
+        $total     = TotalSkor::join('usulans','usulans.id','total_skors.usulan_id')
+                                ->select('total_skor')
+                                ->get();
+        $sub_total     = TotalSkor::join('usulans','usulans.id','total_skors.usulan_id')
+                                ->select(DB::raw('sum(total_skor) as total_skor'))
+                                ->first();
+        $jumlah = count(TotalSkor::select('reviewer_id')->where('usulan_id',$id)->get());
+        $total2     = TotalSkor::join('usulans','usulans.id','total_skors.usulan_id')
+                                ->select(DB::raw('sum(total_skor) as total_skor'))
+                                ->get();
+        return view('operator/usulan.verifikasi.detail_penilaian',compact('per_dosen','review3','komentars','komentar_operator','total','sub_total','jumlah','total2'));
     }
 }

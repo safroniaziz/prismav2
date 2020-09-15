@@ -15,15 +15,9 @@ class RiwayatReviewController extends Controller
         $sesi = Session::get('akses');
         if(Session::get('login') && Session::get('login',1) && Session::get('akses',2)){
             if($sesi == 2){
-                $riwayats = Usulan::leftJoin('anggota_usulans','anggota_usulans.usulan_id','usulans.id')
-                            ->leftJoin('skims','skims.id','usulans.skim_id')
-                            ->leftJoin('reviewer1s','reviewer1s.usulan_id','usulans.id')
-                            ->select('usulans.id','judul_kegiatan','jenis_kegiatan',
-                                    'abstrak','peta_jalan','file_usulan','lembar_pengesahan','biaya_diusulkan','tahun_usulan','status_usulan','ketua_peneliti_nama as nm_ketua_peneliti',
-                                    DB::raw('group_concat(distinct concat(anggota_usulans.anggota_nama) SEPARATOR "<br>") as "nm_anggota" '),
-                                    DB::raw('group_concat(distinct concat(reviewer_nip) SEPARATOR "<br>") as "nip_reviewer" ')
-                                    )
-                            ->where('reviewer1s.reviewer_nip',Session::get('nip'))
+                $riwayats = Usulan::leftJoin('skims','skims.id','usulans.skim_id')
+                            ->leftJoin('total_skors','total_skors.usulan_id','usulans.id')
+                            ->where('total_skors.reviewer_id',Session::get('nip'))
                             ->groupBy('usulans.id')
                             ->get();
                 return view('reviewer.riwayat.index', compact('riwayats'));

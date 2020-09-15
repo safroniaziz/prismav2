@@ -44,12 +44,12 @@
                 <div class="col-md-12">
                     @if (count($riwayats) >0)
                         <div class="alert alert-danger alert-block" id="keterangan">
-                            <button type="button" class="close" data-dismiss="alert">×</button>
+                            
                             <strong><i class="fa fa-info-circle"></i>&nbsp;Perhatian: </strong> Berikut adalah semua usulan kegiatan yang sudah anda review !!
                         </div>
                         @else
                         <div class="alert alert-danger alert-block" id="keterangan">
-                            <button type="button" class="close" data-dismiss="alert">×</button>
+                            
                             <strong><i class="fa fa-info-circle"></i>&nbsp;Perhatian: </strong> Anda belum memiliki riwayat usulan kegiatan yang di review !!
                         </div>
                     @endif
@@ -70,10 +70,6 @@
                                 $no=1;
                             @endphp
                             @foreach ($riwayats as $riwayat)
-                                @php
-                                    $sudah = Usulan::leftJoin('nilai_formulirs','nilai_formulirs.usulan_id','usulans.id')->select('usulans.id')->where('nilai_formulirs.reviewer_id',$riwayat->nip_reviewer)->where('usulans.id',$riwayat->id)->first();
-                                @endphp
-                                @if ($sudah['id'] != null)
                                     <tr>
                                         <td> {{ $no++ }} </td>
                                         <td style="width:40% !important;">
@@ -124,7 +120,6 @@
                                             @endif
                                         </td>
                                     </tr>
-                                @endif
                             @endforeach
                         </tbody>
                     </table>
@@ -142,7 +137,7 @@
                                 <div class="row">
                                     <div class="col-md-12">
                                         <div class="alert alert-success alert-block" id="berhasil">
-                                            <button type="button" class="close" data-dismiss="alert">×</button>
+                                            
                                             <strong><i class="fa fa-info-circle"></i>&nbsp;Data Detail Usulan Penelitian Dosen Universitas Bengkulu</strong>
                                         </div>
                                     </div>

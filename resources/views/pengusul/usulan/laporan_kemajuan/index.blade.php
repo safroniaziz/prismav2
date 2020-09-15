@@ -41,17 +41,17 @@
                 <div class="col-md-12">
                     @if ($message = Session::get('success'))
                         <div class="alert alert-success alert-block" id="berhasil">
-                            <button type="button" class="close" data-dismiss="alert">×</button>
+                            
                             <strong><i class="fa fa-info-circle"></i>&nbsp;Berhasil: </strong> {{ $message }}
                         </div>
                         @elseif(count($usulans)<1)
                         <div class="alert alert-danger alert-block" id="keterangan">
-                            <button type="button" class="close" data-dismiss="alert">×</button>
+                            
                             <strong><i class="fa fa-info-circle"></i>&nbsp;Perhatian: </strong> Belum Ada Usulan Penelitian Yang Disetujui!!
                         </div>
                         @else
                         <div class="alert alert-danger alert-block" id="keterangan">
-                            <button type="button" class="close" data-dismiss="alert">×</button>
+                            
                             <strong><i class="fa fa-info-circle"></i>&nbsp;Perhatian: </strong> Berikut adalah semua usulan yang didanai, usulan yang sudah diverifikasi tidak bisa dibatalkan !!
                         </div>
                     @endif
@@ -62,9 +62,11 @@
                             <tr>
                                 <th>No</th>
                                 <th>Judul Kegiatan</th>
+                                <th style="text-align:center;">Penilaian Reviewer</th>
                                 <th style="text-align:center;">Laporan Perbaikan</th>
-                                <th style="text-align:center;">Kelola Anggaran</th>
+                                <th style="text-align:center;">Anggaran Kegiatan</th>
                                 <th style="text-align:center;">Laporan Kemajuan</th>
+                                <th style="text-align:center;">Ubah Data</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -83,6 +85,9 @@
                                         <span style="font-size:10px !important;" for="" class="badge badge-danger">{{ $usulan->ketua_peneliti_nama }}</span>
                                         <span style="font-size:10px !important;" for="" class="badge badge-secondary">{{ $usulan->tahun_usulan }}</span>
                                     </td>
+                                    <td>
+                                        <a href="{{ route('pengusul.verifikasi.detail_penilaian',[$usulan->id, $usulan->skim_id,\Illuminate\Support\Str::slug($usulan->judul_kegiatan)]) }}"  class="btn btn-primary btn-sm" style="color:white; cursor:pointer;">Lihat detail</a>
+                                    </td>
                                     <td style="text-align:center;">
                                         @if ($usulan->file_perbaikan == null)
                                             <a style="color:red;"><i>belum diupload</i></a>
@@ -95,10 +100,8 @@
                                         @endif
                                     </td>
                                     <td style="width:25%; text-align:center;">
-                                        <a onclick="ubahAnggaran( {{ $usulan->id }} )" style="color:#5A738E; cursor:pointer;"> Rp. {{ number_format($usulan->biaya_diusulkan, 2) }} </a>
-                                        <br>
-                                        <hr style="margin-bottom:5px !important; margin-top:5px !important;">
-                                        <a href="{{ route('pengusul.laporan_kemajuan.detail_anggaran',[$usulan->id]) }}" class="btn btn-primary btn-sm" style="color:white; cursor:pointer;"><i class="fa fa-gear"></i>&nbsp; kelola anggaran</a>
+                                        <a style="color:#5A738E; cursor:pointer;"> Rp. {{ number_format($usulan->biaya_diusulkan, 2) }} </a>
+                                        
                                     </td>
                                     <td style="text-align:center;">
                                         @if ($usulan->file_kemajuan == null)
@@ -114,6 +117,9 @@
                                                 <hr>
                                                 <button style="color:white; cursor:pointer;" disabled class="btn btn-primary btn-sm"><i class="fa fa-upload"></i></button>
                                         @endif
+                                    </td>
+                                    <td class="text-center">
+                                        <a href="{{ route('pengusul.usulan.edit',[\Illuminate\Support\Str::slug(Session::get('nm_dosen')),$usulan->id]) }}" class="btn btn-primary btn-sm" style="color:white; cursor:pointer;"><i class="fa fa-edit"></i></a>
                                     </td>
                                 </tr>
                             @endforeach
@@ -133,7 +139,7 @@
                                     {{ csrf_field() }} {{ method_field('POST') }}
                                     <div class="modal-body">
                                         <div class="alert alert-primary alert-block" id="berhasil">
-                                            <button type="button" class="close" data-dismiss="alert">×</button>
+                                            
                                             <strong><i class="fa fa-info-circle"></i>&nbsp;Perhatian: </strong> Silahkan Upload Laporan Kemajuan Usulan Penelitian Anda !!
                                         </div>
                                         <input type="hidden" name="id_usulan" id="id_usulan">
@@ -189,7 +195,7 @@
                             {{ csrf_field() }} {{ method_field('PATCH') }}`
                             <div class="modal-body">
                                 <div class="alert alert-primary alert-block" id="berhasil">
-                                    <button type="button" class="close" data-dismiss="alert">×</button>
+                                    
                                     <strong><i class="fa fa-info-circle"></i>&nbsp;Perhatian: </strong> Silahkan Upload Laporan Perbaikan Usulan Penelitian Anda !!
                                 </div>
                                 <input type="hidden" name="id_usulan" id="id_perbaikan">
@@ -221,7 +227,7 @@
                         {{ csrf_field() }} {{ method_field('PATCH') }}`
                         <div class="modal-body">
                             <div class="alert alert-primary alert-block" id="berhasil">
-                                <button type="button" class="close" data-dismiss="alert">×</button>
+                                
                                 <strong><i class="fa fa-info-circle"></i>&nbsp;Perhatian: </strong> Silahkan ubah anggaran biaya anda dengan benar !!
                             </div>
                             <input type="hidden" name="id_usulan" id="id_perbaikan">

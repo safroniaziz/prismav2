@@ -24,22 +24,22 @@
                 <div class="col-md-12">
 
                     <div class="alert alert-danger alert-block" id="keterangan">
-                        <button type="button" class="close" data-dismiss="alert">×</button>
+                        
                         <strong><i class="fa fa-info-circle"></i>&nbsp;Perhatian: </strong> Berikut adalah rancangan anggaran detail untuk Judul Kegiatan : {{ $judul_kegiatan->judul_kegiatan }}
                         <p style="margin-top:10px;">Harap memasukan anggaran yang sesuai, sehingga tidak terjadi kesalahan saat proses review oleh tim reviewer</p>
                     </div>
                     @if ($message = Session::get('error'))
                         <div class="alert alert-danger alert-block" id="error">
-                            <button type="button" class="close" data-dismiss="alert">×</button>
+                            
                             <strong><i class="fa fa-info-circle"></i>&nbsp;Gagal: </strong> {{ $message }}
                         </div>
                     @endif
                     <div class="alert alert-success alert-block" style="display:none;" id="usulan-berhasil">
-                        <button type="button" class="close" data-dismiss="alert">×</button>
+                        
                         <i class="fa fa-success-circle"></i><strong>Berhasil :</strong> Penelitian anda sudah diusulkan !!
                     </div>
                     <div class="alert alert-danger alert-block" style="display:none;" id="gagal">
-                        <button type="button" class="close" data-dismiss="alert">×</button>
+                        
                         <i class="fa fa-close"></i><strong>&nbsp;Gagal :</strong> Proses pengusulan gagal !!
                     </div>
                 </div>
@@ -58,7 +58,7 @@
                     <div style="margin-top:10px;">
                         @if ($message = Session::get('success'))
                             <div class="alert alert-success alert-block" id="berhasil" style="margin-bottom:0px !important;">
-                                <button type="button" class="close" data-dismiss="alert">×</button>
+                                
                                 <strong><i class="fa fa-info-circle"></i>&nbsp;Berhasil: </strong> {{ $message }}
                             </div>
                         @endif

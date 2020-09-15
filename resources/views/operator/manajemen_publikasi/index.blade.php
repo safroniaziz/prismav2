@@ -24,12 +24,12 @@
                 <div class="col-md-12">
                     @if ($message = Session::get('success'))
                         <div class="alert alert-success alert-block" id="berhasil">
-                            <button type="button" class="close" data-dismiss="alert">×</button>
+                            
                             <strong><i class="fa fa-info-circle"></i>&nbsp;Berhasil: </strong> {{ $message }}
                         </div>
                     @endif
                     <div class="alert alert-danger alert-block" id="keterangan">
-                        <button type="button" class="close" data-dismiss="alert">×</button>
+                        
                         <strong><i class="fa fa-info-circle"></i>&nbsp;Perhatian: </strong> Berikut adalah semua Jenis Publikasi anda yang tersedia, silahkan tambahkan Jenis Publikasi beserta tahun berlakunya jika diperlukan !!
                     </div>
                 </div>

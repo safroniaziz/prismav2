@@ -40,7 +40,7 @@
             <div class="row" style="margin-right:-15px; margin-left:-15px;">
                 <div class="col-md-12">
                     <div class="alert alert-success alert-block" id="keterangan">
-                        <button type="button" class="close" data-dismiss="alert">×</button>
+                        
                         <strong><i class="fa fa-info-circle"></i>&nbsp;Perhatian: </strong> Berikut adalah semua usulan anda yang tersedia, silahkan tambahkan usulan baru jika diperlukan !!
                     </div>
                 </div>
@@ -51,7 +51,6 @@
                                 <th>No</th>
                                 <th>Judul Kegiatan</th>
                                 <th>Anggota Kelompok</th>
-                                <th>Reviewer</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -63,31 +62,19 @@
                                     <td> {{ $no++ }} </td>
                                     <td style="width:40% !important;">
                                         {!! $usulan->shortJudul !!}
-                                        <a onclick="detail({{ $usulan->id }})" id="selengkapnya">selengkapnya</a>
-                                        <br>
-                                        <hr style="margin-bottom:5px !important; margin-top:5px !important;">
-                                        <span style="font-size:10px !important; text-transform:capitalize;" for="" class="badge badge-info">{{ $usulan->jenis_kegiatan }}</span>
-                                        <span style="font-size:10px !important;" for="" class="badge badge-danger">{{ $usulan->nm_ketua_peneliti }}</span>
-                                        <span style="font-size:10px !important;" for="" class="badge badge-secondary">{{ $usulan->tahun_usulan }}</span>
-                                        <hr style="margin-bottom:5px !important; margin-top:5px !important;">
-                                        <a href="{{ asset('upload/file_usulan/'.$usulan->file_usulan) }}" download="{{ $usulan->file_usulan }}"><i class="fa fa-download"></i>&nbsp; download file usulan kegiatan</a>
-                                        <br>
-                                        <a href="{{ asset('upload/laporan_kemajuan/'.$usulan->file_kemajuan) }}" download="{{ $usulan->file_kemajuan }}"><i class="fa fa-download"></i>&nbsp; download file laporan kemajuan</a>
-                                        <br>
-                                        <a href="{{ asset('upload/laporan_akhir/'.$usulan->file_akhir) }}" download="{{ $usulan->file_akhir }}"><i class="fa fa-download"></i>&nbsp; download file laporan akhir</a>
+                                        <a href="{{ route('operator.pending.detail',[$usulan->id,\Illuminate\Support\Str::slug($usulan->judul_kegiatan)]) }}" id="selengkapnya">selengkapnya</a>
+                                                        <br>
+                                                        <hr style="margin-bottom:5px !important; margin-top:5px !important;">
+                                                        <span style="font-size:10px !important; text-transform:capitalize;" for="" class="badge badge-info">{{ $usulan->nm_skim }}</span>
+                                                        <span style="font-size:10px !important;" for="" class="badge badge-danger">{{ $usulan->nm_ketua_peneliti }}</span>
+                                                        <span style="font-size:10px !important;" for="" class="badge badge-secondary">{{ $usulan->tahun_usulan }}</span> <br>
+                                                        Diusulkan {{ $usulan->created_at ? $usulan->created_at->diffForHumans() : '-' }} ({{ \Carbon\Carbon::parse($usulan->created_at)->format('j F Y H:i') }})
                                    </td>
                                     <td>
                                         @if ($usulan->nm_anggota == null)
                                             <label class="badge badge-danger"><i class="fa fa-close" style="padding:5px;"></i>&nbsp;Belum ditambahkan</label>
                                             @else
                                             <label class="badge" style="font-size:12px;">&nbsp;{!! $usulan->nm_anggota !!}</label>
-                                        @endif
-                                    </td>
-                                    <td>
-                                        @if ($usulan->nm_reviewer == null || $usulan->nm_reviewer == "")
-                                            <label class="badge badge-danger" style="padding:5px;">-</label>
-                                            @else
-                                            <label class="badge" style="font-size:12px;">&nbsp;{!! $usulan->nm_reviewer !!}</label>
                                         @endif
                                     </td>
                                 </tr>
@@ -108,7 +95,7 @@
                                 <div class="row">
                                     <div class="col-md-12">
                                         <div class="alert alert-success alert-block" id="berhasil">
-                                            <button type="button" class="close" data-dismiss="alert">×</button>
+                                            
                                             <strong><i class="fa fa-info-circle"></i>&nbsp;Data Detail Usulan Penelitian Dosen Universitas Bengkulu</strong>
                                         </div>
                                     </div>

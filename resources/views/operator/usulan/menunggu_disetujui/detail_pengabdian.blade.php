@@ -16,6 +16,7 @@
     <thead>
         <th>No</th>
         <th>Judul Pengabdian</th>
+        <th>Skim Pengabdian</th>
         <th>Tahun Pengabdian</th>
         <th>Jenis Pengabdian</th>
         <th>Ketua Pengabdian</th>
@@ -32,6 +33,7 @@
             <tr>
                 <td>{{ $no++ }}</td>
                 <td>{{ $pengabdian->judul_kegiatan }}</td>
+                <td>{{ $pengabdian->nm_skim }}</td>
                 <td>{{ $pengabdian->tahun_usulan }}</td>
                 <td>{{ $pengabdian->jenis_kegiatan }}</td>
                 <td>{{ $pengabdian->nm_ketua_peneliti }}</td>

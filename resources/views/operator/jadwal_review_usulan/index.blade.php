@@ -28,12 +28,12 @@
                 <div class="col-md-12">
                     @if ($message = Session::get('success'))
                         <div class="alert alert-success alert-block" id="berhasil">
-                            <button type="button" class="close" data-dismiss="alert">×</button>
+                            
                             <strong><i class="fa fa-info-circle"></i>&nbsp;Berhasil: </strong> {{ $message }}
                         </div>
                         @else
                         <div class="alert alert-success alert-block" id="keterangan">
-                            <button type="button" class="close" data-dismiss="alert">×</button>
+                            
                             <strong><i class="fa fa-info-circle"></i>&nbsp;Perhatian: </strong> Berikut adalah semua data Jadwal Review Usulan yang tersedia, silahkan tambahkan Jadwal Review Usulan baru jika diperlukan !!
                         </div>
                     @endif
@@ -171,11 +171,11 @@
                                                     <input type="password" name="ulangi_password" id="ulangi_password2"  class="form-control" placeholder="********" required>
                                                 </div>
                                                 <div class="alert alert-success" id="konfirmasi2" style="display:none;">
-                                                    <button type="button" class="close" data-dismiss="alert">×</button>
+                                                    
                                                     <i class="fa fa-check-circle"></i>&nbsp;<strong style="font-style:italic;">Password Sama !</strong>
                                                 </div>
                                                 <div class="alert alert-danger" id="konfirmasi-gagal2" style="display:none;">
-                                                    <button type="button" class="close" data-dismiss="alert">×</button>
+                                                    
                                                     <i class="fa fa-close"></i>&nbsp;<strong style="font-style:italic;">Password Tidak Sama !</strong>
                                                 </div>
 

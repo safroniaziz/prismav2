@@ -18,6 +18,7 @@
         <th>Judul Penelitian</th>
         <th>Tahun Penelitian</th>
         <th>Jenis Penelitian</th>
+        <th>Skim Penelitian</th>
         <th>Ketua Penelitian</th>
         <th>Kaca Kunci</th>
         <th>Biaya Diusulkan</th>
@@ -34,6 +35,7 @@
                 <td>{{ $penelitian->judul_kegiatan }}</td>
                 <td>{{ $penelitian->tahun_usulan }}</td>
                 <td>{{ $penelitian->jenis_kegiatan }}</td>
+                <td>{{ $penelitian->nm_skim }}</td>
                 <td>{{ $penelitian->nm_ketua_peneliti }}</td>
                 <td>{{ $penelitian->kata_kunci }}</td>
                 <td>{{ $penelitian->biaya_diusulkan }}</td>

@@ -14,7 +14,7 @@
                 <img src=" {{ asset('assets/images/logo.png') }} " class="user">
                 @if ($message = Session::get('error'))
                     <div class="alert alert-danger alert-block" style="font-size:13px;">
-                        <button type="button" class="close" data-dismiss="alert">×</button>
+                        
                         <strong>Perhatian:</strong> <i>{{ $message }}</i>
                     </div>
                     @else
