@@ -45,6 +45,45 @@
                     </div>
                 </div>
                 <div class="col-md-12">
+                    <form action="{{ route('operator.laporan_akhir.filter') }}" method="GET">
+                        <div class="form-group col-md-4">
+                            <label for="exampleInputEmail1">Jenis Kegiatan</label>
+                            <select name="jenis_kegiatan" id="jenis_kegiatan" class="form-control">
+                                <option value="" disabled selected>-- pilih jenis kegiatan --</option>
+                                <option value="penelitian">Penelitian</option>
+                                <option value="pengabdian">Pengabdian</option>
+                            </select>
+                            @if ($errors->has('jenis'))
+                                <small class="form-text text-danger">{{ $errors->first('jenis') }}</small>
+                            @endif
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="exampleInputEmail1">Skim Kegiatan</label>
+                            <select name="skim_id" id="skim_id" class="form-control">
+                                <option selected disabled>-- pilih skim kegiatan --</option>
+                                
+                            </select>
+                            @if ($errors->has('jenis'))
+                                <small class="form-text text-danger">{{ $errors->first('skim_id') }}</small>
+                            @endif
+                        </div>
+
+                        <div class="form-group col-md-4">
+                            <label for="exampleInputEmail1">Pilih Unib</label>
+                            <select name="unit" id="unit" class="form-control">
+                                <option selected disabled>-- pilih unit --</option>
+                                
+                            </select>
+                            @if ($errors->has('unit'))
+                                <small class="form-text text-danger">{{ $errors->first('unit') }}</small>
+                            @endif
+                        </div>
+                        <div class="col-md-12">
+                            <button type="submit" class="btn btn-primary btn-sm"><i class="fa fa-search"></i>&nbsp; Cari</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="col-md-12">
                     <table class="table table-striped table-bordered" id="table" style="width:100%;">
                         <thead>
                             <tr>
@@ -211,5 +250,55 @@
                 }
             });
         }
+
+        $(document).ready(function(){
+            $(document).on('change','#jenis_kegiatan',function(){
+                // alert('berhasil');
+                var jenis_kegiatan = $(this).val();
+                var div = $(this).parent().parent();
+                var op=" ";
+                $.ajax({
+                type :'get',
+                url: "{{ url('pengusul/manajemen_usulan/cari_skim') }}",
+                data:{'jenis_kegiatan':jenis_kegiatan},
+                    success:function(data){
+                        op+='<option value="0" selected disabled>-- pilih skim --</option>';
+                        for(var i=0; i<data.length;i++){
+                            // alert(data['jenis_publikasi'][i].jenis_kegiatan);
+                            op+='<option value="'+data[i].id+'">'+data[i].nm_skim+'</option>';
+                        }
+                        div.find('#skim_id').html(" ");
+                        div.find('#skim_id').append(op);
+                    },
+                        error:function(){
+                    }
+                });
+            })
+        });
+
+        $(document).ready(function(){
+            $(document).on('change','#skim_id',function(){
+                // alert('berhasil');
+                var skim_id = $(this).val();
+                var div = $(this).parent().parent();
+                var op=" ";
+                $.ajax({
+                type :'get',
+                url: "{{ url('pengusul/manajemen_usulan/cari_unit') }}",
+                data:{'skim_id':skim_id},
+                    success:function(data){
+                        op+='<option value="0" selected disabled>-- pilih skim --</option>';
+                        for(var i=0; i<data.length;i++){
+                            // alert(data['jenis_publikasi'][i].skim_id);
+                            op+='<option value="'+data[i].nm_unit+'">'+data[i].nm_unit+'</option>';
+                        }
+                        div.find('#unit').html(" ");
+                        div.find('#unit').append(op);
+                    },
+                        error:function(){
+                    }
+                });
+            })
+        });
     </script>
 @endpush

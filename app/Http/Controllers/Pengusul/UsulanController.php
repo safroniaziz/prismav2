@@ -45,7 +45,7 @@ class UsulanController extends Controller
                                             'ketua_peneliti_nama','abstrak','kata_kunci','usulans.created_at','nm_skim','jenis_kegiatan','file_usulan','biaya_diusulkan','status_usulan','tahun_usulan',
                                             DB::raw('group_concat(anggota_usulans.anggota_nama SEPARATOR "<br>") as "nm_anggota" '))
                                     ->get();
-                $skims  =   Skim::select('id','nm_skim')->where('tahun',date('Y'))->get();
+                $skims  =   Skim::select('id','nm_skim')->where('status','1')->where('tahun',date('Y'))->get();
                 $jadwal = JadwalUsulan::select('tanggal_awal','tanggal_akhir')->where('status','1')->get();
                 $mytime = Carbon\Carbon::now();
                 $now =  $mytime->toDateString();
@@ -91,7 +91,7 @@ class UsulanController extends Controller
     }
 
     public function create(){
-        $skims  =   Skim::select('id','nm_skim')->where('tahun',date('Y'))->where('status','1')->get();
+        $skims  =   Skim::select('id','nm_skim')->where('status','1')->where('tahun',date('Y'))->where('status','1')->get();
         return view('pengusul/usulan.create',compact('skims'));
     }
 
@@ -161,7 +161,7 @@ class UsulanController extends Controller
         $sesi = Session::get('akses');
         if(Session::get('login') && Session::get('login',1) && Session::get('akses',1)){
             if($sesi == 1){
-                $skims  =   Skim::select('id','nm_skim')->where('tahun',date('Y'))->where('status','1')->get();
+                $skims  =   Skim::select('id','nm_skim')->where('status','1')->where('tahun',date('Y'))->where('status','1')->get();
                 $usulan = Usulan::select('id','judul_kegiatan','jenis_kegiatan','skim_id','kata_kunci','ketua_peneliti_nip as ketua_peneliti_id','abstrak','file_usulan','lembar_pengesahan','biaya_diusulkan','tujuan','luaran','tahun_usulan')
                             ->where('id',$id)
                             ->first();
@@ -642,5 +642,10 @@ class UsulanController extends Controller
     public function cariSkim(Request $request){
         $skims = Skim::where('j_kegiatan', $request->jenis_kegiatan)->get();
         return $skims;
+    }
+
+    public function cariUnit(Request $request){
+        $units = Skim::where('id', $request->skim_id)->get();
+        return $units;
     }
 }

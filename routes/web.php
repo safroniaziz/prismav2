@@ -205,6 +205,7 @@ Route::group(['prefix'  => 'operator/usulan_dosen/laporan_kemajuan/hasil_verifik
 
 Route::group(['prefix'  => 'operator/usulan_dosen/laporan_akhir'],function(){
     Route::get('/','Operator\LaporanAkhirController@index')->name('operator.laporan_akhir');
+    Route::get('/filter','Operator\LaporanAkhirController@filter')->name('operator.laporan_akhir.filter');
 });
 
 
@@ -309,6 +310,7 @@ Route::group(['prefix'  => 'pengusul/manajemen_usulan'],function(){
     Route::delete('/detail_anggota_mahasiswa','Pengusul\UsulanController@hapusAnggotaMahasiswa')->name('pengusul.usulan.detail_anggota.hapus_mahasiswa');
     Route::delete('/detail_anggota_eksternal','Pengusul\UsulanController@hapusAnggotaEksternal')->name('pengusul.usulan.detail_anggota.hapus_eksternal');
     Route::get('/cari_skim','Pengusul\UsulanController@cariSkim')->name('deta.pembahasan.cari_skim');
+    Route::get('/cari_unit','Pengusul\UsulanController@cariUnit')->name('deta.pembahasan.cari_unit');
 });
 
 Route::group(['prefix'  => 'pengusul/upload_laporan_kemajuan'],function(){
