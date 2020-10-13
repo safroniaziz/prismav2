@@ -227,8 +227,9 @@
                                                                         $rev3 = NilaiFormulir3::where('usulan_id',$pengabdians->id)->first();
                                                                     ?>
                                                                     <td style="text-align:center;">
+
                                                                         @if (empty($rev3))
-                                                                            <a href="{{ route('operator.verifikasi.reviewer3',[$pengabdians->id, $pengabdians->skim_id]) }}"  class="btn btn-primary btn-sm" style="color:white; cursor:pointer;"> <i class="fa fa-plus"></i></a>
+                                                                            <a href="{{ route('operator.verifikasi.reviewer3',[$pengabdians->id, $pengabdians->skim_id,\Illuminate\Support\Str::slug($pengabdians->judul_kegiatan)]) }}"  class="btn btn-primary btn-sm" style="color:white; cursor:pointer;"> <i class="fa fa-plus"></i></a>
                                                                             @else
                                                                             <a class="btn btn-primary btn-sm disabled" style="color:white; cursor:pointer;"> <i class="fa fa-plus"></i></a>
                                                                         @endif
