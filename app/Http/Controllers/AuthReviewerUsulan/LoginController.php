@@ -45,6 +45,7 @@ class LoginController extends Controller
             'nip' => $request->nip,
             'password' => $request->password
         ];
+        // return $credential;
 
         // Attempt to log the user in
         if (Auth::guard('reviewerusulan')->attempt($credential, $request->member)){

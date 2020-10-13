@@ -55,7 +55,7 @@
                                 $no=1;
                                 $nomor=0;
                             @endphp
-                            <input type="hidden" name="jumlah" value="{{ $jumlah }}">
+                            <input type="text" name="jumlah" value="{{ $jumlah }}">
                             <input type="hidden" name="usulan_id" value="{{ $id_usulan }}">
                             @foreach ($formulirs as $formulir)
                                 @php

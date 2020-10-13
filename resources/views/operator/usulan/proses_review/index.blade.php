@@ -165,7 +165,7 @@
                                                             <span style="font-size:10px !important; text-transform:capitalize;" for="" class="badge badge-info">{{ $pengabdian->nm_skim }}</span>
                                                             <span style="font-size:10px !important;" for="" class="badge badge-danger">{{ $pengabdian->nm_ketua_peneliti }}</span>
                                                             <span style="font-size:10px !important;" for="" class="badge badge-secondary">{{ $pengabdian->tahun_usulan }}</span> <br>
-                                                            Diusulkan {{ $penelitian->created_at ? $penelitian->created_at->diffForHumans() : '-' }} ({{ \Carbon\Carbon::parse($penelitian->created_at)->format('j F Y H:i') }})
+                                                            Diusulkan {{ $pengabdian->created_at ? $pengabdian->created_at->diffForHumans() : '-' }} ({{ \Carbon\Carbon::parse($pengabdian->created_at)->format('j F Y H:i') }})
                                                         </td>
                                                         <td>
                                                             @if ($pengabdian->nm_anggota == null)

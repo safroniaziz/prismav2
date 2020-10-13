@@ -1,6 +1,7 @@
 @php
     use App\Usulan;
     use App\TotalSkor;
+    use App\NilaiFormulir3;
 @endphp
 @extends('layouts.layout')
 @section('title', 'Dashboard')

@@ -52,6 +52,7 @@ class UsulanProsesReviewController extends Controller
                             ->where('usulans.jenis_kegiatan','pengabdian')
                             ->groupBy('usulans.id')
                             ->get();
+                            // return $pengabdians;
         $fakultas = Fakultas::select('fakultas_kode','nm_fakultas')->get();
         return view('operator/usulan/proses_review.index',compact('penelitians','pengabdians','fakultas'));
     }
