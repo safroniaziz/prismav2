@@ -178,7 +178,8 @@ Route::group(['prefix'  => 'operator/usulan_dosen/menunggu_verifikasi'],function
     Route::get('/{id}/{skim_id}/reviewer3/{slug}','Operator\VerifikasiUsulanController@reviewerTiga')->name('operator.verifikasi.reviewer3');
     Route::get('/detail_penilaian/{id}/{skim_id}/{slug}','Operator\VerifikasiUsulanController@detailPenilaian')->name('operator.verifikasi.detail_penilaian');
     Route::post('reviewer3','Operator\VerifikasiUsulanController@reviewerTigaPost')->name('operator.verifikasi.reviewer3_post');
-    Route::patch('/verifikasi/{id}','Operator\VerifikasiUsulanController@updateBiaya')->name('operator.verifikasi.update_biaya');
+    Route::patch('/update_biaya','Operator\VerifikasiUsulanController@updateBiaya')->name('operator.verifikasi.update_biaya');
+    Route::get('/{id}/ubah_dana','Operator\VerifikasiUsulanController@ubahDana')->name('operator.verifikasi.ubah_dana');
 
     Route::get('/cetak','Operator\VerifikasiUsulanController@cetak')->name('operator.verifikasi.cetak');
     Route::get('/cetak_pengabdian','Operator\VerifikasiUsulanController@cetakPengabdian')->name('operator.verifikasi.cetak_pengabdian');

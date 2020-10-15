@@ -73,6 +73,8 @@
                                             <tr>
                                                 <th>No</th>
                                                 <th style="text-align:center;">Judul Kegiatan</th>
+                                                <th>Proposal Revisi</th>
+                                                <th>File Kemajuan</th>
                                                 <th style="text-align:center;">Anggota Kegiatan Internal</th>
                                             </tr>
                                         </thead>
@@ -118,9 +120,9 @@
                                             <tr>
                                                 <th>No</th>
                                                 <th style="text-align:center;">Judul Kegiatan</th>
+                                                <th>Proposal Revisi</th>
+                                                <th>File Kemajuan</th>
                                                 <th style="text-align:center;">Anggota Kegiatan Internal</th>
-                                                <th style="text-align:center;">Reviewer Laporan Kemajuan</th>
-                                                <th style="text-align:center;">Tambah Reviewer</th>
                                             </tr>
                                         </thead>
                                         <tbody>

@@ -21,7 +21,7 @@
     </ul>
 </li>
 
-<li><a><i class="fa fa-reply"></i>Usulan Penelitian <span class="fa fa-chevron-down" ></span></a>
+<li><a><i class="fa fa-reply"></i>Usulan Kegiatan <span class="fa fa-chevron-down" ></span></a>
     <ul class="nav child_menu"
         @if (Route::current()->getName() == "operator.menunggu.detail_reviewer")
             style="display:block !important;"
@@ -90,7 +90,7 @@
 
 <li><a><i class="fa fa-check-circle"></i>Manajemen Jadwal<span class="fa fa-chevron-down" ></span></a>
     <ul class="nav child_menu">
-        <li><a href=" {{ route('operator.jadwal_usulan') }} ">Jadwal Input Usulan</a></li>
+        <li><a href=" {{ route('operator.jadwal_usulan') }} ">Jadwal Input Usulan/Kemajuan/Akhir</a></li>
         <li><a href=" {{ route('operator.jadwal_review_usulan') }} ">Jadwal Review Usulan</a></li>
     </ul>
 </li>

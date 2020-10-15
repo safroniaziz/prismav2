@@ -29,7 +29,7 @@ class LaporanKemajuanController extends Controller
                                     ->leftJoin('skims','skims.id','usulans.skim_id')
                                     ->join('laporan_kemajuans','laporan_kemajuans.usulan_id','usulans.id')
                                     ->select('usulans.id','judul_kegiatan','ketua_peneliti_nama','usulans.created_at','nm_skim','tahun_usulan','file_kemajuan','file_perbaikan','status_usulan','jenis_kegiatan','tahun_usulan',
-                                    DB::raw('group_concat(distinct concat(anggota_usulans.anggota_nama) SEPARATOR "<br>") as "nm_anggota" '),
+                                    DB::raw('group_concat(distinct concat(anggota_usulans.anggota_nama) SEPARATOR "<br>") as "nm_anggota" ')
                                     )
                                     ->groupBy('usulans.id')
                                     ->whereNotNull('file_kemajuan')
@@ -39,7 +39,7 @@ class LaporanKemajuanController extends Controller
                                     ->leftJoin('skims','skims.id','usulans.skim_id')
                                     ->join('laporan_kemajuans','laporan_kemajuans.usulan_id','usulans.id')
                                     ->select('usulans.id','judul_kegiatan','ketua_peneliti_nama','usulans.created_at','nm_skim','tahun_usulan','file_kemajuan','file_perbaikan','status_usulan','jenis_kegiatan','tahun_usulan',
-                                    DB::raw('group_concat(distinct concat(anggota_usulans.anggota_nama) SEPARATOR "<br>") as "nm_anggota" '),
+                                    DB::raw('group_concat(distinct concat(anggota_usulans.anggota_nama) SEPARATOR "<br>") as "nm_anggota" ')
                                     )
                                     ->groupBy('usulans.id')
                                     ->whereNotNull('file_kemajuan')
