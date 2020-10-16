@@ -36,7 +36,7 @@ class VerifikasiUsulanController extends Controller
     public function index(){
         $penelitians = Usulan::leftJoin('nilai_formulirs','nilai_formulirs.usulan_id','usulans.id')
                             ->leftJoin('skims','skims.id','usulans.skim_id')
-                            ->select('usulans.id','jenis_kegiatan','ketua_peneliti_nama','nm_skim','skim_id','tahun_usulan','judul_kegiatan',DB::raw('SUM(total_skor)/2 as totalskor')
+                            ->select('usulans.id','jenis_kegiatan','ketua_peneliti_nama','biaya_diusulkan','nm_skim','skim_id','tahun_usulan','judul_kegiatan',DB::raw('SUM(total_skor)/2 as totalskor')
                             )
                             ->groupBy('usulans.id')
                             ->where('status_usulan','2')
@@ -45,7 +45,7 @@ class VerifikasiUsulanController extends Controller
                             ->get();
         $pengabdians = Usulan::leftJoin('nilai_formulirs','nilai_formulirs.usulan_id','usulans.id')
                             ->leftJoin('skims','skims.id','usulans.skim_id')
-                            ->select('usulans.id','jenis_kegiatan','ketua_peneliti_nama','skim_id','tahun_usulan','judul_kegiatan',DB::raw('SUM(total_skor)/2 as totalskor')
+                            ->select('usulans.id','jenis_kegiatan','ketua_peneliti_nama','nm_skim','tahun_usulan','judul_kegiatan',DB::raw('SUM(total_skor)/2 as totalskor')
                             )
                             ->groupBy('usulans.id')
                             ->where('status_usulan','2')
@@ -265,5 +265,13 @@ class VerifikasiUsulanController extends Controller
                                 ->select(DB::raw('sum(total_skor) as total_skor'))
                                 ->get();
         return view('operator/usulan.verifikasi.detail_penilaian',compact('per_dosen','review3','komentars','komentar_operator','total','sub_total','jumlah','total2'));
+    }
+
+    public function updateBiaya(Request $request, $id){
+        Usulan::where('id',$id)->update([
+            'biaya_diusulkan'   =>  $request->biaya_diusulkan,
+        ]);
+
+        return redirect()->route('operator.verifikasi')->with(['success'    =>  'Biaya berhasil diubah !!']);
     }
 }

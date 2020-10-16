@@ -93,6 +93,8 @@
                                                         <th>No</th>
                                                         <th>Judul Kegiatan</th>
                                                         <th>Total Skor</th>
+                                                        <th>Biaya Diusulkan</th>
+                                                        <th>Ubah Biaya</th>
                                                         <th style="text-align:center;">Detail Penilaian</th>
                                                         <th>Reviewer 3</th>
 
@@ -120,6 +122,7 @@
                                                                 <br>
                                                                 <hr style="margin-bottom:5px !important; margin-top:5px !important;">
                                                                 <span style="font-size:10px !important; text-transform:capitalize;" for="" class="badge badge-info">{{ $penelitan->nm_skim }}</span>
+                                                                <span style="font-size:10px !important; text-transform:capitalize;" for="" class="badge badge-primary">{{ $penelitan->ketua_peneliti_nama }}</span>
                                                                 <span style="font-size:10px !important; text-transform:capitalize;" for="" class="badge badge-success">{{ $penelitan->jenis_kegiatan }}</span>
                                                                 <span style="font-size:10px !important;" for="" class="badge badge-danger">{{ $penelitan->nm_ketua_peneliti }}</span>
                                                                 <span style="font-size:10px !important;" for="" class="badge badge-secondary">{{ $penelitan->tahun_usulan }}</span> <br>
@@ -130,6 +133,16 @@
                                                             {{-- <td style="padding:15px 30px;">
                                                                     <a onclick="detail({{ $penelitan->id }})" class="btn btn-primary btn-sm" style="color:white; cursor:pointer;"><i class="fa fa-info-circle"></i></a>
                                                                 </td> --}}
+                                                                <form action="{{ route('operator.verifikasi.update_biaya',[$penelitan->id]) }}" method="POST">
+                                                                    {{ csrf_field() }} {{ method_field('PATCH') }}
+                                                                    <td>
+                                                                        <input type="text" name="biaya_diusulkan" value="{{ $penelitan->biaya_diusulkan }}" class="form-control">
+                                                                    </td>
+                                                                    <td>
+                                                                        <button type="submit" class="btn btn-primary btn-sm"><i class="fa fa-save"></i>&nbsp; Ubah</button>
+                                                                    </td>
+                                                                </form>
+                                                                
                                                                 <td class="text-center">
                                                                     <a href="{{ route('operator.verifikasi.detail_penilaian',[$penelitan->id, $penelitan->skim_id,\Illuminate\Support\Str::slug($penelitan->judul_kegiatan)]) }}"  class="btn btn-primary btn-sm" style="color:white; cursor:pointer;">Lihat detail</a>
                                                                 </td>
@@ -186,15 +199,12 @@
                                                                     <a onclick="selengkapnya({{ $pengabdians->id }})" id="selengkapnya">selengkapnya</a>
                                                                     <br>
                                                                     <hr style="margin-bottom:5px !important; margin-top:5px !important;">
+                                                                    <span style="font-size:10px !important;" for="" class="badge badge-info">{{ $pengabdians->nm_skim }}</span>
+                                                                    <span style="font-size:10px !important;" for="" class="badge badge-primary">{{ $pengabdians->ketua_peneliti_nama }}</span>
                                                                     <span style="font-size:10px !important; text-transform:capitalize;" for="" class="badge badge-info">{{ $pengabdians->jenis_kegiatan }}</span>
-                                                                    <span style="font-size:10px !important;" for="" class="badge badge-danger">{{ $pengabdians->ketua_peneliti_nama }}</span>
-                                                                    <span style="font-size:10px !important;" for="" class="badge badge-secondary">{{ $pengabdians->tahun_usulan }}</span>
-                                                                    <hr style="margin-bottom:5px !important; margin-top:5px !important;">
-                                                                    <a href="{{ asset('upload/file_usulan/'.$pengabdians->file_usulan) }}" download="{{ $pengabdians->file_usulan }}"><i class="fa fa-download"></i>&nbsp; download file usulan</a>
-                                                                    <br>
-                                                                    <a href="{{ asset('upload/file_anggaran/'.$pengabdians->file_anggaran) }}" download="{{ $pengabdians->file_anggaran }}"><i class="fa fa-download"></i>&nbsp; download file anggaran</a>
-                                                                    <br>
-                                                                    <a href="{{ asset('upload/peta_jalan/'.$pengabdians->peta_jalan) }}" download="{{ $pengabdians->peta_jalan }}"><i class="fa fa-download"></i>&nbsp; download file peta jalan</a>
+                                                                    <span style="font-size:10px !important;" for="" class="badge badge-secondary">{{ $pengabdians->tahun_usulan }}</span> <br>
+                                                                    Diusulkan {{ $penelitan->created_at ? $penelitan->created_at->diffForHumans() : '-' }} ({{ \Carbon\Carbon::parse($penelitan->created_at)->format('j F Y H:i') }})
+
                                                                 </td>
                                                                 @php
                                                                     $tambah = Usulan::join('nilai_formulir3s','nilai_formulir3s.usulan_id','usulans.id')
