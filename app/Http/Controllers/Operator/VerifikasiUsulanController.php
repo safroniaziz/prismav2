@@ -267,11 +267,16 @@ class VerifikasiUsulanController extends Controller
         return view('operator/usulan.verifikasi.detail_penilaian',compact('per_dosen','review3','komentars','komentar_operator','total','sub_total','jumlah','total2'));
     }
 
-    public function updateBiaya(Request $request, $id){
-        Usulan::where('id',$id)->update([
+    public function updateBiaya(Request $request){
+        Usulan::where('id',$request->usulan_id)->update([
             'biaya_diusulkan'   =>  $request->biaya_diusulkan,
         ]);
 
         return redirect()->route('operator.verifikasi')->with(['success'    =>  'Biaya berhasil diubah !!']);
+    }
+
+    public function ubahDana($id){
+        $judul = Usulan::where('id',$id)->select('id','biaya_diusulkan')->first();
+        return $judul;
     }
 }

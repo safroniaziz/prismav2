@@ -133,15 +133,12 @@
                                                             {{-- <td style="padding:15px 30px;">
                                                                     <a onclick="detail({{ $penelitan->id }})" class="btn btn-primary btn-sm" style="color:white; cursor:pointer;"><i class="fa fa-info-circle"></i></a>
                                                                 </td> --}}
-                                                                <form action="{{ route('operator.verifikasi.update_biaya',[$penelitan->id]) }}" method="POST">
-                                                                    {{ csrf_field() }} {{ method_field('PATCH') }}
-                                                                    <td>
-                                                                        <input type="text" name="biaya_diusulkan" value="{{ $penelitan->biaya_diusulkan }}" class="form-control">
-                                                                    </td>
-                                                                    <td>
-                                                                        <button type="submit" class="btn btn-primary btn-sm"><i class="fa fa-save"></i>&nbsp; Ubah</button>
-                                                                    </td>
-                                                                </form>
+                                                                <td>
+                                                                    {{ $penelitan->biaya_diusulkan }}
+                                                                </td>
+                                                                <td>
+                                                                    <a onclick="ubahdana({{ $penelitan->id }})" class="btn btn-primary btn-sm text-white"><i class="fa fa-edit"></i>&nbsp; Ubah Biaya</a>
+                                                                </td>
                                                                 
                                                                 <td class="text-center">
                                                                     <a href="{{ route('operator.verifikasi.detail_penilaian',[$penelitan->id, $penelitan->skim_id,\Illuminate\Support\Str::slug($penelitan->judul_kegiatan)]) }}"  class="btn btn-primary btn-sm" style="color:white; cursor:pointer;">Lihat detail</a>
@@ -250,6 +247,7 @@
                                             </table>
                                         </div>
                                     </div>
+                                    
                                 </div>
                             </div>
                         </div>
@@ -405,6 +403,36 @@
                 </div>
                 </div>
             </div>
+            <!-- Modal Didanai -->
+            <div class="modal fade" id="modalubahdana" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header modal-header-danger">
+                        <p style="font-size:15px;" class="modal-title" id="exampleModalLabel"><i class="fa fa-user"></i>&nbsp;Form Verifikasi Tidak Menyetujui Usulan Di Danai</p>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                    Silahkan Ubah Dana Yang Sesuai !
+                    <form action="{{ route('operator.verifikasi.update_biaya') }}" method="POST">
+                        {{ csrf_field() }} {{ method_field('PATCH') }}
+                        <input type="hidden" name="usulan_id" id="usulan_id_dana">
+                        <div class="form-group">
+                            <input type="text" name="biaya_diusulkan" id="biaya_diusulkan_dana" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary btn-sm"><i class="fa fa-check-circle"></i>&nbsp; Simpan Perubahan</button>
+                        </div>
+                    </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-light btn-sm " style="color:white; background:white; background:transparent;" data-dismiss="modal">Close</button>
+                        <input type="submit" name="verifikasi" value="Tidak Setujui" class="btn btn-outline-light btn-sm" style="color:white; background-color:transparent;">
+                    </div>
+                </div>
+                </div>
+            </div>
         </div>
         <!-- Modal Detail -->
         <div class="modal fade" id="modalkomentar" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -496,6 +524,22 @@
         function verifikasi(id){
             $('#modalverifikasi').modal('show');
             $('#usulan_id_verifikasi').val(id);
+        }
+
+        function ubahdana(id){
+            $.ajax({
+                url: "{{ url('operator/usulan_dosen/menunggu_verifikasi') }}"+'/'+ id + "/ubah_dana",
+                type: "GET",
+                dataType: "JSON",
+                success: function(data){
+                $('#modalubahdana').modal('show');
+                    $('#usulan_id_dana').val(data.id);
+                    $('#biaya_diusulkan_dana').val(data.biaya_diusulkan);
+                },
+                error:function(){
+                    alert("Nothing Data");
+                }
+            });
         }
 
         $('.selectall').click(function(){
