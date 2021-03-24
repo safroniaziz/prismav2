@@ -53,9 +53,8 @@
                                     <thead>
                                         <tr>
                                             <td>
-                                                NIP reviewer
+                                                No
                                             </td>
-                                            <td>Nama Reviewer</td>
                                             <td>Skor</td>
                                             <td>Jenis Reviewer</td>
                                         </tr>
@@ -67,7 +66,6 @@
                                         @foreach ($per_dosen as $item)
                                             <tr>
                                                 <td>{{ $no++ }}</td>
-                                                <td>{{ $item->nama }}</td>
                                                 <td>{{ $item->total_skor }}</td>
                                                 <td>{{ $item->jenis_reviewer }}</td>
                                             </tr>
@@ -162,7 +160,6 @@
                                             <thead>
                                                 <tr>
                                                     <td>No</td>
-                                                    <td>Nama Reviewer</td>
                                                     <td>Komentar Keseluruhan</td>
                                                     <td>Komentar Anggaran</td>
                                                 </tr>
@@ -173,7 +170,6 @@
                                             @foreach ($komentars as $item)
                                                 <tr>
                                                     <td>{{ $no++ }}</td>
-                                                    <td>{{ $item->nama }}</td>
                                                     <td>{!! $item->komentar !!}</td>
                                                     <td>{{ $item->komentar_anggaran }}</td>
                                                 </tr>
