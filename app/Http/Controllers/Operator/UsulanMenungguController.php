@@ -34,7 +34,7 @@ class UsulanMenungguController extends Controller
                             ->leftJoin('reviewer1s','reviewer1s.usulan_id','usulans.id')
                             ->leftJoin('reviewers','reviewers.nip','reviewer1s.reviewer_nip')
                             ->select('usulans.id','judul_kegiatan','jenis_kegiatan',
-                                    'abstrak','kata_kunci','file_usulan','nm_skim','usulans.created_at','biaya_diusulkan','status_usulan','tahun_usulan','ketua_peneliti_prodi_nama','ketua_peneliti_nama as nm_ketua_peneliti',
+                                    'abstrak','kata_kunci','file_usulan','nm_skim','usulans.created_at','biaya_diusulkan','status_usulan','tahun_usulan','ketua_peneliti_prodi_nama','ketua_peneliti_nama as nm_ketua_peneliti','ketua_peneliti_nip as nip_ketua_peneliti',
                                     DB::raw('group_concat(distinct concat(anggota_usulans.anggota_nama) SEPARATOR "<br>") as "nm_anggota" '),
                                     DB::raw('group_concat(distinct concat(reviewers.nama) SEPARATOR "&nbsp;|&nbsp;") as "nm_reviewer" '),
                                     DB::raw('SUM(reviewer_nip) as jumlah')
@@ -48,7 +48,7 @@ class UsulanMenungguController extends Controller
                             ->leftJoin('reviewer1s','reviewer1s.usulan_id','usulans.id')
                             ->leftJoin('reviewers','reviewers.nip','reviewer1s.reviewer_nip')
                             ->select('usulans.id','judul_kegiatan','jenis_kegiatan',
-                                    'abstrak','kata_kunci','file_usulan','nm_skim','usulans.created_at','biaya_diusulkan','status_usulan','tahun_usulan','ketua_peneliti_prodi_nama','ketua_peneliti_nama as nm_ketua_peneliti',
+                                    'abstrak','kata_kunci','file_usulan','nm_skim','usulans.created_at','biaya_diusulkan','status_usulan','tahun_usulan','ketua_peneliti_prodi_nama','ketua_peneliti_nama as nm_ketua_peneliti','ketua_peneliti_nip as nip_ketua_peneliti',
                                     DB::raw('group_concat(distinct concat(anggota_usulans.anggota_nama) SEPARATOR "<br>") as "nm_anggota" '),
                                     DB::raw('group_concat(distinct concat(reviewers.nama) SEPARATOR "&nbsp;|&nbsp;") as "nm_reviewer" '),
                                     DB::raw('SUM(reviewer_nip) as jumlah')
@@ -246,7 +246,7 @@ class UsulanMenungguController extends Controller
                             ->leftJoin('skims','skims.id','usulans.skim_id')
                             ->leftJoin('reviewer1s','reviewer1s.usulan_id','usulans.id')
                             ->select('usulans.id','judul_kegiatan','jenis_kegiatan',
-                                    'kata_kunci','biaya_diusulkan','nm_skim','status_usulan','tahun_usulan','ketua_peneliti_nama as nm_ketua_peneliti',
+                                    'kata_kunci','biaya_diusulkan','nm_skim','status_usulan','tahun_usulan','ketua_peneliti_nama as nm_ketua_peneliti','ketua_peneliti_nip as nip_ketua_peneliti',
                                     DB::raw('group_concat(distinct concat(anggota_usulans.anggota_nama) SEPARATOR "<br>") as "nm_anggota" ')
                                     )
                             ->where('usulans.status_usulan','1')
@@ -262,7 +262,7 @@ class UsulanMenungguController extends Controller
                         ->leftJoin('skims','skims.id','usulans.skim_id')
                         ->leftJoin('reviewer1s','reviewer1s.usulan_id','usulans.id')
                         ->select('usulans.id','judul_kegiatan','jenis_kegiatan',
-                                'kata_kunci','biaya_diusulkan','nm_skim','status_usulan','tahun_usulan','ketua_peneliti_nama as nm_ketua_peneliti',
+                                'kata_kunci','biaya_diusulkan','nm_skim','status_usulan','tahun_usulan','ketua_peneliti_nama as nm_ketua_peneliti','ketua_peneliti_nip as nip_ketua_peneliti',
                                 DB::raw('group_concat(distinct concat(anggota_usulans.anggota_nama) SEPARATOR "<br>") as "nm_anggota" ')
                                 )
                         ->where('usulans.status_usulan','1')

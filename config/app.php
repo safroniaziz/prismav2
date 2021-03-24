@@ -13,6 +13,10 @@ return [
     |
     */
 
+    'timezone' => 'Asia/Jakarta',
+    'locale' => 'id',
+    'faker_locale' => 'id_ID',
+
     'name' => env('APP_NAME', 'Laravel'),
 
     /*

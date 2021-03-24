@@ -49,6 +49,7 @@ class UsulanController extends Controller
                 $jadwal = JadwalUsulan::select('tanggal_awal','tanggal_akhir')->where('status','1')->get();
                 $mytime = Carbon\Carbon::now();
                 $now =  $mytime->toDateString();
+                // return $now;
                 return view('pengusul/usulan.index',compact('usulans','skims','fakultas','jadwal','now'));
             }
             else{
@@ -113,14 +114,14 @@ class UsulanController extends Controller
                 
                 $model = $request->all();
                 $slug = Str::slug(Session::get('nm_dosen'));
-                // $model['file_usulan'] = null;
+                $model['file_usulan'] = null;
 
-                // if ($request->hasFile('file_usulan')) {
-                //     $model['file_usulan'] = Str::slug(Session::get('nm_dosen')).'-'.date('now').$request->skim_id.'-'.$request->tahun_usulan.uniqid().'.'.$request->file_usulan->getClientOriginalExtension();
-                //     $request->file_usulan->move(public_path('/upload/file_usulan'), $model['file_usulan']);
-                // }
-                $file_usulan = $request->file('file_usulan');
-                $file_usulanUrl = $file_usulan->store('file_usulan/'.$slug.'-'.Session::get('nip'));
+                if ($request->hasFile('file_usulan')) {
+                    $model['file_usulan'] = Str::slug(Session::get('nm_dosen')).'-'.date('now').$request->skim_id.'-'.$request->tahun_usulan.uniqid().'.'.$request->file_usulan->getClientOriginalExtension();
+                    $request->file_usulan->move(public_path('/upload/file_usulan/'.$slug.'-'.Session::get('nip')), $model['file_usulan']);
+                }
+                // $file_usulan = $request->file('file_usulan');
+                // $file_usulanUrl = $file_usulan->store('file_usulan/'.$slug.'-'.Session::get('nip'));
 
                 $usulan = new Usulan;
                 $usulan->judul_kegiatan = $request->judul_kegiatan;
@@ -138,7 +139,7 @@ class UsulanController extends Controller
                 $usulan->ketua_peneliti_universitas = "Universitas Bengkulu";
                 $usulan->abstrak    =   $request->abstrak;
                 $usulan->kata_kunci =   $request->kata_kunci;
-                $usulan->file_usulan    =   $file_usulanUrl;
+                $usulan->file_usulan    =   $model['file_usulan'];
                 $usulan->tujuan    =   $model['tujuan'];
                 $usulan->luaran    =   $model['luaran'];
                 $usulan->biaya_diusulkan    =   $request->biaya_diusulkan;

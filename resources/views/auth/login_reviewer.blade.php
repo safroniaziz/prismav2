@@ -38,7 +38,6 @@
                         @endif
                         @else
                         <div class="alert alert-danger alert-block" style="font-size:13px;">
-                            
                             <strong>Perhatian:</strong> <b>Jadwal review usulan belum diatur !!</b>
                         </div>
                     @endif

@@ -1,3 +1,7 @@
+@php
+    use Illuminate\Support\Str;
+@endphp
+
 @extends('layouts.layout')
 @section('title', 'Usulan Baru')
 @section('user-login')
@@ -43,7 +47,6 @@
                         @if (count($jadwal) > 0)
                             @if ($now >= $jadwal[0]->tanggal_awal && $now <= $jadwal[0]->tanggal_akhir)
                                 <div class="alert alert-primary alert-block text-center" id="keterangan">
-                                    
                                     <h6><strong class="text-uppercase"><i class="fa fa-info-circle"></i>&nbsp;Perhatian: </strong></h6>
                                     <h6>Silahkan selesaikan tahapan dalam membuat usulan kegiatan baru berikut ini:</h6>
                                     <div>
@@ -149,7 +152,7 @@
                                         {{-- <a href="{{ route('pengusul.usulan.detail_anggaran',[$usulan->id]) }}" class="btn btn-primary btn-sm" style="color:white; cursor:pointer;"><i class="fa fa-gear"></i>&nbsp; kelola anggaran</a> --}}
                                     </td>
                                     <td class="text-center">
-                                        <a href="{{ asset('storage/'.$usulan->file_usulan) }}" download="{{ $usulan->file_usulan }}" class="btn btn-primary btn-sm"><i class="fa fa-download"></i></a>
+                                        <a class="btn btn-primary btn-sm" href="{{ asset('upload/file_usulan/'.Str::slug(Session::get('nm_dosen')).'-'.Str::slug(Session::get('nip')).'/'.$usulan->file_usulan) }}" download="{{ $usulan->file_usulan }}"><i class="fa fa-download"></i></a>
                                     </td>
                                     <td style="text-align:center">
                                         @if ($usulan->status_usulan == '0')
@@ -171,7 +174,7 @@
                                         @endif
                                     </td>
                                     <td style="text-align:center">
-                                        @if ($usulan->nm_anggota != null && $usulan->status_usulan != "1")
+                                        @if ($usulan->nm_anggota != null && $usulan->status_usulan == "0")
                                             <form action="{{ route('pengusul.usulan.usulkan',[$usulan->id])}}" method="POST">
                                                 {{ csrf_field() }} {{ method_field('PATCH') }}
                                                 <button type="submit" class="btn btn-primary btn-sm"><i class="fa fa-arrow-right"></i>&nbsp; Kirimkan Usulan</button>

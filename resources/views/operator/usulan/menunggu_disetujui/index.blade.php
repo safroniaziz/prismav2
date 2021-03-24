@@ -1,3 +1,6 @@
+@php
+    use Illuminate\Support\Str;
+@endphp
 @extends('layouts.layout')
 @section('title', 'Tambah Reviewer')
 @section('login_as', 'Administrator')
@@ -109,7 +112,7 @@
                                                         Diusulkan {{ $penelitian->created_at ? $penelitian->created_at->diffForHumans() : '-' }} ({{ \Carbon\Carbon::parse($penelitian->created_at)->format('j F Y H:i') }})
                                                    </td>
                                                    <td class="text-center">
-                                                        <a href="{{ asset('storage/'.$penelitian->file_usulan) }}" download="{{ $penelitian->file_usulan }}" class="btn btn-primary btn-sm"><i class="fa fa-download"></i></a>
+                                                        <a class="btn btn-primary btn-sm" href="{{ asset('upload/file_usulan/'.Str::slug($penelitian->nm_ketua_peneliti).'-'.$penelitian->nip_ketua_peneliti.'/'.$penelitian->file_usulan) }}" download="{{ $penelitian->file_usulan }}"><i class="fa fa-download"></i></a>
                                                    </td>
                                                     <td style="text-align:center;">
                                                         @if ($penelitian->nm_anggota == null)
