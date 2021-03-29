@@ -106,7 +106,7 @@ class UsulanController extends Controller
             'tujuan'    =>  'required',
             'luaran'    =>  'required',
             'biaya_diusulkan'    =>  'required|numeric',
-            'file_usulan'   =>  'required|mimes:pdf|max:3024',
+            'file_usulan'   =>  'required|mimes:pdf|max:2000',
         ]);
         $sesi = Session::get('akses');
         if(Session::get('login') && Session::get('login',1) && Session::get('akses',1)){

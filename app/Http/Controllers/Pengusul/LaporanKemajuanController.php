@@ -150,10 +150,12 @@ class LaporanKemajuanController extends Controller
         $komentars = Usulan::leftJoin('komentar1s','komentar1s.usulan_id','usulans.id')
                             ->join('reviewers','reviewers.nip','komentar1s.reviewer_id')
                             ->select('komentar1s.komentar','nama','komentar_anggaran','nip')
+                            ->where('usulans.id',$id)
                             ->get();
         $komentar_operator = Usulan::leftJoin('komentar1s','komentar1s.usulan_id','usulans.id')
                             ->join('users','users.id','komentar1s.reviewer_id')
                             ->select('komentar1s.komentar','nm_user','komentar_anggaran')
+                            ->where('usulans.id',$id)
                             ->get();
         $total     = TotalSkor::join('usulans','usulans.id','total_skors.usulan_id')
                                 ->select('total_skor')

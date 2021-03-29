@@ -107,7 +107,7 @@
                         <div class="col-md-12 text-center">
                             <hr style="width: 50%" class="mt-0">
                             <button type="reset" name="reset" class="btn btn-danger btn-sm"><i class="fa fa-refresh"></i>&nbsp;Ulangi</button>
-                            <button type="submit" class="btn btn-primary btn-sm"><i class="fa fa-check-circle"></i>&nbsp;Kirim Usulan</button>
+                            <button type="submit" class="btn btn-primary btn-sm"><i class="fa fa-check-circle"></i>&nbsp;Simpan</button>
                         </div>
                     </form>
                 </div>

@@ -113,7 +113,7 @@
                             @endif
                         </div>
                         <div class="form-group col-md-6">
-                            <label for="exampleInputEmail1">File Usulan : <a class="text-danger">Harap masukan file pdf. Max : 5MB</a></label>
+                            <label for="exampleInputEmail1">File Usulan : <a class="text-danger">Harap masukan file pdf. Max : 2MB</a></label>
                             <input type="file" name="file_usulan" id="file_usulan1" class="form-control" style="padding-bottom:30px;">
                             @if ($errors->has('file_usulan'))
                                 <small class="form-text text-danger">{{ $errors->first('file_usulan') }}</small>

@@ -27,7 +27,7 @@ class UsulanMenungguController extends Controller
                 $usulans = Usulan::leftJoin('anggota_usulans','anggota_usulans.usulan_id','usulans.id')
                                     ->leftJoin('skims','skims.id','usulans.skim_id')
                                     ->leftJoin('reviewer1s','reviewer1s.usulan_id','usulans.id')
-                                    ->select('usulans.id','judul_kegiatan','usulans.created_at','nm_skim','jenis_kegiatan','ketua_peneliti_universitas','skims.id as skim_id','ketua_peneliti_prodi_nama',
+                                    ->select('usulans.id','judul_kegiatan','usulans.created_at','nm_skim','jenis_kegiatan','ketua_peneliti_nip','ketua_peneliti_universitas','skims.id as skim_id','ketua_peneliti_prodi_nama',
                                             'ketua_peneliti_nama as nm_ketua_peneliti','abstrak','tahun_usulan','kata_kunci','file_usulan','biaya_diusulkan',
                                             DB::raw('group_concat(distinct concat(anggota_nama) SEPARATOR "<br>") as "nm_anggota" '),
                                             DB::raw('group_concat(distinct concat(reviewer_nip) SEPARATOR "<br>") as "nip_reviewer" ')
