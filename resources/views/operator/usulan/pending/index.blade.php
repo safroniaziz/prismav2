@@ -175,7 +175,7 @@
                                                         Diusulkan {{ $pengabdians->created_at ? $pengabdians->created_at->diffForHumans() : '-' }} ({{ \Carbon\Carbon::parse($pengabdians->created_at)->format('j F Y H:i') }})
                                                    </td>
                                                    <td>
-                                                        <a class="btn btn-primary btn-sm" href="{{ asset('upload/file_usulan/'.Str::slug($pengabdian->nm_ketua_peneliti).'-'.$pengabdian->nip_ketua_peneliti.'/'.$penelitian->file_usulan) }}" download="{{ $penelitian->file_usulan }}"><i class="fa fa-download"></i></a>
+                                                        <a class="btn btn-primary btn-sm" href="{{ asset('upload/file_usulan/'.Str::slug($pengabdians->nm_ketua_peneliti).'-'.$pengabdians->nip_ketua_peneliti.'/'.$pengabdians->file_usulan) }}" download="{{ $pengabdians->file_usulan }}"><i class="fa fa-download"></i></a>
                                                    </td>
                                                     <td style="text-align:center;">
                                                         @if ($pengabdians->nm_anggota == null)
