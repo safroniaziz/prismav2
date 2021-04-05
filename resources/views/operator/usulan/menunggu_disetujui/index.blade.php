@@ -170,6 +170,7 @@
                                             <tr>
                                                 <th style="text-align:center;">No</th>
                                                 <th style="text-align:center;">Judul Kegiatan</th>
+                                                <th style="text-align:center;">File Usulan</th>
                                                 <th style="text-align:center;">Anggota Kelompok</th>
                                                 <th style="text-align:center;">Biaya Diusulkan</th>
                                                 <th style="text-align:center;">Status Usulan</th>
@@ -199,6 +200,9 @@
                                                         <span style="font-size:10px !important;" for="" class="badge badge-secondary">{{ $pengabdians->tahun_usulan }}</span> <br>
                                                         Diusulkan {{ $pengabdians->created_at ? $pengabdians->created_at->diffForHumans() : '-' }} ({{ \Carbon\Carbon::parse($pengabdians->created_at)->format('j F Y H:i') }})
                                                    </td>
+                                                   <td class="text-center">
+                                                            <a class="btn btn-primary btn-sm" href="{{ asset('upload/file_usulan/'.Str::slug($pengabdians->nm_ketua_peneliti).'-'.$pengabdians->nip_ketua_peneliti.'/'.$pengabdians->file_usulan) }}" download="{{ $pengabdians->file_usulan }}"><i class="fa fa-download"></i></a>
+                                                    </td>
                                                     <td style="text-align:center;">
                                                         @if ($pengabdians->nm_anggota == null)
                                                             <label class="badge badge-danger"><i class="fa fa-close" style="padding:5px;"></i>&nbsp;Belum ditambahkan</label>
