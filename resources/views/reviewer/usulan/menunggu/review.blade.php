@@ -48,7 +48,7 @@
                                 <th>No</th>
                                 <th>Kriteria Penilaian</th>
                                 <th>Bobot Penilaian</th>
-                                <th>Skor <a style="color:red;"><i></i></a></th>
+                                <th>Skor</th>
                                 <th>Total Skor</th>
                             </tr>
                             @php
