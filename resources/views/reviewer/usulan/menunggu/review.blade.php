@@ -47,8 +47,8 @@
                             <tr>
                                 <th>No</th>
                                 <th>Kriteria Penilaian</th>
-                                <th>Bobot Penilaian %</th>
-                                <th>Skor <a style="color:red;"><i>(1 - 100)</i></a></th>
+                                <th>Bobot Penilaian</th>
+                                <th>Skor <a style="color:red;"><i></i></a></th>
                                 <th>Total Skor</th>
                             </tr>
                             @php
@@ -66,13 +66,28 @@
                                     <td>{{ $formulir->kriteria_penilaian }}</td>
                                     <td>
                                         <input type="hidden" name="formulir_id{{ $nomor }}" id="formulir_id{{ $nomor }}" value="{{ $formulir->id }}">
-                                        <input type="text" name="bobot" id="bobot{{ $nomor }}" value="{{ $formulir->bobot }}" readonly>
+                                        <input type="text" class="form-control" name="bobot" id="bobot{{ $nomor }}" value="{{ $formulir->bobot }}" readonly>
                                     </td>
                                     <td>
-                                        <input type="number" max="100" min="1" name="nilai{{ $nomor }}" value="{{ old('nilai'.$nomor) }}" id="nilai{{ $nomor }}" required>
+                                        <select name="nilai{{ $nomor }}" id="nilai{{ $nomor }}" class="form-control">
+                                            <option disabled selected>-- pilih nilai --</option>
+                                            @if ($judul_kegiatan->jenis_kegiatan == "penelitian")
+                                                <option value="1">1</option>
+                                                <option value="2">2</option>
+                                                <option value="3">3</option>
+                                                <option value="5">5</option>
+                                                <option value="6">6</option>
+                                                <option value="7">7</option>
+                                                @else
+                                                <option value="1">1</option>
+                                                <option value="5">5</option>
+                                                <option value="10">10</option>
+                                            @endif
+                                        </select>
+                                        {{-- <input type="number" max="100" min="1" name="nilai{{ $nomor }}" value="{{ old('nilai'.$nomor) }}" id="nilai{{ $nomor }}" required> --}}
                                     </td>
                                     <td>
-                                        <input type="text" max="100" min="1" name="total{{ $nomor }}" value="{{ old('total'.$nomor) }}" id="total{{ $nomor }}" readonly>
+                                        <input type="text" class="form-control" max="100" min="1" name="total{{ $nomor }}" value="{{ old('total'.$nomor) }}" id="total{{ $nomor }}" readonly>
                                     </td>
                                 </tr>
                             @endforeach
@@ -143,6 +158,7 @@
         });
 
         function hitung(){
+            var hasil = 0;
             var total_1 = parseFloat($('#total1').val());
             var total_2 = parseFloat($('#total2').val());
             var total_3 = parseFloat($('#total3').val());
@@ -154,7 +170,7 @@
             var total_9 = parseFloat($('#total9').val());
             var total_10 = parseFloat($('#total10').val());
             var total_11 = parseFloat($('#total11').val());
-            var total_12 = parseFloat($('#tota112').val());
+            var total_12 = parseFloat($('#total12').val());
             var total_13 = parseFloat($('#total13').val());
             var total_14 = parseFloat($('#total14').val());
             var total_15 = parseFloat($('#total15').val());
@@ -206,127 +222,130 @@
             }else if(<?php echo $jumlah ?> == 20) {
                 var hasil = total_1+total_2+total_3+total_4+total_5+total_6+total_7+total_8+total_9+total_10+total_11+total_12+total_13+total_14+total_15+total_16+total_17+total_18+total_19+total_20;
             }
+            // $total12 = $('#total_12').val();
             $('#total_nilai').val(hasil);
         }
 
 
         $(document).ready(function(){
-            $("#bobot1, #nilai1").keyup(function(){
+            $("#bobot1, #nilai1").change(function(){
                 var bobot = $("#bobot1").val();
+                // var nilai = $("#nilai1").val();
+                // alert(nilai);
                 var nilai = $("#nilai1").val();
                 var total = (bobot/100) * nilai;
                 $('#total1').val(total);
             });
-            $("#bobot5, #nilai2").keyup(function(){
+            $("#bobot5, #nilai2").change(function(){
                 var bobot = $("#bobot5").val();
                 var nilai = $("#nilai2").val();
                 var total = (bobot/100) * nilai;
                 $('#total2').val(total);
             });
-            $("#bobot3, #nilai3").keyup(function(){
+            $("#bobot3, #nilai3").change(function(){
                 var bobot = $("#bobot3").val();
                 var nilai = $("#nilai3").val();
                 var total = (bobot/100) * nilai;
                 $('#total3').val(total);
             });
-            $("#bobot4, #nilai4").keyup(function(){
+            $("#bobot4, #nilai4").change(function(){
                 var bobot = $("#bobot4").val();
                 var nilai = $("#nilai4").val();
                 var total = (bobot/100) * nilai;
                 $('#total4').val(total);
             });
-            $("#bobot5, #nilai5").keyup(function(){
+            $("#bobot5, #nilai5").change(function(){
                 var bobot = $("#bobot5").val();
                 var nilai = $("#nilai5").val();
                 var total = (bobot/100) * nilai;
                 $('#total5').val(total);
             });
-            $("#bobot6, #nilai6").keyup(function(){
+            $("#bobot6, #nilai6").change(function(){
                 var bobot = $("#bobot6").val();
                 var nilai = $("#nilai6").val();
                 var total = (bobot/100) * nilai;
                 $('#total6').val(total);
             });
-            $("#bobot7, #nilai7").keyup(function(){
+            $("#bobot7, #nilai7").change(function(){
                 var bobot = $("#bobot7").val();
                 var nilai = $("#nilai7").val();
                 var total = (bobot/100) * nilai;
                 $('#total7').val(total);
             });
-            $("#bobot8, #nilai8").keyup(function(){
+            $("#bobot8, #nilai8").change(function(){
                 var bobot = $("#bobot8").val();
                 var nilai = $("#nilai8").val();
                 var total = (bobot/100) * nilai;
                 $('#total8').val(total);
             });
-            $("#bobot9, #nilai9").keyup(function(){
+            $("#bobot9, #nilai9").change(function(){
                 var bobot = $("#bobot9").val();
                 var nilai = $("#nilai9").val();
                 var total = (bobot/100) * nilai;
                 $('#total9').val(total);
             });
-            $("#bobot10, #nilai10").keyup(function(){
+            $("#bobot10, #nilai10").change(function(){
                 var bobot = $("#bobot10").val();
                 var nilai = $("#nilai10").val();
                 var total = (bobot/100) * nilai;
                 $('#total10').val(total);
             });
-            $("#bobot11, #nilai11").keyup(function(){
+            $("#bobot11, #nilai11").change(function(){
                 var bobot = $("#bobot11").val();
                 var nilai = $("#nilai11").val();
                 var total = (bobot/100) * nilai;
                 $('#total11').val(total);
             });
-            $("#bobot12, #nilai12").keyup(function(){
+            $("#bobot12, #nilai12").change(function(){
                 var bobot = $("#bobot12").val();
                 var nilai = $("#nilai12").val();
                 var total = (bobot/100) * nilai;
                 $('#total12').val(total);
             });
-            $("#bobot13, #nilai13").keyup(function(){
+            $("#bobot13, #nilai13").change(function(){
                 var bobot = $("#bobot13").val();
                 var nilai = $("#nilai13").val();
                 var total = (bobot/100) * nilai;
                 $('#total13').val(total);
             });
-            $("#bobot14, #nilai14").keyup(function(){
+            $("#bobot14, #nilai14").change(function(){
                 var bobot = $("#bobot14").val();
                 var nilai = $("#nilai14").val();
                 var total = (bobot/100) * nilai;
                 $('#total14').val(total);
             });
-            $("#bobot15, #nilai15").keyup(function(){
+            $("#bobot15, #nilai15").change(function(){
                 var bobot = $("#bobot15").val();
                 var nilai = $("#nilai15").val();
                 var total = (bobot/100) * nilai;
                 $('#total15').val(total);
             });
-            $("#bobot16, #nilai16").keyup(function(){
+            $("#bobot16, #nilai16").change(function(){
                 var bobot = $("#bobot16").val();
                 var nilai = $("#nilai16").val();
                 var total = (bobot/100) * nilai;
                 $('#total16').val(total);
             });
-            $("#bobot17, #nilai17").keyup(function(){
+            $("#bobot17, #nilai17").change(function(){
                 var bobot = $("#bobot17").val();
                 var nilai = $("#nilai17").val();
                 var total = (bobot/100) * nilai;
                 $('#total17').val(total);
             });
-            $("#bobot18, #nilai18").keyup(function(){
+            $("#bobot18, #nilai18").change(function(){
                 var bobot = $("#bobot18").val();
                 var nilai = $("#nilai18").val();
                 var total = (bobot/100) * nilai;
                 $('#total18').val(total);
             });
 
-            $("#bobot19, #nilai19").keyup(function(){
+            $("#bobot19, #nilai19").change(function(){
                 var bobot = $("#bobot19").val();
                 var nilai = $("#nilai19").val();
                 var total = (bobot/100) * nilai;
                 $('#total19').val(total);
             });
-            $("#bobot20, #nilai20").keyup(function(){
+            $("#bobot20, #nilai20").change(function(){
                 var bobot = $("#bobot20").val();
                 var nilai = $("#nilai20").val();
                 var total = (bobot/100) * nilai;
