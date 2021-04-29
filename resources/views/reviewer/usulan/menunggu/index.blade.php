@@ -113,8 +113,10 @@
                                                         Diusulkan {{ $usulan->created_at ? $usulan->created_at->diffForHumans() : '-' }} ({{ \Carbon\Carbon::parse($usulan->created_at)->format('j F Y H:i') }})
                                                     </td>
                                                     <td class="text-center">
-                                                        <a class="btn btn-primary btn-sm" href="{{ asset('upload/file_usulan/'.$usulan->nm_ketua_peneliti.'-'.$usulan->ketua_peneliti_nip.'/'.$usulan->file_usulan) }}" download="{{ $usulan->file_usulan }}"><i class="fa fa-download"></i></a>
-                                                        <a href="{{ asset('storage/'.$usulan->file_usulan) }}" download="{{ $usulan->file_usulan }}" class="btn btn-primary btn-sm"><i class="fa fa-download"></i></a>
+                                                        {{-- <a class="btn btn-primary btn-sm" href="{{ asset('upload/file_usulan/'.Str::slug(Session::get('nm_dosen')).'-'.Str::slug(Session::get('nip')).'/'.$usulan->file_usulan) }}" download="{{ $usulan->file_usulan }}"><i class="fa fa-download"></i></a> --}}
+
+                                                        <a class="btn btn-primary btn-sm" href="{{ asset('upload/file_usulan/'.\Illuminate\Support\Str::slug($usulan->nm_ketua_peneliti).'-'.$usulan->ketua_peneliti_nip.'/'.$usulan->file_usulan) }}" download="{{ $usulan->file_usulan }}"><i class="fa fa-download"></i></a>
+                                                        {{-- <a href="{{ asset('storage/'.$usulan->file_usulan) }}" download="{{ $usulan->file_usulan }}" class="btn btn-primary btn-sm"><i class="fa fa-download"></i></a> --}}
                                                     </td>
                                                     <td style="text-align:center;">
                                                         @if ($usulan->nm_anggota == null)

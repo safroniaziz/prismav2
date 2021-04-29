@@ -188,17 +188,19 @@ class UsulanController extends Controller
             'tujuan'    =>  'required',
             'luaran'    =>  'required',
             'biaya_diusulkan'    =>  'required|numeric',
-            'file_usulan'   =>  'mimes:pdf|max:3024',
+            'file_usulan'   =>  'mimes:pdf|max:2024',
         ]);
-
-        $file_lama = Usulan::where('id',$id)->select('file_usulan')->first();
+        $file_usulan = Usulan::find($request->id);
+        $model = $request->all();
+        $model['file_usulan'] = $file_usulan->file_usulan;
         $slug = Str::slug(Session::get('nm_dosen'));
-        DB::beginTransaction();
-        try {
-            if (!empty(request()->file('file_usulan'))) {
-                Storage::delete($file_lama->file_usulan);
-                $fileUrl = $request->file_usulan->store('file_usulan/'.$slug.'-'.Session::get('nip'));
+        if ($request->hasFile('file_usulan')){
+            if (!$file_usulan->file_usulan == NULL){
+                unlink(public_path($file_usulan->file_usulan));
             }
+            $model['file_usulan'] = Str::slug(Session::get('nm_dosen')).'-'.date('now').$request->skim_id.'-'.$request->tahun_usulan.uniqid().'.'.$request->file_usulan->getClientOriginalExtension();
+            $request->file_usulan->move(public_path('/upload/file_usulan/'.$slug.'-'.Session::get('nip')), $model['file_usulan']);
+        }
             Usulan::where('id',$id)->update([
                 'judul_kegiatan'    =>  $request->judul_kegiatan,
                 'skim_id'    =>  $request->skim_id,
@@ -213,16 +215,10 @@ class UsulanController extends Controller
                 'luaran'    =>   $request->luaran,
                 'biaya_diusulkan'    =>   $request->biaya_diusulkan,
                 'tahun_usulan'  => date('Y'),
-                'file_usulan'   =>  $fileUrl,
+                'file_usulan'   =>  $model['file_usulan'],
             ]);
-            DB::commit();
             return redirect()->route('pengusul.usulan')->with(['success' =>  'File usulan kegiatan berhasil diubah !!']);
-        } catch (Exception $e) {
-            DB::rollback();
-            return redirect()->route('pengusul.usulan')->with(['error' =>  'File usulan kegiatan gagal diubah, silahkan cek koneksi internet anda atau coba lagi nanti !! !']);
-        }
 
-        return redirect()->route('pengusul.usulan')->with(['success' =>  'Usulan berhasil diubah !']);
     }
 
     public function delete(Request $request){

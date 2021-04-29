@@ -64,7 +64,9 @@
                                         <th style="width: 20%">File Usulan</th>
                                         <td style="width: 2%"> : </td>
                                         <td>
-                                            <a href="{{ asset('storage/'.$detail->file_usulan) }}" download="{{ $detail->file_usulan }}" class="btn btn-primary btn-sm"><i class="fa fa-download"></i>&nbsp;Download Disini</a>
+                                            <a class="btn btn-primary btn-sm" href="{{ asset('upload/file_usulan/'.\Illuminate\Support\Str::slug($detail->ketua_peneliti_nama).'-'.$detail->ketua_peneliti_nip.'/'.$detail->file_usulan) }}" download="{{ $detail->file_usulan }}"><i class="fa fa-download"></i></a>
+
+                                            {{-- <a href="{{ asset('storage/'.$detail->file_usulan) }}" download="{{ $detail->file_usulan }}" class="btn btn-primary btn-sm"><i class="fa fa-download"></i>&nbsp;Download Disini</a> --}}
                                         </td>
                                     </tr>
                                     <tr>

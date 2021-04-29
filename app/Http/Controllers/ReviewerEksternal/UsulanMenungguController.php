@@ -33,7 +33,7 @@ class UsulanMenungguController extends Controller
                                     ->leftJoin('skims','skims.id','usulans.skim_id')
                                     ->leftJoin('reviewer1s','reviewer1s.usulan_id','usulans.id')
                                     ->select('usulans.id','judul_kegiatan','usulans.created_at','nm_skim','jenis_kegiatan','ketua_peneliti_universitas','skims.id as skim_id','ketua_peneliti_prodi_nama',
-                                            'ketua_peneliti_nama as nm_ketua_peneliti','abstrak','tahun_usulan','kata_kunci','file_usulan','biaya_diusulkan',
+                                            'ketua_peneliti_nama as nm_ketua_peneliti','abstrak','ketua_peneliti_nip','tahun_usulan','kata_kunci','file_usulan','biaya_diusulkan',
                                             DB::raw('group_concat(distinct concat(anggota_nama) SEPARATOR "<br>") as "nm_anggota" '),
                                             DB::raw('group_concat(distinct concat(reviewer_nip) SEPARATOR "<br>") as "nip_reviewer" ')
                                             )
@@ -96,7 +96,7 @@ class UsulanMenungguController extends Controller
 
     public function review($id, $skim_id){
         // $cek = NilaiFormulir::select('usulan_id')
-        $judul_kegiatan = Usulan::select('judul_kegiatan')->where('id',$id)->first();
+        $judul_kegiatan = Usulan::select('judul_kegiatan','jenis_kegiatan')->where('id',$id)->first();
         $id_usulan = $id;
         $jumlah =  Count(Formulir::join('skims','skims.id','formulirs.skim_id')->where('skims.id',$skim_id)->get());
         $formulirs = Formulir::join('skims','skims.id','formulirs.skim_id')->select('formulirs.id','kriteria_penilaian','bobot')->where('skims.id',$skim_id)->get();

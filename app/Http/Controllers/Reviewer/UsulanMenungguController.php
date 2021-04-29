@@ -126,7 +126,7 @@ class UsulanMenungguController extends Controller
         if(Session::get('login') && Session::get('login',1) && Session::get('akses',2)){
             if($sesi == 2){
                 // $cek = NilaiFormulir::select('usulan_id')
-                $judul_kegiatan = Usulan::select('judul_kegiatan')->where('id',$id)->first();
+                $judul_kegiatan = Usulan::select('judul_kegiatan','jenis_kegiatan')->where('id',$id)->first();
                 $id_usulan = $id;
                 $jumlah =  Count(Formulir::join('skims','skims.id','formulirs.skim_id')->where('skims.id',$skim_id)->get());
                 $formulirs = Formulir::join('skims','skims.id','formulirs.skim_id')->select('formulirs.id','kriteria_penilaian','bobot')->where('skims.id',$skim_id)->get();
