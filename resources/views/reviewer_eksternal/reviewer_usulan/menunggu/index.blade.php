@@ -5,12 +5,12 @@
 @section('title', 'Review Usulan Kegiatan')
 @section('user-login')
     @if (Auth::guard('reviewerusulan')->check())
-        {{ Auth::guard('reviewerusulan')->user()->reviewer_nama }}
+        {{ Auth::guard('reviewerusulan')->user()->nama }}
     @endif
 @endsection
 @section('user-login2')
     @if (Auth::guard('reviewerusulan')->check())
-        {{ Auth::guard('reviewerusulan')->user()->reviewer_nama }}
+        {{ Auth::guard('reviewerusulan')->user()->nama }}
     @endif
 @endsection
 @section('login_as', 'Reviewer Eksternal')

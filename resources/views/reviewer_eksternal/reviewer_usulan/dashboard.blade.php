@@ -2,15 +2,15 @@
 @section('title', 'Dashboard')
 @section('user-login')
     @if (Auth::guard('reviewerusulan')->check())
-        {{ Auth::guard('reviewerusulan')->user()->reviewer_nama }}
+        {{ Auth::guard('reviewerusulan')->user()->nama }}
     @endif
 @endsection
 @section('user-login2')
     @if (Auth::guard('reviewerusulan')->check())
-        {{ Auth::guard('reviewerusulan')->user()->reviewer_nama }}
+        {{ Auth::guard('reviewerusulan')->user()->nama }}
     @endif
 @endsection
-@section('login_as', 'Reviewer')
+@section('login_as', 'Reviewer Eksternal')
 @section('sidebar-menu')
     @include('reviewer_eksternal/sidebar')
 @endsection
@@ -21,7 +21,7 @@
         </header>
         <div class="panel-body" style="border-top: 1px solid #eee; padding:15px; background:white;">
             <div class="row" style="margin-right:-15px; margin-left:-15px;">
-                <div class="col-md-12">Selamat datang <strong> {{ Auth::guard('reviewerusulan')->user()->reviewer_nama }} </strong> di halaman Dashboard Admin <b> Sistem Informasi Publikasi, Riset dan Pengabdian Kepada Masyarakat                            </b></div>
+                <div class="col-md-12">Selamat datang <strong> {{ Auth::guard('reviewerusulan')->user()->nama }} </strong> di halaman Dashboard Admin <b> Sistem Informasi Publikasi, Riset dan Pengabdian Kepada Masyarakat                            </b></div>
             </div>
         </div>
     </section>
