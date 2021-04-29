@@ -26,6 +26,7 @@ class ReviewerEksternalController extends Controller
             'jenis_kelamin'  =>  'required',
             'universitas'  =>  'required',
             'jabatan_fungsional'  =>  'required',
+            'password'  =>  'required',
         ]);
         Reviewer::create([
             'nip'   =>  $request->nip,

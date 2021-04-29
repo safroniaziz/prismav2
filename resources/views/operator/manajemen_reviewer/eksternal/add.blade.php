@@ -57,6 +57,13 @@
                                     <small class="form-text text-danger">{{ $errors->first('jenis_kelamin') }}</small>
                                 @endif
                             </div>
+                            <div class="form-group col-md-6">
+                                <label for="exampleInputEmail1">Password : <a style="color: red;" >minimal 6 karakter</a></label>
+                                <input type="text" name="nama" value="{{ old('nama') }}" class="form-control">
+                                @if ($errors->has('nama'))
+                                    <small class="form-text text-danger">{{ $errors->first('nama') }}</small>
+                                @endif
+                            </div>
 
                             <div class="form-group col-md-6">
                                 <label for="exampleInputEmail1">NIDN :</label>
